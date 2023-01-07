@@ -1,0 +1,186 @@
+roomIdx 0
+colPos -800 1300
+colScale 1100 1100
+enemySpawner 0 0
+enemySpawner 0 0
+enemySpawner 0 0
+enemySpawner 0 0
+treasureSpawner 0 0
+gateSpawner -850 1250
+gateSpawner -750 1250
+gateSpawner -650 1250
+gateSpawner -850 1350
+gateSpawner -750 1350
+gateSpawner -650 1350
+gateSpawner -850 1450
+gateSpawner -750 1450
+gateSpawner -650 1450
+cleared 1
+roomType 0
+doorTileNum 3
+doorTileIdx 47 63
+doorTileIdx 46 63
+doorTileIdx 36 61
+
+roomIdx 1
+colPos -1700 -1800
+colScale 1100 1100
+enemySpawner 0 0
+enemySpawner 0 0
+enemySpawner 0 0
+enemySpawner 0 0
+treasureSpawner -1650 -1750
+gateSpawner -1750 -1850
+gateSpawner -1650 -1850
+gateSpawner -1550 -1850
+gateSpawner -1750 -1750
+gateSpawner -1650 -1750
+gateSpawner -1550 -1750
+gateSpawner -1750 -1650
+gateSpawner -1650 -1650
+gateSpawner -1550 -1650
+cleared 1
+roomType 1
+doorTileNum 2
+doorTileIdx 33 37
+doorTileIdx 38 33
+
+roomIdx 2
+colPos 3000 -2700
+colScale 1200 1200
+enemySpawner 2550 -3150
+enemySpawner 3250 -2850
+enemySpawner 3550 -3150
+enemySpawner 2850 -2950
+treasureSpawner 0 0
+gateSpawner 2950 -2750
+gateSpawner 3050 -2750
+gateSpawner 3150 -2750
+gateSpawner 2950 -2650
+gateSpawner 3050 -2650
+gateSpawner 3150 -2650
+gateSpawner 2950 -2550
+gateSpawner 3050 -2550
+gateSpawner 3150 -2550
+cleared 0
+roomType 2
+doorTileNum 2
+doorTileIdx 79 29
+doorTileIdx 74 24
+
+roomIdx 3
+colPos 1700 1300
+colScale 1200 1200
+enemySpawner 2050 850
+enemySpawner 1450 1350
+enemySpawner 2050 1150
+enemySpawner 1750 1850
+treasureSpawner 0 0
+gateSpawner 1650 1250
+gateSpawner 1750 1250
+gateSpawner 1850 1250
+gateSpawner 1650 1350
+gateSpawner 1750 1350
+gateSpawner 1850 1350
+gateSpawner 1650 1450
+gateSpawner 1750 1450
+gateSpawner 1850 1450
+cleared 0
+roomType 2
+doorTileNum 3
+doorTileIdx 61 63
+doorTileIdx 69 57
+doorTileIdx 66 57
+
+roomIdx 4
+colPos -1900 -100
+colScale 1200 1200
+enemySpawner -1450 250
+enemySpawner -1850 250
+enemySpawner -1550 -550
+enemySpawner -2150 150
+treasureSpawner 0 0
+gateSpawner -1950 -150
+gateSpawner -1850 -150
+gateSpawner -1750 -150
+gateSpawner -1950 -50
+gateSpawner -1850 -50
+gateSpawner -1750 -50
+gateSpawner -1950 50
+gateSpawner -1850 50
+gateSpawner -1750 50
+cleared 0
+roomType 2
+doorTileNum 2
+doorTileIdx 35 55
+doorTileIdx 32 43
+
+roomIdx 5
+colPos 200 2600
+colScale 1200 1000
+enemySpawner 250 2850
+enemySpawner 50 2850
+enemySpawner 650 2250
+enemySpawner 250 2350
+treasureSpawner 0 0
+gateSpawner 150 2550
+gateSpawner 250 2550
+gateSpawner 350 2550
+gateSpawner 150 2650
+gateSpawner 250 2650
+gateSpawner 350 2650
+gateSpawner 150 2750
+gateSpawner 250 2750
+gateSpawner 350 2750
+cleared 0
+roomType 2
+doorTileNum 1
+doorTileIdx 51 71
+
+roomIdx 6
+colPos 2600 -500
+colScale 1000 1000
+enemySpawner 2450 -450
+enemySpawner 2750 -750
+enemySpawner 2950 -450
+enemySpawner 2750 -150
+treasureSpawner 0 0
+gateSpawner 2550 -550
+gateSpawner 2650 -550
+gateSpawner 2750 -550
+gateSpawner 2550 -450
+gateSpawner 2650 -450
+gateSpawner 2750 -450
+gateSpawner 2550 -350
+gateSpawner 2650 -350
+gateSpawner 2750 -350
+cleared 0
+roomType 2
+doorTileNum 2
+doorTileIdx 72 50
+doorTileIdx 78 40
+
+roomIdx 7
+colPos 400 -1200
+colScale 1200 1100
+enemySpawner -50 -850
+enemySpawner 50 -1450
+enemySpawner 850 -1350
+enemySpawner 350 -1650
+treasureSpawner 0 0
+gateSpawner 350 -1250
+gateSpawner 450 -1250
+gateSpawner 550 -1250
+gateSpawner 350 -1150
+gateSpawner 450 -1150
+gateSpawner 550 -1150
+gateSpawner 350 -1050
+gateSpawner 450 -1050
+gateSpawner 550 -1050
+cleared 0
+roomType 2
+doorTileNum 3
+doorTileIdx 48 37
+doorTileIdx 60 42
+doorTileIdx 58 32
+

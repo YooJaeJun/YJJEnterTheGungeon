@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="GameObject">
+      <UniqueIdentifier>{05cf287f-5ccb-4e1c-a923-b6196b408b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Bullet">
+      <UniqueIdentifier>{b9ca0c8b-5dfc-4456-bb4d-f78c6eb9eb14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Unit">
+      <UniqueIdentifier>{ee59fbc8-95fd-4b1a-913e-8bf037985466}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\UI">
+      <UniqueIdentifier>{cb1d9972-e25e-4865-a4fd-7e542ce9fea1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Level">
+      <UniqueIdentifier>{d5c42346-46be-4eed-a185-12cbb53691c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{09f919fa-161d-43a7-b8c0-e22f829de12f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProcedureMapGeneration">
+      <UniqueIdentifier>{43d31f4c-4da4-483c-8477-5db7e2296b91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Item">
+      <UniqueIdentifier>{427abf59-565d-49b7-9691-f7ccaf27032c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObject\Effect">
+      <UniqueIdentifier>{c57f0926-b496-40bf-99c4-0bda6b943a0b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Bullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>GameObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>GameObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="StringBulletData.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Obstacle.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene01.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>GameObject\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="ProcedureMapGeneration.h">
+      <Filter>ProcedureMapGeneration</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene02.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Unit.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy2.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy1.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon1.h">
+      <Filter>GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon2.h">
+      <Filter>GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene03.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Door.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Gate.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy3.h">
+      <Filter>GameObject\Unit</Filter>
+    </ClInclude>
+    <ClInclude Include="TrailBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon3.h">
+      <Filter>GameObject\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="TreasureBox.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="ShurikenBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Cinematic.h">
+      <Filter>GameObject\Level</Filter>
+    </ClInclude>
+    <ClInclude Include="GravityBullet.h">
+      <Filter>GameObject\Bullet</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Bullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>GameObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>GameObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Unit.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="StringBulletData.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Obstacle.cpp">
+      <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>GameObject\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene01.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ProcedureMapGeneration.cpp">
+      <Filter>ProcedureMapGeneration</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene02.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy2.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy1.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon1.cpp">
+      <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon2.cpp">
+      <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene03.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Door.cpp">
+      <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Gate.cpp">
+      <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Enemy3.cpp">
+      <Filter>GameObject\Unit</Filter>
+    </ClCompile>
+    <ClCompile Include="TrailBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon3.cpp">
+      <Filter>GameObject\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureBox.cpp">
+      <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="ShurikenBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Cinematic.cpp">
+      <Filter>GameObject\Level</Filter>
+    </ClCompile>
+    <ClCompile Include="GravityBullet.cpp">
+      <Filter>GameObject\Bullet</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
