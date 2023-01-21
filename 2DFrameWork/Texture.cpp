@@ -69,7 +69,7 @@ bool Texture::DeleteTexture(wstring file)
 
 ScratchImage* Texture::GetTexture(wstring file)
 {
-    ID3D11ShaderResourceView* temp;
+    // ID3D11ShaderResourceView* temp;
     wstring path = L"../Contents/Images/" + file;
 
     ScratchImage* image = new ScratchImage();

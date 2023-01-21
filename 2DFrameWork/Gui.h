@@ -3,7 +3,6 @@ class Gui :public Singleton<Gui>
 {
 public:
 	static LRESULT MsgProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam);
-	class GameObject* target;
 
 private:
 	UINT fileID;

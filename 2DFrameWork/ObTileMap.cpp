@@ -140,14 +140,14 @@ void ObTileMap::RenderGui(Int2& guiPickingIdx, int& imgIdx)
 {
     if (ImGui::InputInt("ImgIdx", &imgIdx))
     {
-        if (imgIdx > imageCount - 1)
+        if (imgIdx > tileImageCount - 1)
         {
             imgIdx = 0; //첫번째이미지로 돌리기
         }
         else if (imgIdx < 0)
         {
             //마지막 이미지로 돌리기
-            imgIdx = imageCount - 1;
+            imgIdx = tileImageCount - 1;
         }
     }
 
@@ -160,9 +160,9 @@ void ObTileMap::RenderGui(Int2& guiPickingIdx, int& imgIdx)
     ImVec2 LT, RB;
     int index = 0;
 
-    for (UINT i = 0; i < MF.y; i++)
+    for (UINT i = 0; i < (UINT)MF.y; i++)
     {
-        for (UINT j = 0; j < MF.x; j++)
+        for (UINT j = 0; j < (UINT)MF.x; j++)
         {
             if (j != 0)
             {
@@ -193,7 +193,7 @@ void ObTileMap::Render()
     if (!isVisible)return;
     GameObject::Render();
 
-    for (int i = 0; i < imageCount; i++)
+    for (int i = 0; i < tileImageCount; i++)
     {
         if (tileImages[i])
         {
@@ -261,8 +261,8 @@ bool ObTileMap::WorldPosToTileIdx(Vector2 wpos, Int2& tileIdx)
         return false;
     }
 
-    tileIdx.x = tileCoord.x;
-    tileIdx.y = tileCoord.y;
+    tileIdx.x = static_cast<int>(tileCoord.x);
+    tileIdx.y = static_cast<int>(tileCoord.y);
 
     return true;
 }
@@ -329,7 +329,7 @@ void ObTileMap::Save()
     //파일 열렷니?
     if (fout.is_open())
     {
-        for (int i = 0; i < imageCount; i++)
+        for (int i = 0; i < tileImageCount; i++)
         {
             fout << i << " ";
 
@@ -382,7 +382,7 @@ void ObTileMap::Load()
 
     if (fin.is_open())
     {
-        for (int i = 0; i < imageCount; i++)
+        for (int i = 0; i < tileImageCount; i++)
         {
             int idx; string Imgfile;
             fin >> idx;
@@ -415,7 +415,11 @@ void ObTileMap::Load()
         //가로
         for (int j = 0; j < tileSize.x; j++)
         {
-            int temp; Vector2 minUV, maxUV; Color color; float tileMapIdx, tileMapState; int tileRoomIdx, tileDirState;
+            int temp; 
+            Vector2 minUV, maxUV; 
+            Color color; 
+            int tileMapIdx, tileMapState; 
+            int tileRoomIdx, tileDirState;
 
             fin >> temp >> temp >> minUV.x >> minUV.y >> maxUV.x >> maxUV.y
                 >> color.x >> color.y >> color.z >> color.w >> tileMapIdx >> tileMapState

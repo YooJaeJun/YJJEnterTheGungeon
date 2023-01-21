@@ -162,7 +162,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Camara.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Delaunay.h" />
     <ClInclude Include="Direct3D11.h" />
     <ClInclude Include="DWrite.h" />
@@ -193,7 +193,6 @@
     <ClInclude Include="Utility.h" />
     <ClInclude Include="VertexType.h" />
     <ClInclude Include="Window.h" />
-    <ClInclude Include="RenderOrder.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
@@ -224,7 +223,6 @@
     <ClCompile Include="Utility.cpp" />
     <ClCompile Include="Window.cpp" />
     <ClCompile Include="Numeric.cpp" />
-    <ClCompile Include="RenderOrder.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

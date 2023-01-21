@@ -75,7 +75,7 @@ void Map::SetTilemapGUI()
     ImGui::ColorEdit4("TileColor", (float*)&tileColor, ImGuiColorEditFlags_PickerHueWheel);
 
     //Texture
-    for (int i = 0; i < imageCount; i++)
+    for (int i = 0; i < tileImageCount; i++)
     {
         string str = "Texture" + to_string(i);
         if (GUI->FileImGui(str.c_str(), str.c_str(),

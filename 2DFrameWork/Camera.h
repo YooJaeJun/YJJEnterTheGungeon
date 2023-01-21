@@ -2,11 +2,11 @@
 class Camera : public Singleton<Camera>
 {
 private:
-    Viewport            viewport;       //뷰포트
-    Matrix              V, P, VP, S;       //View x Proj
+    Viewport            viewport;       // 뷰포트
+    Matrix              V, P, VP, S;    // View x Proj
 
 public:
-    //카메라위치
+    // 카메라위치
     Vector2             position;
     Vector3             zoomFactor;
 

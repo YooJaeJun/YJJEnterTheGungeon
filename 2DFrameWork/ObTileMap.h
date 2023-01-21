@@ -11,8 +11,6 @@ enum class TileState
     max
 };
 
-const int imageCount = 2;
-
 class Tile
 {
 public:
@@ -41,6 +39,9 @@ struct ComparePTile
         return a.second > b.second;
     }
 };
+
+
+const int tileImageCount = 3;
 
 class ObTileMap : public GameObject
 {
@@ -80,13 +81,13 @@ public:
 protected:
     VertexTile*             vertices;
     ID3D11Buffer*           vertexBuffer;
-    Int2                    tileSize;   //10x10 , 4x4
+    Int2                    tileSize;       //10x10 , 4x4
 
 public:
     vector<vector<Tile>>    Tiles;
 
 public:
-    shared_ptr<ObImage>     tileImages[imageCount];
+    shared_ptr<ObImage>     tileImages[tileImageCount];
     string                  file;
 };
 

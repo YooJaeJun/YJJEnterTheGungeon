@@ -4,6 +4,10 @@ namespace Gungeon
 {
     Scene02::Scene02()
     {
+        for (auto& elem : enemy)
+        {
+            elem = nullptr;
+        }
     }
 
     Scene02::~Scene02()
@@ -495,7 +499,7 @@ namespace Gungeon
                     if (player->colTile->Intersect(elem->col))
                     {
                         DirState doorDir = MAP->tilemap->GetTileDir(elem->On());
-                        float x, y;
+                        int x, y;
                         switch (doorDir)
                         {
                         case dirB:
@@ -535,7 +539,7 @@ namespace Gungeon
                             y = -dy[DirState::dirNone];
                             break;
                         }
-                        player->col->MoveWorldPos(Vector2(x, y));
+                        player->col->MoveWorldPos(Vector2(static_cast<float>(x), static_cast<float>(y)));
                     }
                 }
             }

@@ -49,11 +49,11 @@ bool ObIso::WorldPosToTileIdx(Vector2 WPos, Int2& TileIdx)
     // i
 
     Vector2 temp;
-    temp.x = (int)(tileCoord.x - tileCoord.y);
-    temp.y = (int)(-tileCoord.x - tileCoord.y);
+    temp.x = static_cast<float>(static_cast<int>((tileCoord.x - tileCoord.y)));
+    temp.y = static_cast<float>(static_cast<int>((-tileCoord.x - tileCoord.y)));
 
-    TileIdx.x = temp.x;
-    TileIdx.y = temp.y;
+    TileIdx.x = static_cast<int>(temp.x);
+    TileIdx.y = static_cast<int>(temp.y);
 
     if ((temp.x < 0) or (temp.y < 0) or
         (TileIdx.x >= tileSize.x) or (TileIdx.y >= tileSize.y))

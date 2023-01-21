@@ -163,7 +163,7 @@ bool ObTriangle::CircumCircleContains(const ObNode& n) const
     long double circum_x = (dA * (cy - by) + dB * (ay - cy) + dC * (by - ay)) / (ax * (cy - by) + bx * (ay - cy) + cx * (by - ay));
     long double circum_y = (dA * (cx - bx) + dB * (ax - cx) + dC * (bx - ax)) / (ay * (cx - bx) + by * (ax - cx) + cy * (bx - ax));
 
-    Vector2 circum(circum_x / 2, circum_y / 2);
+    Vector2 circum(static_cast<float>(circum_x / 2), static_cast<float>(circum_y / 2));
     float circum_radius = Vector2::Distance(va, circum);
     Vector2 v = Vector2(n.x, n.y);
     float dist = Vector2::Distance(v, circum);
@@ -172,7 +172,6 @@ bool ObTriangle::CircumCircleContains(const ObNode& n) const
 
 bool ObTriangle::almostEqualTriangle(const ObTriangle& other)
 {
-    
     return	(a.almostEqualNode(other.a) || a.almostEqualNode(other.b) || a.almostEqualNode(other.c)) &&
         (b.almostEqualNode(other.a) || b.almostEqualNode(other.b) || b.almostEqualNode(other.c)) &&
         (c.almostEqualNode(other.a) || c.almostEqualNode(other.b) || c.almostEqualNode(other.c));

@@ -976,7 +976,7 @@ namespace Gungeon
         bullet.resize(stringBullet.inputString.size() * 25);
         bulletSpawnPos = firePosTargeting->GetWorldPos();
 
-        int size = stringBullet.inputString.size();
+        size_t size = stringBullet.inputString.size();
 
         int idx = 0;
         for (int r = 0; r < 5; r++)
@@ -1198,7 +1198,7 @@ namespace Gungeon
 
     void Boss::UpdateString()
     {
-        int size = stringBullet.inputString.size();
+        size_t size = stringBullet.inputString.size();
         char* s = const_cast<char*>(stringBullet.inputString.c_str());
         bool flagChangeStringDirect = false;
 

@@ -42,8 +42,8 @@ ColPos Utility::IntersectLineLine(LINE& l1, LINE& l2)
     };
 
     //두 선분이 한 직선 위에 있거나, 끝점이 겹치는 경우
-    float ab = ccw(l1.begin, l1.end, l2.begin) * ccw(l1.begin, l1.end, l2.end);
-    float cd = ccw(l2.begin, l2.end, l1.begin) * ccw(l2.begin, l2.end, l1.end);
+    float ab = static_cast<float>(ccw(l1.begin, l1.end, l2.begin) * ccw(l1.begin, l1.end, l2.end));
+    float cd = static_cast<float>(ccw(l2.begin, l2.end, l1.begin) * ccw(l2.begin, l2.end, l1.end));
 
     if (ab == 0.0f && cd == 0.0f)
     {

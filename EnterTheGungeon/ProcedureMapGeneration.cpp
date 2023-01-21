@@ -274,11 +274,11 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Loop()
     {
-        int count = max(1, linesTriangulated.size() / 8);
+        size_t count = max(1, linesTriangulated.size() / 8);
 
         while (count--)
         {
-            float rand = RANDOM->Int(0, linesTriangulated.size() - 1);
+            int rand = static_cast<int>(RANDOM->Int(0, linesTriangulated.size() - 1));
             bool flag = false;
             for (auto& elem : linesMST)
             {
@@ -554,7 +554,7 @@ namespace Gungeon
         {
             Int2 on;
             MAP->tilemap->WorldPosToTileIdx(elem->Pos(), on);
-            Int2 scaleOn = Int2(elem->col->scale.x / 100, elem->col->scale.y / 100);
+            Int2 scaleOn = Int2(static_cast<int>(elem->col->scale.x / 100), static_cast<int>(elem->col->scale.y / 100));
             Int2 halfScaleOn = scaleOn / 2;
 
             int xStart = elem->TileLB().x + 1;
@@ -682,9 +682,9 @@ namespace Gungeon
 
             auto push = [&](const ObNode& node)
             {
-                int size = triangulation.nodesLinked[node].size();
+                size_t size = triangulation.nodesLinked[node].size();
                 ObNode nextNode;
-                for (int i = 0; i < size; i++)
+                for (size_t i = 0; i < size; i++)
                 {
                     nextNode = triangulation.nodesLinked[node][i];
                     nextNode.index = triangulation.nodesForIndex[nextNode];
@@ -1129,7 +1129,7 @@ namespace Gungeon
                 {
                     float x, y;
                     fin >> temp >> x >> y;
-                    room->doorTileIdxs.emplace_back(Int2(x, y));
+                    room->doorTileIdxs.emplace_back(Int2(static_cast<int>(x), static_cast<int>(y)));
                 }
 
                 selectedRooms.emplace_back(room);

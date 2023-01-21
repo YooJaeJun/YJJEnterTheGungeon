@@ -36,8 +36,8 @@ struct VertexTile
     Vector2 uv;
     Color color;
 
-    float tileMapIdx;
-    float tileState;
+    int tileMapIdx;
+    int tileState;
     int tileRoomIdx;
     int tileDir;
 
@@ -46,13 +46,13 @@ struct VertexTile
         position = Vector3(0.0f, 0.0f, 0.0f);
         uv = Vector2(0.0f, 0.0f);
         color = Color(0.5f, 0.5f, 0.5f, 0.5f);
-        tileMapIdx = 0.0f;
-        tileState = 0.0f;
+        tileMapIdx = 0;
+        tileState = 0;
         tileRoomIdx = -1;
         tileDir = -1;
     }
 
-    VertexTile(Vector3 position, Vector2 uv, Color color, float tileMapIdx, float tileState)
+    VertexTile(const Vector3 position, const Vector2 uv, const Color color, const int tileMapIdx, const int tileState)
         : position(position), uv(uv), color(color), tileMapIdx(tileMapIdx), tileState(tileState), tileRoomIdx(-1), tileDir(-1)
     {
         this->position.z = 0.0f;

@@ -74,7 +74,6 @@ WPARAM Window::Run(Scene* main)
 	TEXTURE->DeleteSingleton();
 	LIGHT->DeleteSingleton();
 	SCENE->DeleteSingleton();
-	RENDER->DeleteSingleton();
 	D3D->DeleteSingleton();
 	MAP->DeleteSingleton();
 	Destroy();

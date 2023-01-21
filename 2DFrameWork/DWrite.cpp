@@ -170,6 +170,6 @@ void DWrite::RenderText(wstring text, RECT rect, float size, wstring font, Color
 
     deviceContext->DrawTextW
     (
-        text.c_str(), text.size(), findText->format, rectF, findBrush->brush
+        text.c_str(), (UINT32)text.size(), findText->format, rectF, findBrush->brush
     );
 }

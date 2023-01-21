@@ -41,9 +41,6 @@
     <ClInclude Include="VertexType.h">
       <Filter>GameObject\Member</Filter>
     </ClInclude>
-    <ClInclude Include="Camara.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="Gui.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -80,9 +77,6 @@
     <ClInclude Include="ObTileMap.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="RenderOrder.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="ObNode.h">
       <Filter>GameObject</Filter>
     </ClInclude>
@@ -93,6 +87,9 @@
       <Filter>GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Map.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
       <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
@@ -182,9 +179,6 @@
     </ClCompile>
     <ClCompile Include="ObTileMap.cpp">
       <Filter>GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="RenderOrder.cpp">
-      <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="ObNode.cpp">
       <Filter>GameObject</Filter>

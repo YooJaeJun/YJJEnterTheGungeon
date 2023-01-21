@@ -12,7 +12,7 @@ private:
 	ID3D11Texture2D*					backBuffer;
 	ID3D11RenderTargetView*				renderTargetView;
 	ID3D11BlendState *					blendState;
-	//ID3D11DepthStencilView*				depthStencilView;
+	//ID3D11DepthStencilView*			depthStencilView;
 
 	vector<struct D3DEnumAdapterInfo*>	adapterInfos;
 	UINT								numerator;

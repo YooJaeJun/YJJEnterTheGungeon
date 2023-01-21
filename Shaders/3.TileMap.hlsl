@@ -4,8 +4,8 @@ struct VertexInput
     float4 position : POSITION0;
     float2 uv : UV0;
     float4 color : COLOR0;
-    float tileMapIdx : INDICES0;
-    float tileState : STATE0;
+    int tileMapIdx : INDICES0;
+    int tileState : STATE0;
     int tileRoomIdx : ROOMIDX0;
     int tileDir : DIR0;
 };
@@ -15,8 +15,8 @@ struct PixelInput
     float4 position : SV_POSITION;
     float2 uv : UV0;
     float4 color : COLOR0;
-    float tileMapIdx : INDICES0;
-    float tileState : STATE0;
+    int tileMapIdx : INDICES0;
+    int tileState : STATE0;
     int tileRoomIdx : ROOMIDX0;
     int tileDir : DIR0;
 };
@@ -68,19 +68,19 @@ float4 PS(PixelInput input) : SV_TARGET
     float4 TextureColor;
    
     [branch]
-    if (input.tileMapIdx == 0.0f)
+    if (input.tileMapIdx == 0)
     {
         TextureColor = Texture0.Sample(Sampler0, input.uv);
     }
-    else if (input.tileMapIdx == 1.0f)
+    else if (input.tileMapIdx == 1)
     {
         TextureColor = Texture1.Sample(Sampler1, input.uv);
     }
-    else if (input.tileMapIdx == 2.0f)
+    else if (input.tileMapIdx == 2)
     {
         TextureColor = Texture2.Sample(Sampler2, input.uv);
     }
-    else if (input.tileMapIdx == 3.0f)
+    else if (input.tileMapIdx == 3)
     {
         TextureColor = Texture3.Sample(Sampler3, input.uv);
     }

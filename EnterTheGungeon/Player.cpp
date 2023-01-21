@@ -354,8 +354,8 @@ namespace Gungeon
 
 		Unit::Render();
 
-		roll->Render(); // RENDER->push(elem);
-		respawn->Render(); //RENDER->push(respawn);
+		roll->Render();
+		respawn->Render();
 		fall->Render();
 		respawn->Render();
 		for (auto& elem : bullet) elem->Render();
@@ -603,28 +603,28 @@ namespace Gungeon
 	{
 		if (INPUT->KeyPress('A'))
 		{
-			moveDir.x = dx[DirState::dirL];
+			moveDir.x = static_cast<float>(dx[DirState::dirL]);
 		}
 		else if (INPUT->KeyPress('D'))
 		{
-			moveDir.x = dx[DirState::dirR];
+			moveDir.x = static_cast<float>(dx[DirState::dirR]);
 		}
 		else
 		{
-			moveDir.x = dx[DirState::dirNone];
+			moveDir.x = static_cast<float>(dx[DirState::dirNone]);
 		}
 
 		if (INPUT->KeyPress('W'))
 		{
-			moveDir.y = dy[DirState::dirT];
+			moveDir.y = static_cast<float>(dy[DirState::dirT]);
 		}
 		else if (INPUT->KeyPress('S'))
 		{
-			moveDir.y = dy[DirState::dirB];
+			moveDir.y = static_cast<float>(dy[DirState::dirB]);
 		}
 		else
 		{
-			moveDir.y = dy[DirState::dirNone];
+			moveDir.y = static_cast<float>(dy[DirState::dirNone]);
 		}
 
 		if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))

@@ -124,7 +124,7 @@ extern Application app;//Extern Global
 #include "Gui.h"
 #include "Input.h"
 #include "Timer.h"
-#include "Camara.h"
+#include "Camera.h"
 #include "Random.h"
 #include "Texture.h"
 #include "Sound.h"
@@ -132,7 +132,6 @@ extern Application app;//Extern Global
 #include "SceneManager.h"
 #include "DWrite.h"
 #include "Numeric.h"
-#include "RenderOrder.h"
 
 #include "VertexType.h"
 #include "Shader.h"
@@ -164,6 +163,5 @@ extern Application app;//Extern Global
 #define SOUND		Sound::GetInstance()
 #define LIGHT		Light::GetInstance()
 #define SCENE       SceneManager::GetInstance()
-#define RENDER      RenderOrder::GetInstance()
 #define DWRITE		DWrite::GetInstance()
 #define MAP         Map::GetInstance()

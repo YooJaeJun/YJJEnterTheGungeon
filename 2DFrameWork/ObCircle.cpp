@@ -10,9 +10,9 @@ void ObCircle::CreateStaticMember()
     VertexPC* Vertex;
     Vertex = new VertexPC[StaticVertexCount::Trianglestrip()];
 
-    int size = StaticVertexCount::Trianglestrip() / 3;
+    size_t size = StaticVertexCount::Trianglestrip() / 3;
 
-    for (UINT i = 0; i < size; i++)
+    for (size_t i = 0; i < size; i++)
     {
         Vertex[i * 3].position.x = 0.0f;
         Vertex[i * 3].position.y = 0.0f;
@@ -58,7 +58,6 @@ void ObCircle::CreateStaticMember()
     }
 
 
-
     //정점들이 버퍼로 옮겨지는 코드
     //익명 스코프
     {
@@ -85,7 +84,7 @@ void ObCircle::CreateStaticMember()
     Vertex = new VertexPC[StaticVertexCount::Linestrip()];
 
     //두가지 랜덤한 색 만들기
-    for (UINT i = 0; i < StaticVertexCount::Linestrip(); i++)
+    for (size_t i = 0; i < (size_t)StaticVertexCount::Linestrip(); i++)
     {
         Vertex[i].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         Vertex[i].position.x = cosf(i * ToRadian) * 0.5f;
