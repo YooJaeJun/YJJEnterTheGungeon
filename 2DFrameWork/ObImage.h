@@ -13,8 +13,10 @@ class ObImage : public GameObject, public StaticVertexCount<ObImage>
     friend class ObTileMap;
 
 private:
-    static ID3D11Buffer*        vertexBuffer;
-    static ID3D11Buffer*        uvBuffer;
+    //static ID3D11Buffer* vertexBuffer;
+    //static ID3D11Buffer* uvBuffer;
+    static Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
+    static Microsoft::WRL::ComPtr<ID3D11Buffer> uvBuffer;
 
 public:
     static void CreateStaticMember();

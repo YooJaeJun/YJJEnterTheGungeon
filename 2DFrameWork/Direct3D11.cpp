@@ -280,12 +280,12 @@ void Direct3D11::CreateBackBuffer(float width, float height)
 	{
 		ID3D11Texture2D* backbufferPointer;
 		hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backbufferPointer);
-		Check(hr)
+		Check(hr);
 
-			hr = device->CreateRenderTargetView(backbufferPointer, NULL, &renderTargetView);
-		Check(hr)
+		hr = device->CreateRenderTargetView(backbufferPointer, NULL, &renderTargetView);
+		Check(hr);
 
-			SafeRelease(backbufferPointer);
+		SafeRelease(backbufferPointer);
 	}
 }
 

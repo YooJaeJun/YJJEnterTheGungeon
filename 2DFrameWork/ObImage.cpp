@@ -1,7 +1,9 @@
 #include "framework.h"
 
-ID3D11Buffer* ObImage::vertexBuffer = nullptr;
-ID3D11Buffer* ObImage::uvBuffer = nullptr;
+// ID3D11Buffer* ObImage::vertexBuffer = nullptr;
+// ID3D11Buffer* ObImage::uvBuffer = nullptr;
+Microsoft::WRL::ComPtr<ID3D11Buffer> ObImage::vertexBuffer = nullptr;
+Microsoft::WRL::ComPtr<ID3D11Buffer> ObImage::uvBuffer = nullptr;
 
 void ObImage::CreateStaticMember()
 {
@@ -41,7 +43,7 @@ void ObImage::CreateStaticMember()
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
+        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
@@ -55,16 +57,16 @@ void ObImage::CreateStaticMember()
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         desc.MiscFlags = 0;
         desc.StructureByteStride = 0;
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &uvBuffer);
+        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, uvBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
-    D3D->GetDC()->VSSetConstantBuffers(2, 1, &uvBuffer);
+    D3D->GetDC()->VSSetConstantBuffers(2, 1, uvBuffer.GetAddressOf());
 }
 
 void ObImage::DeleteStaticMember()
 {
-    vertexBuffer->Release();
-    uvBuffer->Release();
+    //vertexBuffer->Release();
+    //uvBuffer->Release();
 }
 
 void ObImage::PlayAnim()
@@ -212,7 +214,7 @@ void ObImage::Render()
 
 
     D3D11_MAPPED_SUBRESOURCE mappedResource;
-    D3D->GetDC()->Map(uvBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+    D3D->GetDC()->Map(uvBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (reverseLR)
     {
         Vector4 reUv = Vector4(uv.z, uv.y, uv.x, uv.w);
@@ -222,15 +224,14 @@ void ObImage::Render()
     {
         memcpy_s(mappedResource.pData, sizeof(Vector4), &uv, sizeof(Vector4));
     }
-    D3D->GetDC()->Unmap(uvBuffer, 0);
-
+    D3D->GetDC()->Unmap(uvBuffer.Get(), 0);
 
     UINT stride = sizeof(VertexPT);
     UINT offset = 0;
 
     D3D->GetDC()->PSSetShaderResources(0, 1, &SRV);
     D3D->GetDC()->PSSetSamplers(0, 1, &sampler);
-    D3D->GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+    D3D->GetDC()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
     D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
     D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
 }
