@@ -15,7 +15,7 @@ namespace Gungeon
         col->pivot = OFFSET_B;
         SetPos(DEFAULTSPAWN);
 
-        colTile = new ObRect;
+        colTile = make_shared<ObRect>();
         colTile->isVisible = false;
         colTile->scale = Vector2(40.0f, 20.0f) * scaleFactor;
         colTile->color = Color(1.0f, 1.0f, 1.0f);
@@ -24,7 +24,7 @@ namespace Gungeon
         colTile->SetLocalPosY(-20.0f);
         colTile->pivot = OFFSET_B;
 
-        idle = new ObImage(L"EnterTheGungeon/Level/Gate.png");
+        idle = make_shared<ObImage>(L"EnterTheGungeon/Level/Gate.png");
         idle->isVisible = false;
         idle->maxFrame.x = 15;
         idle->scale = Vector2(960.0f / 15.0f, 165.0f) * scaleFactor;
@@ -32,7 +32,7 @@ namespace Gungeon
         idle->SetLocalPosY(-20.0f);
         idle->pivot = OFFSET_B;
 
-        bottom = new ObImage(L"EnterTheGungeon/Level/Gate_Bottom.png");
+        bottom = make_shared<ObImage>(L"EnterTheGungeon/Level/Gate_Bottom.png");
         bottom->isVisible = false;
         bottom->scale = Vector2(64.0f, 73.0f) * scaleFactor;
         bottom->SetParentRT(*col);
@@ -40,13 +40,6 @@ namespace Gungeon
         bottom->pivot = OFFSET_B;
 
         gateState = GateState::none;
-    }
-
-    void Gate::Release()
-    {
-        Obstacle::Release();
-        SafeDelete(col);
-        SafeDelete(colTile);
     }
 
     void Gate::Update()
@@ -57,35 +50,27 @@ namespace Gungeon
             break;
 
         case Gungeon::GateState::opening:
-            if (TIMER->GetTick(timeOpen, 1.5f))
-            {
+            if (TIMER.GetTick(timeOpen, 1.5f))
                 gateState = GateState::open;
-            }
             break;
 
         case Gungeon::GateState::open:
             if (flagIntersectPlayer)
-            {
                 gateState = GateState::cinematic;
-            }
             break;
 
         case Gungeon::GateState::cinematic:
 
-            if (TIMER->GetTick(timeCinematicBox, 1.0f))
-            {
+            if (TIMER.GetTick(timeCinematicBox, 1.0f))
                 gateState = GateState::process;
-            }
             break;
 
         case Gungeon::GateState::process:
             break;
 
         case Gungeon::GateState::setting:
-            if (TIMER->GetTick(timeSet, 0.5f))
-            {
+            if (TIMER.GetTick(timeSet, 0.5f))
                 gateState = GateState::set;
-            }
             break;
 
         case Gungeon::GateState::set:
@@ -95,15 +80,13 @@ namespace Gungeon
 
         case Gungeon::GateState::closing:
 
-            if (TIMER->GetTick(timePlayerDisappear, 0.2f))
-            {
+            if (TIMER.GetTick(timePlayerDisappear, 0.2f))
                 flagPlayerDisappear = true;
-            }
 
-            if (TIMER->GetTick(timeClosed, 0.3f))
+            if (TIMER.GetTick(timeClosed, 0.3f))
             {
                 gateState = GateState::closed;
-                SOUND->Play("GateSlam");
+                SOUND.Play("GateSlam");
             }
             break;
 
@@ -137,6 +120,6 @@ namespace Gungeon
         idle->isVisible = true;
         bottom->isVisible = true;
         gateState = GateState::opening;
-        SOUND->Play("GateSlam");
+        SOUND.Play("GateSlam");
     }
 }

@@ -10,7 +10,7 @@ namespace Gungeon
     public:
         //¹®ÀÚ¿­ ÃÑ¾Ë
         string  inputString;
-        int     outputAlphbets[40][5][5];
+        int     outputAlphbets[40][5][5] = { 0, };
         float   midForTargetFactor = 0.0f;
 
         int A[5][5] = { { 0, 0, 1, 0, 0 }, { 0, 1, 0, 1, 0 }, { 1, 0, 0, 0, 1 }, { 1, 1, 1, 1, 1 }, { 1, 0, 0, 0, 1 } };

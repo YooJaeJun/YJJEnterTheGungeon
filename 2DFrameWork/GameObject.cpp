@@ -1,8 +1,9 @@
 #include "framework.h"
+using Microsoft::WRL::ComPtr;
 
 unique_ptr<ObLine> GameObject::axisObject = nullptr;
-ID3D11Buffer* GameObject::WVPBuffer = nullptr;
-ID3D11Buffer* GameObject::colorBuffer = nullptr;
+ComPtr<ID3D11Buffer> GameObject::WVPBuffer = nullptr;
+ComPtr<ID3D11Buffer> GameObject::colorBuffer = nullptr;
 unique_ptr<Shader> GameObject::basicShader = nullptr;
 unique_ptr<Shader> GameObject::imageShader = nullptr;
 unique_ptr<Shader> GameObject::tileMapShader = nullptr;
@@ -19,10 +20,10 @@ void GameObject::CreateStaticMember()
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
 
-		HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &WVPBuffer);	// WVPBuffer 최종행렬
+		HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, NULL, WVPBuffer.GetAddressOf());	// WVPBuffer 최종행렬
 		assert(SUCCEEDED(hr));
 	}
-	D3D->GetDC()->VSSetConstantBuffers(0, 1, &WVPBuffer);
+	D3D.GetDC()->VSSetConstantBuffers(0, 1, WVPBuffer.GetAddressOf());
 
 	//CreateConstantBuffer
 	{
@@ -34,10 +35,10 @@ void GameObject::CreateStaticMember()
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
 
-		HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &colorBuffer);
+		HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, NULL, colorBuffer.GetAddressOf());
 		assert(SUCCEEDED(hr));
 	}
-	D3D->GetDC()->VSSetConstantBuffers(1, 1, &colorBuffer);
+	D3D.GetDC()->VSSetConstantBuffers(1, 1, colorBuffer.GetAddressOf());
 
 	basicShader = make_unique<Shader>(L"1.Basic");
 	imageShader = make_unique<Shader>(L"2.Image");
@@ -45,19 +46,14 @@ void GameObject::CreateStaticMember()
 	axisObject = make_unique<ObLine>();
 }
 
-void GameObject::DeleteStaticMember()
-{
-	WVPBuffer->Release();
-	colorBuffer->Release();
-}
-
 
 GameObject::GameObject()
 {
-	isVisible = true;
-	isFilled = true;
+	P = nullptr;
 	position.x = 0;
 	position.y = 0;
+	isVisible = true;
+	isFilled = true;
 	scale.x = 1.0f;
 	scale.y = 1.0f;
 	rotation = 0;
@@ -66,7 +62,6 @@ GameObject::GameObject()
 	rotation2 = 0;
 	color = Color(0.5, 0.5, 0.5, 0.5);
 	isAxis = false;
-	P = nullptr;
 	pivot = OFFSET_N;
 	space = Space::world;
 	colOnOff = true;
@@ -127,10 +122,10 @@ void GameObject::Render()
 	switch (space)
 	{
 	case Space::world:
-		WVP = W * CAM->GetVP();		// V: 카메라 영향을 받는다.
+		WVP = W * CAM.GetVP();		// V: 카메라 영향을 받는다.
 		break;
 	case Space::screen:
-		WVP = W * CAM->GetP();
+		WVP = W * CAM.GetP();
 		break;
 	}
 
@@ -138,21 +133,22 @@ void GameObject::Render()
 	{
 		// subresource와 map 함수를 이용. CPU와 GPU의 중복 접근을 막음
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		D3D->GetDC()->Map(WVPBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		D3D.GetDC()->Map(WVPBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		memcpy_s(mappedResource.pData, sizeof(Matrix), &WVP, sizeof(Matrix));
-		D3D->GetDC()->Unmap(WVPBuffer, 0);
+		D3D.GetDC()->Unmap(WVPBuffer.Get(), 0);
 	}
 	{
 		D3D11_MAPPED_SUBRESOURCE mappedResource;
-		D3D->GetDC()->Map(colorBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+		D3D.GetDC()->Map(colorBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
 		memcpy_s(mappedResource.pData, sizeof(Color), &color, sizeof(Color));
-		D3D->GetDC()->Unmap(colorBuffer, 0);
+		D3D.GetDC()->Unmap(colorBuffer.Get(), 0);
 	}
 }
 
 ColPos GameObject::Intersect(Vector2 coord)
 {
-	if (not colOnOff) return ColPos::none;
+	if (not colOnOff) 
+		return ColPos::none;
 	
 	if (collider == Collider::rect)
 	{
@@ -181,9 +177,10 @@ ColPos GameObject::Intersect(Vector2 coord)
 	return ColPos::none;
 }
 
-ColPos GameObject::Intersect(GameObject* ob)
+ColPos GameObject::Intersect(shared_ptr<GameObject> ob)
 {
-	if (colOnOff == false or ob->colOnOff == false) return ColPos::none;
+	if (colOnOff == false or ob->colOnOff == false) 
+		return ColPos::none;
 
 	if (collider == Collider::line)
 	{
@@ -232,7 +229,7 @@ ColPos GameObject::Intersect(GameObject* ob)
 			}
 			else
 			{
-				return Utility::IntersectRectRect(this, ob);
+				return Utility::IntersectRectRect(make_shared<GameObject>(*this), ob);
 			}
 
 		}
@@ -316,7 +313,7 @@ void GameObject::SetWorldPos(Vector2 worldPos)
 	}
 	else
 	{
-		Vector2 location = Vector2::Transform(worldPos, (*P).Invert());
+		Vector2 location = Vector2::Transform(worldPos, P->Invert());
 		position = location;
 	}
 }
@@ -329,7 +326,7 @@ void GameObject::SetWorldPosX(float worldPosX)
 	}
 	else
 	{
-		Vector2 location = Vector2::Transform(Vector2(worldPosX, 0), (*P).Invert());
+		Vector2 location = Vector2::Transform(Vector2(worldPosX, 0), P->Invert());
 		position.x = location.x;
 	}
 }
@@ -341,7 +338,7 @@ void GameObject::SetWorldPosY(float worldPosY)
 	}
 	else
 	{
-		Vector2 location = Vector2::Transform(Vector2(0, worldPosY), (*P).Invert());
+		Vector2 location = Vector2::Transform(Vector2(0, worldPosY), P->Invert());
 		position.y = location.y;
 	}
 }
@@ -353,7 +350,7 @@ void GameObject::MoveWorldPos(Vector2 velocity)
 	}
 	else
 	{
-		Vector2 locVelocity = Vector2::TransformNormal(velocity, (*P).Invert());
+		Vector2 locVelocity = Vector2::TransformNormal(velocity, P->Invert());
 		position += locVelocity;
 	}
 }

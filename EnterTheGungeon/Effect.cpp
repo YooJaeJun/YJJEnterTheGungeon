@@ -7,12 +7,6 @@ namespace Gungeon
 		state = State::die;
 	}
 
-	void Effect::Release()
-	{
-		Character::Release();
-		SafeDelete(idle);
-	}
-
 	void Effect::Update()
 	{
 		Character::Update();
@@ -51,7 +45,7 @@ namespace Gungeon
 
 	void Effect::Idle()
 	{
-		if (TIMER->GetTick(timeDie, intervalDie))
+		if (TIMER.GetTick(timeDie, intervalDie))
 		{
 			state = State::die;
 			idle->SetWorldPos(DEFAULTSPAWN);

@@ -18,17 +18,16 @@ namespace Gungeon
 	public:
 		TreasureBox();
 		virtual void Init() override;
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void Render() override;
 		void Spawn(const Vector2 wpos);
 
 	public:
 		TreasureState	treasureState = TreasureState::none;
-		Weapon*			weapon[treasureWeaponNum];
+		std::shared_ptr<Weapon>			weapon[treasureWeaponNum];
 
 	private:
-		ObImage*		open = nullptr;
+		std::shared_ptr<ObImage>		open = nullptr;
 		Vector2			weaponDest[treasureWeaponNum];
 	};
 }

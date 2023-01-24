@@ -4,27 +4,27 @@ namespace Gungeon
 {
 	Weapon::Weapon()
 	{
-		col = new ObRect;
+		col = make_shared<ObRect>();
 		col->isVisible = false;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 		col->pivot = OFFSET_LB;
 
-		firePos = new ObRect;
+		firePos = make_shared<ObRect>();
 		firePos->isVisible = false;
 		firePos->isFilled = false;
 		firePos->scale = Vector2(10.0f, 10.0f);
 		firePos->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 		firePos->SetParentRT(*col);
 
-		fireEffect = new Effect;
+		fireEffect = make_shared<Effect>();
 
-		uiBulletFrame = new UI;
+		uiBulletFrame = make_shared<UI>();
 
-		uiWeapon = new UI;
+		uiWeapon = make_shared<UI>();
 
-		uiBulletCountInfinity = new UI;
-		uiBulletCountInfinity->img = new ObImage(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
+		uiBulletCountInfinity = make_shared<UI>();
+		uiBulletCountInfinity->img = make_shared<ObImage>(L"EnterTheGungeon/Weapon/UI_BulletCount_Infinity.png");
 		uiBulletCountInfinity->img->isVisible = false;
 		uiBulletCountInfinity->img->scale = Vector2(60.0f, 28.0f);
 		uiBulletCountInfinity->img->pivot = OFFSET_RB;
@@ -32,20 +32,6 @@ namespace Gungeon
 		uiBulletCountInfinityPos = Vector2(-70.0f, 155.0f);
 		uiBulletCountInfinity->Spawn(uiBulletCountInfinityPos);
 		uiBulletCountInfinity->img->space = Space::screen;
-	}
-
-	void Weapon::Release()
-	{
-		Character::Release();
-		SafeDelete(idle);
-		SafeDelete(firePos);
-		SafeDelete(fireEffect);
-		SafeDelete(imgReloading);
-
-		SafeRelease(uiBulletFrame);
-		SafeRelease(uiWeapon);
-		SafeRelease(uiBulletCountInfinity);
-		for (auto& elem : uiBullet) SafeRelease(elem);
 	}
 
 	void Weapon::Update()
@@ -70,8 +56,10 @@ namespace Gungeon
 	{
 		idle->Render(); // RENDER->push(idle);
 		Character::Render();
-		if (firePos) firePos->Render();
-		if (fireEffect) fireEffect->Render();
+		if (firePos) 
+			firePos->Render();
+		if (fireEffect) 
+			fireEffect->Render();
 
 		if (isUIRendering)
 		{
@@ -90,9 +78,7 @@ namespace Gungeon
 		uiBulletFrame->Spawn(Vector2(-26.0f, 30.0f));
 		uiWeapon->Spawn(uiWeaponSpawnPos);
 		if (remainBulletCount == INT_MAX)
-		{
 			uiBulletCountInfinity->Spawn(uiBulletCountInfinityPos);
-		}
 
 		idx = 0;
 		for (auto& elem : uiBullet)
@@ -110,9 +96,7 @@ namespace Gungeon
 		firePos->SetLocalPos(localFirePosDefault);
 		firePos->pivot = pivotDefault;
 		if (fireEffect)
-		{
 			fireEffect->idle->pivot = pivotDefault;
-		}
 	}
 
 	void Weapon::SwapUvY()
@@ -135,9 +119,7 @@ namespace Gungeon
 		firePos->SetLocalPosY(col->GetLocalPos().y);
 		firePos->pivot.y = -pivotDefault.y;
 		if (fireEffect)
-		{
 			fireEffect->idle->pivot.y = -pivotDefault.y;
-		}
 	}
 
 	void Weapon::UIOn(const bool on)

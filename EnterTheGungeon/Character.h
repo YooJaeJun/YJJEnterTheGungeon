@@ -20,7 +20,6 @@ namespace Gungeon
 	public:
 		Character();
 		virtual void Init();
-		virtual void Release();
 		virtual void Update();
 		virtual void Update(const bool notRotation);
 		virtual void LateUpdate();
@@ -38,8 +37,8 @@ namespace Gungeon
 		virtual void ColToggle();
 
 	public:
-		GameObject*	col = nullptr;
-		ObRect*		colTile = nullptr;
+		std::shared_ptr<GameObject>	col = nullptr;
+		std::shared_ptr<ObRect>		colTile = nullptr;
 		State		state = State::idle;
 		float		scalar = 0.0f;
 

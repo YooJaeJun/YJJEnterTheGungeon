@@ -11,19 +11,19 @@ struct Int2
 		this->y = y;
 	}
 
-	const Int2 operator+(const Int2 dest) const
+	const Int2 operator+(const Int2& dest) const
 	{
 		return Int2(x + dest.x, y + dest.y);
 	}
-	const Int2 operator-(const Int2 dest) const
+	const Int2 operator-(const Int2& dest) const
 	{
 		return Int2(x - dest.x, y - dest.y);
 	}
-	const Int2 operator*(const Int2 dest) const
+	const Int2 operator*(const Int2& dest) const
 	{
 		return Int2(x * dest.x, y * dest.y);
 	}
-	const Int2 operator/(const Int2 dest) const
+	const Int2 operator/(const Int2& dest) const
 	{
 		return Int2(x / dest.x, y / dest.y);
 	}
@@ -49,6 +49,7 @@ struct Int2
 	{
 		return (x == dest.x && y == dest.y);
 	}
+
 	bool operator!=(const Int2 dest) const
 	{
 		return (x != dest.x || y != dest.y);
@@ -60,43 +61,12 @@ struct Int2
 	}
 };
 
-template <typename T>
-class Singleton
-{
-	//static
-private:
-	static T* instance;
-
-public:
-	static T* GetInstance()
-	{
-		if (!instance)
-			instance = new T;
-
-		return instance;
-	};
-
-	//member
-public:
-	virtual ~Singleton() {};
-	void DeleteSingleton()
-	{
-		delete instance;
-		instance = nullptr;
-	};
-};
-
-template <typename T>
-T* Singleton<T>::instance = nullptr;
-//씬타입으로는 객체를만들수 없다.
 class Scene
 {
 public:
 	virtual ~Scene() {};
 	//초기화
 	virtual void Init() = 0;
-	//해제
-	virtual void Release() = 0;
 	//Loop
 	virtual void Update() = 0;
 	virtual void LateUpdate() = 0;

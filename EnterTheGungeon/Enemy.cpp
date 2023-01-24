@@ -25,13 +25,13 @@ namespace Gungeon
 	{
 		state = State::die;
 
-		col = new ObCircle;
+		col = make_shared<ObCircle>();
 		col->isVisible = false;
 		col->isFilled = false;
 		col->color = Color(1.0f, 1.0f, 1.0f);
 		SetPos(DEFAULTSPAWN);
 
-		colTile = new ObRect;
+		colTile = make_shared<ObRect>();
 		colTile->isVisible = false;
 		colTile->scale = Vector2(col->scale.x, col->scale.y / 2.0f);
 		colTile->SetParentRT(*col);
@@ -39,20 +39,20 @@ namespace Gungeon
 		colTile->isFilled = false;
 		colTile->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
 
-		shadow = new ObImage(L"EnterTheGungeon/enemy_1/Shadow_1.png");
+		shadow = make_shared<ObImage>(L"EnterTheGungeon/enemy_1/Shadow_1.png");
 		shadow->SetParentRT(*col);
 	}
 
 	void Enemy::InitItem()
 	{
 		float scaleFactor = 0.5f;
-		dropItem = new Item;
-		dropItem->col = new ObCircle;
+		dropItem = make_shared<Item>();
+		dropItem->col = make_shared<ObCircle>();
 		dropItem->col->isVisible = false;
 		dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
 		dropItem->col->isFilled = false;
 		dropItem->SetPos(DEFAULTSPAWN);
-		dropItem->idle = new ObImage(L"EnterTheGungeon/player_1/UI_Gold.png");
+		dropItem->idle = make_shared<ObImage>(L"EnterTheGungeon/player_1/UI_Gold.png");
 		dropItem->idle->scale = Vector2(40.0f, 40.0f) * scaleFactor;
 		dropItem->idle->SetParentRT(*dropItem->col);
 		dropItem->idle->isVisible = false;
@@ -61,13 +61,6 @@ namespace Gungeon
 
 	void Enemy::InitIntervalAttack()
 	{
-	}
-
-	void Enemy::Release()
-	{
-		Unit::Release();
-		if (weapon) weapon->Release();
-		for (auto& elem : bullet) elem->Release();
 	}
 
 	void Enemy::Update()
@@ -167,14 +160,14 @@ namespace Gungeon
 
 		way.clear();
 
-		SOUND->Play("BulletManHurt");
+		SOUND.Play("BulletManHurt");
 	}
 
 	void Enemy::Hitting()
 	{
 		if (isHit)
 		{
-			if (TIMER->GetTick(timeHit, 0.01f))
+			if (TIMER.GetTick(timeHit, 0.01f))
 			{
 				isHit = false;
 			}
@@ -182,7 +175,7 @@ namespace Gungeon
 
 		if (isHitAnim)
 		{
-			Color c = Color(RANDOM->Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM->Float(0.2f, 1.0f));
+			Color c = Color(RANDOM.Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM.Float(0.2f, 1.0f));
 			idle->color = c;
 			walk->color = c;
 			hit->color = c;
@@ -242,7 +235,7 @@ namespace Gungeon
 		dropItem->idle->isVisible = true;
 		dropItem->state = State::idle;
 
-		SOUND->Play("BulletManDeath");
+		SOUND.Play("BulletManDeath");
 	}
 
 	void Enemy::Spawn(const Vector2 wpos)

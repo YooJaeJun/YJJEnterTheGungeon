@@ -3,21 +3,23 @@
 struct FontBrushDesc;
 struct FontTextDesc;
 
-class DWrite : public Singleton<DWrite>
+class DWrite
 {
-    ID2D1Device* device;
-    ID2D1DeviceContext* deviceContext = nullptr;
-    ID2D1Factory1* factory;
-    IDWriteFactory* writeFactory = nullptr;
-    ID2D1Bitmap1* targetBitmap;
-
-    vector<FontBrushDesc> fontBrush;
-    vector<FontTextDesc>  fontText;
+private:
+    DWrite();
 
 public:
-    DWrite();
+    static DWrite& GetInstance()
+    {
+        static std::unique_ptr<DWrite> inst;
+        if (!inst)
+            inst = std::unique_ptr<DWrite>(new DWrite());
+        return *inst;
+    }
+
+public:
     ~DWrite();
-    ID2D1DeviceContext* GetDC() { return deviceContext; }
+    Microsoft::WRL::ComPtr<ID2D1DeviceContext> GetDC() { return deviceContext; }
     //창사이즈 조절
     void CreateBackBuffer(float width, float height);
     void DeleteBackBuffer();
@@ -35,12 +37,22 @@ public:
         , DWRITE_FONT_STYLE style = DWRITE_FONT_STYLE_NORMAL
         , DWRITE_FONT_STRETCH stretch = DWRITE_FONT_STRETCH_NORMAL
     );
+
+private:
+    Microsoft::WRL::ComPtr<ID2D1Device>         device;
+    Microsoft::WRL::ComPtr<ID2D1DeviceContext>  deviceContext = nullptr;
+    Microsoft::WRL::ComPtr<ID2D1Factory1>       factory;
+    Microsoft::WRL::ComPtr<IDWriteFactory>      writeFactory = nullptr;
+    Microsoft::WRL::ComPtr<ID2D1Bitmap1>        targetBitmap;
+
+    vector<FontBrushDesc> fontBrush;
+    vector<FontTextDesc>  fontText;
 };
 
 struct FontBrushDesc
 {
     Color color;
-    ID2D1SolidColorBrush* brush = NULL;
+    Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = NULL;
 
     //연산자오버라이딩
     bool operator==(const FontBrushDesc& val)
@@ -61,7 +73,7 @@ struct FontTextDesc
     DWRITE_FONT_STYLE style;
     DWRITE_FONT_STRETCH stretch;
 
-    IDWriteTextFormat* format = nullptr;
+    Microsoft::WRL::ComPtr<IDWriteTextFormat> format = nullptr;
 
     bool operator==(const FontTextDesc& val)
     {
@@ -75,5 +87,4 @@ struct FontTextDesc
 
         return b;
     }
-
 };

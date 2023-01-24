@@ -17,7 +17,6 @@ namespace Gungeon
 		void InitBullet();
 		void InitEffect();
 		void InitUI();
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
@@ -45,14 +44,14 @@ namespace Gungeon
 		void Dusting();
 		void DecreaseHeart();
 		void PlusMoney(const int n);
-		void EquipWeapon(Weapon* other);
+		void EquipWeapon(std::shared_ptr<Weapon> other);
 		void SetWeaponFrameToOrigin();
 		void UIOn(const bool on);
 		virtual void ColToggle() override;
 
 	public:
-		ObImage*			roll = nullptr;
-		Weapon*				weapons[weaponMax];
+		std::shared_ptr<ObImage>			roll = nullptr;
+		std::shared_ptr<Weapon>				weapons[weaponMax];
 		bool				flagInteractionUI = false;
 		bool				godMode = false;
 		int					curWeaponIdx = 0;
@@ -67,19 +66,19 @@ namespace Gungeon
 		bool				flagFireCamShake = false;
 		float				timeFireCamShake = 0.0f;
 		float				timeHitCamShake = 0.0f;
-		UI*					uiReload = nullptr;
-		UI*					uiReloadBar = nullptr;
+		std::shared_ptr<UI>					uiReload = nullptr;
+		std::shared_ptr<UI>					uiReloadBar = nullptr;
 		bool				godModeByForce = false;
 		float				timeLastPosForDust = 0.0f;
-		Effect*				dust[dustMax];
+		std::shared_ptr<Effect>				dust[dustMax];
 		int					curDustIdx = 0;
-		UI*					uiWeaponFrame = nullptr;
-		vector<UI*>			uiHeartFull;
-		vector<UI*>			uiHeartHalf;
-		vector<UI*>			uiHeartNone;
-		vector<UI*>			uiBlank;
-		UI*					uiKey = nullptr;
-		UI*					uiGold = nullptr;
+		std::shared_ptr<UI>					uiWeaponFrame = nullptr;
+		vector<std::shared_ptr<UI>>			uiHeartFull;
+		vector<std::shared_ptr<UI>>			uiHeartHalf;
+		vector<std::shared_ptr<UI>>			uiHeartNone;
+		vector<std::shared_ptr<UI>>			uiBlank;
+		std::shared_ptr<UI>					uiKey = nullptr;
+		std::shared_ptr<UI>					uiGold = nullptr;
 		int					money = 0;
 		int					key = 0;
 		bool				flagLbutton = false;

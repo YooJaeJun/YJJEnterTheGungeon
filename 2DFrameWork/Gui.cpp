@@ -41,7 +41,7 @@ Gui::Gui()
 	}
 
 	ImGui_ImplWin32_Init(app.handle);
-	ImGui_ImplDX11_Init(D3D->GetDevice(), D3D->GetDC());
+	ImGui_ImplDX11_Init(D3D.GetDevice().Get(), D3D.GetDC().Get());
 
 
 	ImGui::GetIO().ConfigWindowsResizeFromEdges = true;

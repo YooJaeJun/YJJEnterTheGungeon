@@ -7,13 +7,12 @@ namespace Gungeon
 	public:
 		Unit();
 		virtual void Init() override;
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
 
-		virtual void SetTarget(Weapon*& weapon);
+		virtual void SetTarget(std::shared_ptr<Weapon>& weapon);
 		virtual void Idle();
 		virtual void Walk();
 		virtual void Attack();
@@ -26,27 +25,27 @@ namespace Gungeon
 		virtual void Spawn(const Vector2 wpos) override;
 		void SetLastDir();
 		void SetDirState(const Vector2 dir, DirState& dirState);
-		void FindPath(ObTileMap* map);
+		void FindPath(std::shared_ptr<ObTileMap> map);
 		void Stop();
 
 	public:
-		ObImage*			respawn = nullptr;
-		ObImage*			shadow = nullptr;
-		Item*				dropItem = nullptr;
-		vector<Bullet*>		bullet;
-		ObImage*			idle = nullptr;
-		ObImage*			walk = nullptr;
+		std::shared_ptr<ObImage>			respawn = nullptr;
+		std::shared_ptr<ObImage>			shadow = nullptr;
+		std::shared_ptr<Item>				dropItem = nullptr;
+		vector<std::shared_ptr<Bullet>>		bullet;
+		std::shared_ptr<ObImage>			idle = nullptr;
+		std::shared_ptr<ObImage>			walk = nullptr;
 		Vector2				targetPos;
 		wstring				name;
 		wstring				desc;
 
 	protected:
-		ObImage*			kick = nullptr;
-		ObImage*			hit = nullptr;
-		ObImage*			fall = nullptr;
-		ObImage*			die = nullptr;
-		ObImage*			attack = nullptr;
-		ObImage*			attackEnd = nullptr;
+		std::shared_ptr<ObImage>			kick = nullptr;
+		std::shared_ptr<ObImage>			hit = nullptr;
+		std::shared_ptr<ObImage>			fall = nullptr;
+		std::shared_ptr<ObImage>			die = nullptr;
+		std::shared_ptr<ObImage>			attack = nullptr;
+		std::shared_ptr<ObImage>			attackEnd = nullptr;
 		DirState			curMoveDirState = DirState::dirB;
 		DirState			curMoveDirStateBefore = DirState::dirB;
 		DirState			curTargetDirState = DirState::dirB;

@@ -1,16 +1,15 @@
 #include "framework.h"
 
+SceneManager::SceneManager()
+{
+}
+
 SceneManager::~SceneManager()
 {
-    for (auto i = scenes.begin();
-        i != scenes.end(); i++)
-    {
-        SafeDelete(i->second);
-    }
     scenes.clear();
 }
 
-bool SceneManager::AddScene(string key, Scene * value)
+bool SceneManager::AddScene(string key, std::shared_ptr<Scene> value)
 {
     auto iter = scenes.find(key);
 
@@ -32,15 +31,14 @@ bool SceneManager::DeleteScene(string key)
         return false;
     }
 
-    SafeDelete(iter->second);
     scenes.erase(iter);
 
     return true;
 }
 
-Scene * SceneManager::ChangeScene(string key, float changingTime)
+shared_ptr<Scene> SceneManager::ChangeScene(string key, float changingTime)
 {
-    Scene * temp = GetScene(key);
+    shared_ptr<Scene> temp = GetScene(key);
 
     if (temp)
     {
@@ -51,7 +49,7 @@ Scene * SceneManager::ChangeScene(string key, float changingTime)
         {
             isChanging = true;
             //¾À ºÒ·¯¿Ã ¶§ 
-            SafeRelease(currentScene);
+            currentScene.reset();
             //¾À ¹Ù²ð ¶§
             nextScene->Init();
         } 
@@ -59,7 +57,7 @@ Scene * SceneManager::ChangeScene(string key, float changingTime)
     return temp;
 }
 
-Scene * SceneManager::GetScene(string key)
+shared_ptr<Scene> SceneManager::GetScene(string key)
 {
     auto iter = scenes.find(key);
 
@@ -71,14 +69,9 @@ Scene * SceneManager::GetScene(string key)
     return iter->second;
 }
 
-Scene * SceneManager::GetCurrentScene()
+shared_ptr<Scene> SceneManager::GetCurrentScene()
 {
     return currentScene;
-}
-
-void SceneManager::Release()
-{
-    if (currentScene)currentScene->Release();
 }
 
 void SceneManager::Update()
@@ -90,7 +83,7 @@ void SceneManager::Update()
         if (changingTime <= 0.0f)
         {
             isChanging = true;
-            SafeRelease(currentScene);
+            currentScene = nullptr;
             nextScene->Init();
         }
     }

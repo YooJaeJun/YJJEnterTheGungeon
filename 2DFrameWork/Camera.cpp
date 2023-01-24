@@ -8,7 +8,7 @@ Camera::Camera()
     //ºäÆ÷Æ®
     viewport.width = app.GetWidth();
     viewport.height = app.GetHeight();
-    D3D->GetDC()->RSSetViewports(1, viewport.Get11());
+    D3D.GetDC()->RSSetViewports(1, viewport.Get11());
     // ÁÜ
     zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
 }
@@ -40,5 +40,5 @@ void Camera::ResizeScreen()
 {
     viewport.width = app.GetWidth();
     viewport.height = app.GetHeight();
-    D3D->GetDC()->RSSetViewports(1, viewport.Get11());
+    D3D.GetDC()->RSSetViewports(1, viewport.Get11());
 }

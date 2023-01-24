@@ -11,7 +11,6 @@ namespace Gungeon
 		void InitSelf();
 		void InitItem();
 		virtual void InitIntervalAttack();
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
@@ -32,7 +31,7 @@ namespace Gungeon
 
 	public:
 		float		timeSetDir = 0.0f;
-		Weapon*		weapon = nullptr;
+		std::shared_ptr<Weapon>		weapon = nullptr;
 
 	private:
 		float		timeSetMoveDir = 0.0f;

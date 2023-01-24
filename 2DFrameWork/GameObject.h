@@ -18,17 +18,6 @@ struct StaticVertexCount
 	}
 };
 
-enum class ZOrder
-{
-	none,
-	shadow,
-	weapon,
-	object,
-	bullet,
-	effect,
-	UI,
-};
-
 class ObLine;
 enum class Space
 {
@@ -49,8 +38,8 @@ class GameObject
 {
 	//static member
 private:
-	static ID3D11Buffer*		WVPBuffer;
-	static ID3D11Buffer*		colorBuffer;
+	static Microsoft::WRL::ComPtr<ID3D11Buffer>		WVPBuffer;
+	static Microsoft::WRL::ComPtr<ID3D11Buffer>		colorBuffer;
 	static unique_ptr<ObLine>	axisObject;
 
 protected:
@@ -61,7 +50,6 @@ protected:
 	//static member function
 public:
 	static void CreateStaticMember();
-	static void DeleteStaticMember();
 
 	//member
 private:
@@ -88,7 +76,6 @@ public:
 	Space		space;
 	Collider	collider;
 	bool		colOnOff;
-	ZOrder		zOrder;
 
 	//member function
 public:
@@ -99,7 +86,7 @@ public:
 	virtual void Update(const bool notRotation);
 	virtual void Render();
 	ColPos Intersect(Vector2 coord);
-	ColPos Intersect(GameObject* ob);
+	ColPos Intersect(std::shared_ptr<GameObject> ob);
 	ColPos IntersectScreenMouse(Vector2 coord);
 
 	//getter setter
@@ -126,6 +113,6 @@ public:
 	//부모행렬 만들기
 	void	SetParentRT(GameObject& src)	{ P = &src.RT; }
 	void	SetParentT(GameObject& src)	{ P = &src.T; }
-	Matrix*	GetParent() { return P; }
+	Matrix* GetParent() { return P; }
 };
 

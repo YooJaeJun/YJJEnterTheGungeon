@@ -1,6 +1,19 @@
 #pragma once
-class Timer : public Singleton<Timer>
+// 나중에 델리게이트 이벤트로...
+class Timer
 {
+private:
+    Timer();
+
+public:
+    static Timer& GetInstance()
+    {
+        static std::unique_ptr<Timer> inst;
+        if (!inst)
+            inst = std::unique_ptr<Timer>(new Timer());
+        return *inst;
+    }
+
 private:
     chrono::steady_clock::time_point    currentTime;
     chrono::steady_clock::time_point    lastTime;
@@ -12,7 +25,6 @@ private:
     float                               worldTime;
    
 public:
-    Timer();
     bool    GetTick(float& time, float interval);
     void    Chronometry(UINT lock = 60);
     float   GetDelta()          { return deltaTime; } //매크로 X

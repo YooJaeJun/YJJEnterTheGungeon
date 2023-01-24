@@ -69,21 +69,13 @@ float4 PS(PixelInput input) : SV_TARGET
    
     [branch]
     if (input.tileMapIdx == 0)
-    {
         TextureColor = Texture0.Sample(Sampler0, input.uv);
-    }
     else if (input.tileMapIdx == 1)
-    {
         TextureColor = Texture1.Sample(Sampler1, input.uv);
-    }
     else if (input.tileMapIdx == 2)
-    {
         TextureColor = Texture2.Sample(Sampler2, input.uv);
-    }
     else if (input.tileMapIdx == 3)
-    {
         TextureColor = Texture3.Sample(Sampler3, input.uv);
-    }
     
     
     [flatten]
@@ -106,13 +98,9 @@ float4 PS(PixelInput input) : SV_TARGET
     if (Select == 0.0f)
     {
         if (dis > Radius)
-        {
             TextureColor.rgb += (OutColor.rgb * 2.0f - 1.0f);
-        }
         else
-        {
             TextureColor.rgb += (LightColor.rgb * 2.0f - 1.0f);
-        }
     }
     else
     {
@@ -120,6 +108,7 @@ float4 PS(PixelInput input) : SV_TARGET
         TextureColor.rgb += (LightColor.rgb * 2.0f - 1.0f);
         TextureColor.rgb *= temp;
     }
+
     TextureColor = saturate(TextureColor);
     
     //if (input.tileState == 1.0f)

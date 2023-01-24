@@ -9,17 +9,16 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Init()
     {
-        MAP->useGui = false;
-        LIGHT->light.radius = 4000.0f;
+        Clear();
+        MAP.useGui = false;
+        LIGHT.light.radius = 4000.0f;
         state = MapGenState::none;
         finalState = state;
     }
 
-    void ProcedureMapGeneration::Release()
+    void ProcedureMapGeneration::Clear()
     {
-        for (auto& elem : candidateRooms) elem->Release();
         candidateRooms.clear();
-        for (auto& elem : selectedRooms) elem->Release();
         selectedRooms.clear();
         roomNode.clear();
         triangulation.nodesLinked.clear();
@@ -37,14 +36,10 @@ namespace Gungeon
         if (state != MapGenState::finish)
         {
             if (ImGui::Button("Next Step"))
-            {
                 state = (MapGenState)((int)finalState + 1);
-            }
             ImGui::SameLine();
             if (ImGui::Button("Auto"))
-            {
                 autoProcess = true;
-            }
         }
 
         switch (state)
@@ -103,7 +98,7 @@ namespace Gungeon
 
         case MapGenState::propWall:
             PropWall();
-            MAP->useGui = true;
+            MAP.useGui = true;
             break;
 
         case MapGenState::finish:
@@ -127,10 +122,16 @@ namespace Gungeon
         }
 
 
-        for (auto& elem : candidateRooms) if (elem) elem->Update();
-        for (auto& elem : selectedRooms) if (elem) elem->Update();
-        for (auto& elem : linesTriangulated) elem.Update();
-        for (auto& elem : linesMST) elem.Update();
+        for (auto& elem : candidateRooms) 
+            if (elem) 
+                elem->Update();
+        for (auto& elem : selectedRooms) 
+            if (elem) 
+                elem->Update();
+        for (auto& elem : linesTriangulated) 
+            elem.Update();
+        for (auto& elem : linesMST) 
+            elem.Update();
     }
 
     void ProcedureMapGeneration::LateUpdate()
@@ -139,10 +140,16 @@ namespace Gungeon
 
     void ProcedureMapGeneration::Render()
     {
-        for (auto& elem : candidateRooms) if (elem) elem->Render();
-        for (auto& elem : selectedRooms) if (elem) elem->Render();
-        for (auto& elem : linesTriangulated) elem.Render();
-        for (auto& elem : linesMST) elem.Render();
+        for (auto& elem : candidateRooms) 
+            if (elem) 
+                elem->Render();
+        for (auto& elem : selectedRooms) 
+            if (elem) 
+                elem->Render();
+        for (auto& elem : linesTriangulated) 
+            elem.Render();
+        for (auto& elem : linesMST) 
+            elem.Render();
     }
 
     void ProcedureMapGeneration::ResizeScreen()
@@ -153,29 +160,29 @@ namespace Gungeon
     {       
         // room
         roomScaleForSelect = 1100.0f;
-        candidateRooms = vector<Room*>(roomMax);
+        candidateRooms = vector<shared_ptr<Room>>(roomMax);
         int idx = 0;
         for (auto& room : candidateRooms)
         {
-            room = new Room();
+            room = make_shared<Room>();
 
             // 일부 방 선택할 만한 크기 보장
             if (idx < 5)
             {
-                room->col->scale.x = 100.0f * RANDOM->Int(13, 15);
-                room->col->scale.y = 100.0f * RANDOM->Int(13, 15);
+                room->col->scale.x = 100.0f * RANDOM.Int(13, 15);
+                room->col->scale.y = 100.0f * RANDOM.Int(13, 15);
             }
             else
             {
-                room->col->scale.x = 100.0f * RANDOM->Int(9, 14);
-                room->col->scale.y = 100.0f * RANDOM->Int(9, 14);
+                room->col->scale.x = 100.0f * RANDOM.Int(9, 14);
+                room->col->scale.y = 100.0f * RANDOM.Int(9, 14);
             }
 
             map<Int2, int> dic;
             int xRand = 0, yRand = 0;
             do {
-                xRand = RANDOM->Int(-10, 10);
-                yRand = RANDOM->Int(-10, 10);
+                xRand = RANDOM.Int(-10, 10);
+                yRand = RANDOM.Int(-10, 10);
             } while (dic[Int2(xRand, yRand)]);
 
             dic[Int2(xRand, yRand)]++;
@@ -200,17 +207,18 @@ namespace Gungeon
             {
                 for (auto& room2 : candidateRooms)
                 {
-                    if (room == room2) continue;
+                    if (room == room2) 
+                        continue;
 
                     if (room->col->Intersect(room2->col))
                     {
                         Vector2 dir = room->col->GetWorldPos() - room2->col->GetWorldPos();
 
                         float x, y;
-                        if (dir.x >= 0.0f) x = MAP->tilemap->scale.x / 2.0f;
-                        else x = MAP->tilemap->scale.x * -1.0f / 2.0f;
-                        if (dir.y >= 0.0f) y = MAP->tilemap->scale.y / 2.0f;
-                        else y = MAP->tilemap->scale.y * -1.0f / 2.0f;
+                        if (dir.x >= 0.0f) x = MAP.tilemap->scale.x / 2.0f;
+                        else x = MAP.tilemap->scale.x * -1.0f / 2.0f;
+                        if (dir.y >= 0.0f) y = MAP.tilemap->scale.y / 2.0f;
+                        else y = MAP.tilemap->scale.y * -1.0f / 2.0f;
 
                         room->SetPos(Vector2(room->Pos().x + x, room->Pos().y + y));
                         flagSpread = false;
@@ -220,9 +228,7 @@ namespace Gungeon
             }
 
             if (flagSpread)
-            {
                 break;
-            }
         }
     }
 
@@ -236,10 +242,8 @@ namespace Gungeon
                 elem->col->scale.x -= 200.0f;
                 elem->col->scale.y -= 200.0f;
                 Int2 on;
-                if (MAP->tilemap->WorldPosToTileIdx(elem->Pos(), on))
-                {
-                    elem->SetPos(MAP->tilemap->TileIdxToWorldPos(on));
-                }
+                if (MAP.tilemap->WorldPosToTileIdx(elem->Pos(), on))
+                    elem->SetPos(MAP.tilemap->TileIdxToWorldPos(on));
                 elem->col->isFilled = true;
                 elem->selected = true;
 
@@ -258,13 +262,11 @@ namespace Gungeon
             idx++;
         }
 
-        triangulation.triangulate(roomNode);
+        triangulation.Triangulate(roomNode);
         linesTriangulated = triangulation.edges;
 
         for (auto& elem : linesTriangulated)
-        {
             elem.color = Color(1.0f, 1.0f, 1.0f);
-        }
     }
 
     void ProcedureMapGeneration::Spanning()
@@ -278,7 +280,7 @@ namespace Gungeon
 
         while (count--)
         {
-            int rand = static_cast<int>(RANDOM->Int(0, linesTriangulated.size() - 1));
+            int rand = static_cast<int>(RANDOM.Int(0, linesTriangulated.size() - 1));
             bool flag = false;
             for (auto& elem : linesMST)
             {
@@ -305,14 +307,9 @@ namespace Gungeon
     void ProcedureMapGeneration::Clean()
     {
         linesTriangulated.clear();
-
         for (auto& elem : candidateRooms)
-        {
             if (false == elem->selected)
-            {
-                SafeDelete(elem);
-            }
-        }
+                elem.reset();
         candidateRooms.clear();
     }
 
@@ -345,15 +342,11 @@ namespace Gungeon
             {
                 Vector2 v = Vector2(elem.V().x, elem.V().y);
                 if (almostEqualVector2(v, selectedRooms[roomIdx]->Pos()))
-                {
                     nodesForRoomIndex[v] = roomIdx;
-                }
 
                 Vector2 w = Vector2(elem.W().x, elem.W().y);
                 if (almostEqualVector2(w, selectedRooms[roomIdx]->Pos()))
-                {
                     nodesForRoomIndex[w] = roomIdx;
-                }
             }
         }
 
@@ -367,8 +360,8 @@ namespace Gungeon
                 int nx = on.x + dx[i];
                 int ny = on.y + dy[i];
 
-                if (MAP->tilemap->GetTileState(Int2(nx, ny)) == TileState::wall ||
-                    MAP->tilemap->GetTileState(Int2(nx, ny)) == TileState::door)
+                if (MAP.tilemap->GetTileState(Int2(nx, ny)) == TileState::wall ||
+                    MAP.tilemap->GetTileState(Int2(nx, ny)) == TileState::door)
                 {
                     dirWall[i] = true;
                 }
@@ -409,20 +402,20 @@ namespace Gungeon
                     doorTileIdx.y = on.y + dy[DirState::dirL];
                 }
 
-                MAP->tilemap->SetTile(floorTileIdx,
-                    Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
-                        RANDOM->Int(floorImgMin.y, floorImgMax.y)),
-                    MAP->imgIdx,
+                MAP.tilemap->SetTile(floorTileIdx,
+                    Int2(RANDOM.Int(floorImgMin.x, floorImgMax.x),
+                        RANDOM.Int(floorImgMin.y, floorImgMax.y)),
+                    MAP.imgIdx,
                     (int)TileState::floor, 
                     Color(0.5f, 0.5f, 0.5f),
                     -1, 
                     dir);
             }
 
-            MAP->tilemap->SetTile(doorTileIdx,
-                Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
-                    RANDOM->Int(floorImgMin.y, floorImgMax.y)),
-                MAP->imgIdx,
+            MAP.tilemap->SetTile(doorTileIdx,
+                Int2(RANDOM.Int(floorImgMin.x, floorImgMax.x),
+                    RANDOM.Int(floorImgMin.y, floorImgMax.y)),
+                MAP.imgIdx,
                 (int)TileState::door,
                 Color(0.5f, 0.5f, 0.5f),
                 -1, 
@@ -438,28 +431,28 @@ namespace Gungeon
 
         auto FindValidLoad = [&](Int2 sour, Int2 dest, bool first, const int passageIdx) ->Int2
         {
-            if (MAP->tilemap->PathFinding(sour, dest, way, false))
+            if (MAP.tilemap->PathFinding(sour, dest, way, false))
             {
-                int sourRoomIdx = MAP->tilemap->GetTileRoomIndex(sour);
-                int destRoomIdx = MAP->tilemap->GetTileRoomIndex(dest);
+                int sourRoomIdx = MAP.tilemap->GetTileRoomIndex(sour);
+                int destRoomIdx = MAP.tilemap->GetTileRoomIndex(dest);
 
                 Int2 beforeOn = way.back().idx;
-                int beforeRoomIdx = MAP->tilemap->GetTileRoomIndex(beforeOn);
-                DirState beforeDir = MAP->tilemap->GetTileDir(beforeOn);
+                int beforeRoomIdx = MAP.tilemap->GetTileRoomIndex(beforeOn);
+                DirState beforeDir = MAP.tilemap->GetTileDir(beforeOn);
 
                 for (int cur = way.size() - 2; cur >= 0; cur--)
                 {
                     Int2 curOn = way[cur].idx;
-                    TileState curTileState = MAP->tilemap->GetTileState(curOn);
-                    int curRoomIdx = MAP->tilemap->GetTileRoomIndex(curOn);
-                    DirState curDir = MAP->tilemap->GetTileDir(curOn);
+                    TileState curTileState = MAP.tilemap->GetTileState(curOn);
+                    int curRoomIdx = MAP.tilemap->GetTileRoomIndex(curOn);
+                    DirState curDir = MAP.tilemap->GetTileDir(curOn);
 
                     if (curTileState == TileState::none)
                     {
-                        MAP->tilemap->SetTile(curOn,
-                            Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
-                                RANDOM->Int(floorImgMin.y, floorImgMax.y)),
-                            MAP->imgIdx,
+                        MAP.tilemap->SetTile(curOn,
+                            Int2(RANDOM.Int(floorImgMin.x, floorImgMax.x),
+                                RANDOM.Int(floorImgMin.y, floorImgMax.y)),
+                            MAP.imgIdx,
                             (int)TileState::floor);
 
                         passages[passageIdx].emplace_back(curOn);
@@ -485,8 +478,8 @@ namespace Gungeon
                     }
 
                     beforeOn = way[cur].idx;
-                    beforeRoomIdx = MAP->tilemap->GetTileRoomIndex(beforeOn);
-                    beforeDir = MAP->tilemap->GetTileDir(beforeOn);
+                    beforeRoomIdx = MAP.tilemap->GetTileRoomIndex(beforeOn);
+                    beforeDir = MAP.tilemap->GetTileDir(beforeOn);
                 }
             }
 
@@ -511,8 +504,8 @@ namespace Gungeon
             Vector2 end = Vector2(w.x, w.y);
 
             Int2 sour, dest;
-            MAP->tilemap->WorldPosToTileIdx(start, sour);
-            MAP->tilemap->WorldPosToTileIdx(end, dest);
+            MAP.tilemap->WorldPosToTileIdx(start, sour);
+            MAP.tilemap->WorldPosToTileIdx(end, dest);
 
             sour = FindValidLoad(sour, dest, true, idx);
             FindValidLoad(sour, dest, false, idx);
@@ -533,14 +526,14 @@ namespace Gungeon
                 {
                     int nx = on.x + dx[j];
                     int ny = on.y + dy[j];
-                    if (nx < 0 || nx >= MAP->tileSize.x || ny < 0 || ny >= MAP->tileSize.y) continue;
+                    if (nx < 0 || nx >= MAP.tileSize.x || ny < 0 || ny >= MAP.tileSize.y) continue;
 
-                    if (MAP->tilemap->GetTileState(Int2(nx, ny)) == TileState::none)
+                    if (MAP.tilemap->GetTileState(Int2(nx, ny)) == TileState::none)
                     {
-                        MAP->tilemap->SetTile(Int2(nx, ny),
-                            Int2(RANDOM->Int(passagePitImgMin.x, passagePitImgMax.x),
-                                RANDOM->Int(passagePitImgMin.y, passagePitImgMax.y)),
-                            MAP->imgIdx,
+                        MAP.tilemap->SetTile(Int2(nx, ny),
+                            Int2(RANDOM.Int(passagePitImgMin.x, passagePitImgMax.x),
+                                RANDOM.Int(passagePitImgMin.y, passagePitImgMax.y)),
+                            MAP.imgIdx,
                             (int)TileState::pit);
                     }
                 }
@@ -553,7 +546,7 @@ namespace Gungeon
         for (auto& elem : selectedRooms)
         {
             Int2 on;
-            MAP->tilemap->WorldPosToTileIdx(elem->Pos(), on);
+            MAP.tilemap->WorldPosToTileIdx(elem->Pos(), on);
             Int2 scaleOn = Int2(static_cast<int>(elem->col->scale.x / 100), static_cast<int>(elem->col->scale.y / 100));
             Int2 halfScaleOn = scaleOn / 2;
 
@@ -562,19 +555,19 @@ namespace Gungeon
             int yStart = elem->TileLB().y + 1;
             int yEnd = elem->TileLT().y - 1;
 
-            int tileRoomIdx = MAP->tilemap->GetTileRoomIndex(on);
+            int tileRoomIdx = MAP.tilemap->GetTileRoomIndex(on);
             int t = 3;
             while (t--)
             {
-                int rx = RANDOM->Int(xStart, xEnd);
-                int ry = RANDOM->Int(yStart, yEnd);
+                int rx = RANDOM.Int(xStart, xEnd);
+                int ry = RANDOM.Int(yStart, yEnd);
 
-                if (MAP->tilemap->GetTileState(Int2(rx, ry)) == TileState::floor)
+                if (MAP.tilemap->GetTileState(Int2(rx, ry)) == TileState::floor)
                 {
-                    MAP->tilemap->SetTile(Int2(rx, ry),
-                        Int2(RANDOM->Int(propImgMin.x, propImgMax.x),
-                            RANDOM->Int(propImgMin.y, propImgMax.y)),
-                        MAP->imgIdx,
+                    MAP.tilemap->SetTile(Int2(rx, ry),
+                        Int2(RANDOM.Int(propImgMin.x, propImgMax.x),
+                            RANDOM.Int(propImgMin.y, propImgMax.y)),
+                        MAP.imgIdx,
                         (int)TileState::prop,
                         Color(0.5f, 0.5f, 0.5f),
                         tileRoomIdx);
@@ -610,7 +603,7 @@ namespace Gungeon
             }
             roomIdx++;
         }
-        MAP->tilemap->CreateTileCost();
+        MAP.tilemap->CreateTileCost();
     }
 
     void ProcedureMapGeneration::PropPit()
@@ -634,13 +627,13 @@ namespace Gungeon
             roomIdx++;
         }
 
-        MAP->tilemap->CreateTileCost();
+        MAP.tilemap->CreateTileCost();
     }
 
     void ProcedureMapGeneration::Finish()
     {
         //SaveLoad
-        if (GUI->FileImGui("Save Room", "Save Map",
+        if (GUI.FileImGui("Save Room", "Save Map",
             ".txt", "../Contents/Room"))
         {
             string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
@@ -648,7 +641,7 @@ namespace Gungeon
             Save();
         }
         ImGui::SameLine();
-        if (GUI->FileImGui("Load Room", "Load Map",
+        if (GUI.FileImGui("Load Room", "Load Map",
             ".txt", "../Contents/Room"))
         {
             string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
@@ -703,10 +696,10 @@ namespace Gungeon
         {
             for (int x = sour.x + 1; x <= dest.x - 1; x++)
             {
-                MAP->tilemap->SetTile(Int2(x, y),
-                    Int2(RANDOM->Int(imgMin.x, imgMax.x),
-                        RANDOM->Int(imgMin.y, imgMax.y)),
-                    MAP->imgIdx,
+                MAP.tilemap->SetTile(Int2(x, y),
+                    Int2(RANDOM.Int(imgMin.x, imgMax.x),
+                        RANDOM.Int(imgMin.y, imgMax.y)),
+                    MAP.imgIdx,
                     (int)tileState,
                     Color(0.5f, 0.5f, 0.5f, 1.0f),
                     roomIdx);
@@ -717,9 +710,9 @@ namespace Gungeon
     void ProcedureMapGeneration::SetTileSpecificDir(const TileState tileState, const Int2 imgDir[], 
         const Int2 on, const DirState dir, const int roomIdx)
     {
-        MAP->tilemap->SetTile(on,
+        MAP.tilemap->SetTile(on,
             imgDir[(int)dir],
-            MAP->imgIdx,
+            MAP.imgIdx,
             (int)tileState,
             Color(0.5f, 0.5f, 0.5f),
             roomIdx,
@@ -753,22 +746,14 @@ namespace Gungeon
         for (auto& elem : selectedRooms)
         {
             if (elem->roomType == RoomType::enemy)
-            {
                 for (auto& spawnerElem : elem->enemySpawner)
-                {
                     spawnerElem->isVisible = true;
-                }
-            }
 
             if (elem->roomType == RoomType::treasure)
-            {
                 elem->treasureSpawner->isVisible = true;
-            }
 
             for (auto& spawnerElem : elem->gateSpawner)
-            {
                 spawnerElem->isVisible = true;
-            }
 
             roomIdx++;
         }
@@ -779,9 +764,9 @@ namespace Gungeon
         int idx = 0;
         for (auto& elem : selectedRooms)
         {
-            int tileRoomIdx = MAP->tilemap->GetTileRoomIndex(elem->On());
-            float xHalf = MAP->tilemap->scale.x / 2.0f;
-            float yHalf = MAP->tilemap->scale.y / 2.0f;
+            int tileRoomIdx = MAP.tilemap->GetTileRoomIndex(elem->On());
+            float xHalf = MAP.tilemap->scale.x / 2.0f;
+            float yHalf = MAP.tilemap->scale.y / 2.0f;
 
             Int2 sour = Int2(elem->On().x - 1, elem->On().y - 1);
             Int2 dest = Int2(elem->On().x + 1, elem->On().y + 1);
@@ -791,14 +776,14 @@ namespace Gungeon
             {
                 for (int x = sour.x; x <= dest.x; x++)
                 {
-                    MAP->tilemap->SetTile(Int2(x, y),
+                    MAP.tilemap->SetTile(Int2(x, y),
                         spawnerImg,
-                        MAP->imgIdx,
+                        MAP.imgIdx,
                         (int)TileState::spawner,
                         Color(0.5f, 0.5f, 0.5f),
                         tileRoomIdx);
 
-                    Vector2 wpos = MAP->tilemap->TileIdxToWorldPos(Int2(x, y));
+                    Vector2 wpos = MAP.tilemap->TileIdxToWorldPos(Int2(x, y));
                     elem->gateSpawner[curGateIdx]->SetWorldPos(Vector2(wpos.x + xHalf, wpos.y + yHalf));
                     elem->gateSpawner[curGateIdx]->isVisible = true;
                     curGateIdx++;
@@ -814,9 +799,9 @@ namespace Gungeon
         int idx = 0;
         for (auto& elem : selectedRooms)
         {
-            int tileRoomIdx = MAP->tilemap->GetTileRoomIndex(elem->On());
-            float xHalf = MAP->tilemap->scale.x / 2.0f;
-            float yHalf = MAP->tilemap->scale.y / 2.0f;
+            int tileRoomIdx = MAP.tilemap->GetTileRoomIndex(elem->On());
+            float xHalf = MAP.tilemap->scale.x / 2.0f;
+            float yHalf = MAP.tilemap->scale.y / 2.0f;
 
             if (idx != (int)RoomType::start && idx != (int)RoomType::treasure)
             {
@@ -828,27 +813,27 @@ namespace Gungeon
                     if (spawnerPos.x == 0.0f &&
                         spawnerPos.y == 0.0f)
                     {
-                        while (MAP->tilemap->GetTileState(on) != TileState::floor)
+                        while (MAP.tilemap->GetTileState(on) != TileState::floor)
                         {
-                            int rx = RANDOM->Int(elem->TileLB().x + 1, elem->TileRB().x - 1);
-                            int ry = RANDOM->Int(elem->TileLB().y + 1, elem->TileLT().y - 1);
+                            int rx = RANDOM.Int(elem->TileLB().x + 1, elem->TileRB().x - 1);
+                            int ry = RANDOM.Int(elem->TileLB().y + 1, elem->TileLT().y - 1);
                             on = Int2(rx, ry);
                         }
                     }
                     else
                     {
-                        MAP->tilemap->WorldPosToTileIdx(spawnerPos, on);
+                        MAP.tilemap->WorldPosToTileIdx(spawnerPos, on);
                     }
 
 
-                    MAP->tilemap->SetTile(on,
+                    MAP.tilemap->SetTile(on,
                         spawnerImg,
-                        MAP->imgIdx,
+                        MAP.imgIdx,
                         (int)TileState::spawner,
                         Color(0.5f, 0.5f, 0.5f),
                         tileRoomIdx);
 
-                    Vector2 wpos = MAP->tilemap->TileIdxToWorldPos(on);
+                    Vector2 wpos = MAP.tilemap->TileIdxToWorldPos(on);
                     spawnPosElem->SetWorldPos(Vector2(wpos.x + xHalf, wpos.y + yHalf));
                     spawnPosElem->isVisible = true;
                 }
@@ -860,23 +845,23 @@ namespace Gungeon
 
     void ProcedureMapGeneration::SetTreasureSpawner()
     {
-        Room* treasure = selectedRooms[(int)RoomType::treasure];
+        shared_ptr<Room> treasure = selectedRooms[(int)RoomType::treasure];
         treasure->roomType = RoomType::treasure;
         treasure->cleared = true;
 
         Int2 on;
-        MAP->tilemap->WorldPosToTileIdx(treasure->Pos(), on);
-        Vector2 wpos = MAP->tilemap->TileIdxToWorldPos(Int2(on.x, on.y));
-        float tileXHalf = MAP->tilemap->scale.x / 2.0f;
-        float tileYHalf = MAP->tilemap->scale.y / 2.0f;
+        MAP.tilemap->WorldPosToTileIdx(treasure->Pos(), on);
+        Vector2 wpos = MAP.tilemap->TileIdxToWorldPos(Int2(on.x, on.y));
+        float tileXHalf = MAP.tilemap->scale.x / 2.0f;
+        float tileYHalf = MAP.tilemap->scale.y / 2.0f;
         treasure->treasureSpawner->SetWorldPos(Vector2(wpos.x + tileXHalf, wpos.y + tileYHalf));
         treasure->treasureSpawner->isVisible = true;
         treasure->treasureSpawner->Update();
 
-        MAP->tilemap->WorldPosToTileIdx(wpos, on);
-        MAP->tilemap->SetTile(on,
+        MAP.tilemap->WorldPosToTileIdx(wpos, on);
+        MAP.tilemap->SetTile(on,
             spawnerImg,
-            MAP->imgIdx,
+            MAP.imgIdx,
             (int)TileState::spawner,
             Color(0.5f, 0.5f, 0.5f),
             (int)RoomType::treasure);
@@ -884,8 +869,8 @@ namespace Gungeon
 
     void ProcedureMapGeneration::MaximalSquare(const Room* elem)
     {
-        const int size = RANDOM->Int(2, 4);
-        int roomIdx = MAP->tilemap->GetTileRoomIndex(elem->On());
+        const int size = RANDOM.Int(2, 4);
+        int roomIdx = MAP.tilemap->GetTileRoomIndex(elem->On());
 
         int xStart = elem->TileLB().x + 2;
         int xEnd = elem->TileRB().x - 2;
@@ -906,7 +891,7 @@ namespace Gungeon
             {
                 int temp = dp[x];
                 Int2 on = Int2(xStart + x - 1, yStart + y - 1);
-                if (MAP->tilemap->GetTileState(on) == TileState::floor)
+                if (MAP.tilemap->GetTileState(on) == TileState::floor)
                 {
                     dp[x] = min(min(dp[x - 1], prev), dp[x]) + 1;
                     length = max(length, dp[x]);
@@ -936,7 +921,7 @@ namespace Gungeon
         cout << length << '\n';
     }
 
-    void ProcedureMapGeneration::Histogram(const Room* elem)
+    void ProcedureMapGeneration::Histogram(const shared_ptr<Room> elem)
     {
         int xStart = elem->TileLB().x + 2;
         int xEnd = elem->TileRB().x - 1;
@@ -955,7 +940,7 @@ namespace Gungeon
                 if (x < xSize)
                 {
                     Int2 on = Int2(xStart + x, yStart + y);
-                    if (MAP->tilemap->GetTileState(on) == TileState::floor)
+                    if (MAP.tilemap->GetTileState(on) == TileState::floor)
                     {
                         height[x]++;
                     }
@@ -1036,9 +1021,8 @@ namespace Gungeon
     void ProcedureMapGeneration::Load()
     {
         for (auto& elem : selectedRooms)
-        {
-            SafeRelease(elem);
-        }
+            elem.reset();
+
         selectedRooms.clear();
 
 

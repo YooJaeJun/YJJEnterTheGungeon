@@ -24,30 +24,29 @@ Light::Light()
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         desc.MiscFlags = 0;
         desc.StructureByteStride = 0;
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, &lightBuffer);
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, NULL, lightBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
-    D3D->GetDC()->PSSetConstantBuffers(0, 1, &lightBuffer);
+    D3D.GetDC()->PSSetConstantBuffers(0, 1, lightBuffer.GetAddressOf());
 }
 
 Light::~Light()
 {
-    SafeRelease(lightBuffer);
 }
 
 void Light::Set()
 {
     D3D11_MAPPED_SUBRESOURCE mappedResource;
-    D3D->GetDC()->Map(lightBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+    D3D.GetDC()->Map(lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     memcpy_s(mappedResource.pData, sizeof(PointLight), &light, sizeof(PointLight));
-    D3D->GetDC()->Unmap(lightBuffer, 0);
+    D3D.GetDC()->Unmap(lightBuffer.Get(), 0);
 }
 
 void Light::SetLightPos(Vector2 WPos)
 {
     //World To Screen
-    WPos -= CAM->position;
+    WPos -= CAM.position;
     WPos.y *= -1.0f;
     WPos += Vector2(app.GetHalfWidth(), app.GetHalfHeight());
 

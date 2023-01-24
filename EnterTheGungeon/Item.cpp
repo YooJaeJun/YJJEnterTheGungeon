@@ -7,12 +7,6 @@ namespace Gungeon
 		scalar = 600.0f;
 	}
 
-	void Item::Release()
-	{
-		Character::Release();
-		SafeDelete(idle);
-	}
-
 	void Item::Update()
 	{
 		if (flagAbsorbed)

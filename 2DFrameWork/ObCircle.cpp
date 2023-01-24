@@ -1,14 +1,15 @@
 #include "framework.h"
-ID3D11Buffer* ObCircle::fillVertexBuffer = nullptr;
-ID3D11Buffer* ObCircle::vertexBuffer = nullptr;
+using Microsoft::WRL::ComPtr;
+
+ComPtr<ID3D11Buffer> ObCircle::fillVertexBuffer = nullptr;
+ComPtr<ID3D11Buffer> ObCircle::vertexBuffer = nullptr;
 
 void ObCircle::CreateStaticMember()
 {
     StaticVertexCount::Trianglestrip() = 360 * 3;
     StaticVertexCount::Linestrip() = 361;
 
-    VertexPC* Vertex;
-    Vertex = new VertexPC[StaticVertexCount::Trianglestrip()];
+    shared_ptr<VertexPC[]> Vertex{ new VertexPC[StaticVertexCount::Trianglestrip()] };
 
     size_t size = StaticVertexCount::Trianglestrip() / 3;
 
@@ -17,7 +18,7 @@ void ObCircle::CreateStaticMember()
         Vertex[i * 3].position.x = 0.0f;
         Vertex[i * 3].position.y = 0.0f;
         Vertex[i * 3].color = Color(0.3333f, 0.3333f, 0.3333f, 1.0f);
-        // Vertex[i * 3].color = Color(RANDOM->Float(), RANDOM->Float(), RANDOM->Float(), 1.0f);    // 삼각형 360개 확인
+        // Vertex[i * 3].color = Color(RANDOM.Float(), RANDOM.Float(), RANDOM.Float(), 1.0f);    // 삼각형 360개 확인
 
 
         //0 1 2 ... 359
@@ -69,19 +70,17 @@ void ObCircle::CreateStaticMember()
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
         //하위 리소스를 초기화하기위한 데이터를 지정합니다.
-        data.pSysMem = Vertex;
+        data.pSysMem = Vertex.get();
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
         //                                           서술    원본       복사대상   
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, &fillVertexBuffer);
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
 
     }
 
-    delete[] Vertex;
-
-    Vertex = new VertexPC[StaticVertexCount::Linestrip()];
+    Vertex.reset(new VertexPC[StaticVertexCount::Linestrip()]);
 
     //두가지 랜덤한 색 만들기
     for (size_t i = 0; i < (size_t)StaticVertexCount::Linestrip(); i++)
@@ -101,21 +100,13 @@ void ObCircle::CreateStaticMember()
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
         //하위 리소스를 초기화하기위한 데이터를 지정합니다.
-        data.pSysMem = Vertex;
+        data.pSysMem = Vertex.get();
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
-
     }
-    delete[] Vertex;
-}
-
-void ObCircle::DeleteStaticMember()
-{
-    vertexBuffer->Release();
-    fillVertexBuffer->Release();
 }
 
 ObCircle::ObCircle()
@@ -135,25 +126,25 @@ void ObCircle::Render()
 
     if (isFilled)
     {
-        D3D->GetDC()->IASetVertexBuffers(0,
+        D3D.GetDC()->IASetVertexBuffers(0,
             1,
-            &fillVertexBuffer,
+            fillVertexBuffer.GetAddressOf(),
             &stride,
             &offset);
-        D3D->GetDC()->IASetPrimitiveTopology
+        D3D.GetDC()->IASetPrimitiveTopology
         (D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-        D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
+        D3D.GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
     }
     else
     {
-        D3D->GetDC()->IASetVertexBuffers(0,//입력슬롯(16~32개까지 설정가능)
+        D3D.GetDC()->IASetVertexBuffers(0,//입력슬롯(16~32개까지 설정가능)
             1,//입력슬롯에 붙이고자 하는 버퍼의 갯수
-            &vertexBuffer,
+            vertexBuffer.GetAddressOf(),
             &stride,//정점버퍼의 한 원소의 바이트단위 크기
             &offset);
-        D3D->GetDC()->IASetPrimitiveTopology
+        D3D.GetDC()->IASetPrimitiveTopology
         (D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-        D3D->GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
+        D3D.GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
     }
 }
 

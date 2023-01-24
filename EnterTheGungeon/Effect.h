@@ -6,7 +6,6 @@ namespace Gungeon
 	{
 	public:
 		Effect();
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
@@ -15,7 +14,7 @@ namespace Gungeon
 		void Die();
 
 	public:
-		ObImage*	idle = nullptr;
+		std::shared_ptr<ObImage>	idle = nullptr;
 		float		intervalDie = 0.5f;
 
 	private:

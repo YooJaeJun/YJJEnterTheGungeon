@@ -17,18 +17,6 @@ namespace Gungeon
 		intervalAnim[(int)State::cinematic] = 0.0f;
 	}
 
-	void Unit::Release()
-	{
-		Character::Release();
-		SafeDelete(respawn);
-		SafeDelete(idle);
-		SafeDelete(walk);
-		SafeDelete(hit);
-		SafeDelete(fall);
-		SafeDelete(die);
-		SafeDelete(shadow);
-	}
-
 	void Unit::Update()
 	{
 		SetLastPos();
@@ -67,12 +55,16 @@ namespace Gungeon
 
 	void Unit::Render()
 	{
-		if (respawn) respawn->Render();
-		idle->Render(); // RENDER->push(idle[curTargetDirState]);
-		walk->Render(); // RENDER->push(walk[curTargetDirState]);
-		if (hit)  hit->Render();  // RENDER->push(hit);
-		if (fall) fall->Render(); // RENDER->push(fall);
-		if (die)  die->Render();  // RENDER->push(die);
+		if (respawn) 
+			respawn->Render();
+		idle->Render();
+		walk->Render();
+		if (hit)  
+			hit->Render();
+		if (fall) 
+			fall->Render();
+		if (die)  
+			die->Render();
 		Character::Render();
 	}
 
@@ -80,7 +72,7 @@ namespace Gungeon
 	{
 	}
 
-	void Unit::SetTarget(Weapon*& weapon)
+	void Unit::SetTarget(shared_ptr<Weapon>& weapon)
 	{
 		targetDir = targetPos - Pos();
 		targetDir.Normalize();
@@ -181,10 +173,8 @@ namespace Gungeon
 
 	void Unit::Die()
 	{
-		if (TIMER->GetTick(timeDieAnim, 0.1f))
-		{
+		if (TIMER.GetTick(timeDieAnim, 0.1f))
 			die->color = Color(0.4f, 0.4f, 0.4f, 0.4f);
-		}
 	}
 
 	void Unit::StartWalk()
@@ -205,10 +195,8 @@ namespace Gungeon
 
 	void Unit::StartAttack()
 	{
-		if (TIMER->GetTick(timeAttackStart, intervalAttackStart))
-		{
+		if (TIMER.GetTick(timeAttackStart, intervalAttackStart))
 			state = State::attack;
-		}
 	}
 
 	// moveDir: 이동방향에 따라 다른 방향 애니메이션(플레이어는 roll) 설정
@@ -252,9 +240,9 @@ namespace Gungeon
 		}
 	}
 
-	void Unit::FindPath(ObTileMap* map)
+	void Unit::FindPath(std::shared_ptr<ObTileMap> map)
 	{
-		if (TIMER->GetTick(timeFindPath, 1.0f))
+		if (TIMER.GetTick(timeFindPath, 1.0f))
 		{
 			Int2 sour, dest;
 			bool isFind;

@@ -24,7 +24,6 @@ namespace Gungeon
 
 	protected:
 		virtual void Init() override;
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
@@ -51,23 +50,23 @@ namespace Gungeon
 		void ColToggle();
 
 	public:
-		ProcedureMapGeneration* mapGen = nullptr;
-		Player*					player = nullptr;
+		std::shared_ptr<ProcedureMapGeneration> mapGen = nullptr;
+		std::shared_ptr<Player>					player = nullptr;
 
 	private:
-		Room*					curRoom = nullptr;
-		GameState				gameState = GameState::start;
-		Enemy*					enemy[enemyMax];
-		bool					isChangingScene = false;
-		float					timeFade = 0.0f;
-		vector<Effect*>			spawnEffect;
-		int						afterRoomIdx = -2;
-		int						curRoomIdx = 0;
-		int						roomClearCount = 0;
-		int						roomClearCountForBossBattle = 3;
-		Gate*					gate = nullptr;
-		Cinematic*				cinematic = nullptr;
-		vector<Door*>			door;
-		TreasureBox*			treasureBox = nullptr;
+		std::shared_ptr<Room>					curRoom = nullptr;
+		GameState								gameState = GameState::start;
+		std::shared_ptr<Enemy>					enemy[enemyMax];
+		bool									isChangingScene = false;
+		float									timeFade = 0.0f;
+		vector<std::shared_ptr<Effect>>			spawnEffect;
+		int										afterRoomIdx = -2;
+		int										curRoomIdx = 0;
+		int										roomClearCount = 0;
+		int										roomClearCountForBossBattle = 3;
+		std::shared_ptr<Gate>					gate = nullptr;
+		std::shared_ptr<Cinematic>				cinematic = nullptr;
+		std::vector<std::shared_ptr<Door>>		door;
+		std::shared_ptr<TreasureBox>			treasureBox = nullptr;
 	};
 }

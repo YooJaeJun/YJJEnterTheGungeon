@@ -1,17 +1,14 @@
 #include "framework.h"
+using Microsoft::WRL::ComPtr;
 
-// ID3D11Buffer* ObImage::vertexBuffer = nullptr;
-// ID3D11Buffer* ObImage::uvBuffer = nullptr;
-Microsoft::WRL::ComPtr<ID3D11Buffer> ObImage::vertexBuffer = nullptr;
-Microsoft::WRL::ComPtr<ID3D11Buffer> ObImage::uvBuffer = nullptr;
+ComPtr<ID3D11Buffer> ObImage::vertexBuffer = nullptr;
+ComPtr<ID3D11Buffer> ObImage::uvBuffer = nullptr;
 
 void ObImage::CreateStaticMember()
 {
     StaticVertexCount::Trianglestrip() = 4;
 
-    VertexPT* Vertex;
-
-    Vertex = new VertexPT[StaticVertexCount::Trianglestrip()];
+    shared_ptr<VertexPT[]> Vertex{ new VertexPT[StaticVertexCount::Trianglestrip()] };
 
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = -0.5f;
@@ -39,15 +36,16 @@ void ObImage::CreateStaticMember()
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
         //하위 리소스를 초기화하기위한 데이터를 지정합니다.
-        data.pSysMem = Vertex;
+        data.pSysMem = Vertex.get();
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
-    delete[] Vertex;
+    Vertex.reset(new VertexPT[StaticVertexCount::Linestrip()]);
+
     //CreateConstantBuffer
     {
         D3D11_BUFFER_DESC desc = { 0 };
@@ -57,16 +55,11 @@ void ObImage::CreateStaticMember()
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         desc.MiscFlags = 0;
         desc.StructureByteStride = 0;
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, NULL, uvBuffer.GetAddressOf());
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, NULL, uvBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
-    D3D->GetDC()->VSSetConstantBuffers(2, 1, uvBuffer.GetAddressOf());
-}
 
-void ObImage::DeleteStaticMember()
-{
-    //vertexBuffer->Release();
-    //uvBuffer->Release();
+    D3D.GetDC()->VSSetConstantBuffers(2, 1, uvBuffer.GetAddressOf());
 }
 
 void ObImage::PlayAnim()
@@ -76,7 +69,7 @@ void ObImage::PlayAnim()
 
     if (animState != AnimState::stop)
     {
-        if (TIMER->GetTick(animTime, animInterval))
+        if (TIMER.GetTick(animTime, animInterval))
         {
             //재생간격이 지났을 때
             if (animXAxis) //가로재생
@@ -185,10 +178,10 @@ ObImage::ObImage(wstring file)
     samplerDesc.MaxLOD = FLT_MAX;
 
     //하나 이상의 샘플러 만들어 두기
-    D3D->GetDevice()->CreateSamplerState(&samplerDesc, &sampler);
+    D3D.GetDevice()->CreateSamplerState(&samplerDesc, sampler.GetAddressOf());
 
     //텍스쳐 로드
-    SRV = TEXTURE->LoadTexture(file);
+    SRV = TEXTURE.LoadTexture(file);
 
     //           (최소좌표)   (최대좌표)
     uv = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
@@ -202,7 +195,6 @@ ObImage::ObImage(wstring file)
 
 ObImage::~ObImage()
 {
-    sampler->Release();
 }
 
 void ObImage::Render()
@@ -214,7 +206,7 @@ void ObImage::Render()
 
 
     D3D11_MAPPED_SUBRESOURCE mappedResource;
-    D3D->GetDC()->Map(uvBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
+    D3D.GetDC()->Map(uvBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (reverseLR)
     {
         Vector4 reUv = Vector4(uv.z, uv.y, uv.x, uv.w);
@@ -224,16 +216,16 @@ void ObImage::Render()
     {
         memcpy_s(mappedResource.pData, sizeof(Vector4), &uv, sizeof(Vector4));
     }
-    D3D->GetDC()->Unmap(uvBuffer.Get(), 0);
+    D3D.GetDC()->Unmap(uvBuffer.Get(), 0);
 
     UINT stride = sizeof(VertexPT);
     UINT offset = 0;
 
-    D3D->GetDC()->PSSetShaderResources(0, 1, &SRV);
-    D3D->GetDC()->PSSetSamplers(0, 1, &sampler);
-    D3D->GetDC()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
-    D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-    D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
+    D3D.GetDC()->PSSetShaderResources(0, 1, SRV.GetAddressOf());
+    D3D.GetDC()->PSSetSamplers(0, 1, sampler.GetAddressOf());
+    D3D.GetDC()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+    D3D.GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+    D3D.GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
 }
 
 void ObImage::ChangeAnim(AnimState anim, float interval, bool xAxis)
@@ -261,9 +253,8 @@ void ObImage::ChangeAnim(AnimState anim, float interval, bool xAxis)
 
 void ObImage::ChangeSampler(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE addressU, D3D11_TEXTURE_ADDRESS_MODE addressV)
 {
-    SafeRelease(sampler);
     samplerDesc.Filter = filter;
     samplerDesc.AddressU = addressU;
     samplerDesc.AddressV = addressV;
-    D3D->GetDevice()->CreateSamplerState(&samplerDesc, &sampler);
+    D3D.GetDevice()->CreateSamplerState(&samplerDesc, sampler.GetAddressOf());
 }

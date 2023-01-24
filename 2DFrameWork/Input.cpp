@@ -36,8 +36,8 @@ void Input::Update()
     // mouseWorldPos.y = app.GetHeight() - app.GetHalfHeight() - mouseScreenPos.y ;
     mouseWorldPos.y = app.GetHalfHeight() - mouseScreenPos.y;
 
-    mouseWorldPos = mouseWorldPos / CAM->zoomFactor;
-    mouseWorldPos += CAM->position;
+    mouseWorldPos = mouseWorldPos / CAM.zoomFactor;
+    mouseWorldPos += CAM.position;
 
 
     //메모리복사 keyOldState = keyState 

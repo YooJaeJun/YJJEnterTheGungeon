@@ -1,16 +1,16 @@
 #include "framework.h"
+using Microsoft::WRL::ComPtr;
 
-ID3D11Buffer* ObRect::fillVertexBuffer = nullptr;
-ID3D11Buffer* ObRect::vertexBuffer = nullptr;
+ComPtr<ID3D11Buffer> ObRect::fillVertexBuffer = nullptr;
+ComPtr<ID3D11Buffer> ObRect::vertexBuffer = nullptr;
 
 void ObRect::CreateStaticMember()
 {
     StaticVertexCount::Trianglestrip() = 4;
     StaticVertexCount::Linestrip() = 5;
 
-    VertexPC* Vertex;
+    shared_ptr<VertexPC[]> Vertex{ new VertexPC[StaticVertexCount::Trianglestrip()] };
 
-    Vertex = new VertexPC[StaticVertexCount::Trianglestrip()];
     //VertexCount = 4;
     //시계방향으로 정점찍기
     Vertex[0].position.x = -0.5f;
@@ -41,17 +41,16 @@ void ObRect::CreateStaticMember()
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
         //하위 리소스를 초기화하기위한 데이터를 지정합니다.
-        data.pSysMem = Vertex;
+        data.pSysMem = Vertex.get();
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, &fillVertexBuffer);
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
-    delete[] Vertex;
-
-    Vertex = new VertexPC[StaticVertexCount::Linestrip()];
+    Vertex.reset(new VertexPC[StaticVertexCount::Linestrip()]);
+    
     //VertexCount = 5;
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = -0.5f;
@@ -83,20 +82,13 @@ void ObRect::CreateStaticMember()
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
         //하위 리소스를 초기화하기위한 데이터를 지정합니다.
-        data.pSysMem = Vertex;
+        data.pSysMem = Vertex.get();
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
-    delete[] Vertex;
-}
-
-void ObRect::DeleteStaticMember()
-{
-    vertexBuffer->Release();
-    fillVertexBuffer->Release();
 }
 
 ObRect::ObRect()
@@ -116,23 +108,23 @@ void ObRect::Render()
 
     if (isFilled)
     {
-        D3D->GetDC()->IASetVertexBuffers(0,
+        D3D.GetDC()->IASetVertexBuffers(0,
             1,
-            &fillVertexBuffer,
+            fillVertexBuffer.GetAddressOf(),
             &stride,
             &offset);
-        D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);   // 그릴 모양
-        D3D->GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
+        D3D.GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);   // 그릴 모양
+        D3D.GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
     }
     else
     {
-        D3D->GetDC()->IASetVertexBuffers(0,//입력슬롯(16~32개까지 설정가능)
+        D3D.GetDC()->IASetVertexBuffers(0,//입력슬롯(16~32개까지 설정가능)
             1,//입력슬롯에 붙이고자 하는 버퍼의 갯수
-            &vertexBuffer,
+            vertexBuffer.GetAddressOf(),
             &stride,//정점버퍼의 한 원소의 바이트단위 크기
             &offset);
-        D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
-        D3D->GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
+        D3D.GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINESTRIP);
+        D3D.GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
     }
 }
 

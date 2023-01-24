@@ -22,7 +22,6 @@
 using namespace std;
 
 //DirectX smart pointer
-#include <wrl/client.h>
 
 //DirectX d3d 11
 #include <d3d11.h>
@@ -31,6 +30,7 @@ using namespace std;
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxgi.lib")
+#include <wrl/client.h>
 
 //D2D
 #include <d2d1_1.h>
@@ -66,23 +66,15 @@ using namespace SimpleMath;
 #include "../Libs/ImGui/ImGuiFileDialogConfig.h"
 
 //Macro(Pascal)
-// #define Check(hr)			{ assert(SUCCEEDED(hr)); }
-inline void Check(HRESULT hr) { assert(SUCCEEDED(hr)); }
-#define SafeRelease(p)		{ if(p){ (p)->Release(); (p) = nullptr; } }
-#define SafeDelete(p)		{ if(p){ delete (p); (p) = nullptr; } }
-#define SafeDeleteArray(p)	{ if(p){ delete[] (p); (p) = nullptr; } }
-// #define	ToRadian			0.0174532f
-const float ToRadian = 0.0174532f;
+#define Check(hr)			{ assert(SUCCEEDED(hr)); }
+// inline void Check(HRESULT hr) { assert(SUCCEEDED(hr)); }
+#define	ToRadian			0.0174532f
 
 //Macro(WINAPI Style)
-// #define	PI					3.1415926f	//180
-const float PI = 3.1415926f;
-// #define	DIV2PI				1.5707963f	//90
-const float DIV2PI = 1.5707963f;
-// #define	DIV4PI				0.7853981f	//45
-const float DIV4PI = 0.7853981f;
-// #define	DIV8PI				0.3926991f	//22.5
-const float DIV8PI = 0.3926991f;
+#define	PI					3.1415926f	//180
+#define	DIV2PI				1.5707963f	//90
+#define	DIV4PI				0.7853981f	//45
+#define	DIV8PI				0.3926991f	//22.5
 #define	UP					Vector2(0.0f,1.0f)
 #define	DOWN				Vector2(0.0f,-1.0f)
 #define	LEFT				Vector2(-1.0f,0.0f)
@@ -167,7 +159,7 @@ extern Application app;//Extern Global
 #define CAM         Camera::GetInstance()
 #define INPUT		Input::GetInstance()
 #define TIMER		Timer::GetInstance()
-#define DELTA		Timer::GetInstance()->GetDeltaTime()
+#define DELTA		Timer::GetInstance().GetDeltaTime()
 #define RANDOM		Random::GetInstance()
 #define TEXTURE		Texture::GetInstance()
 #define SOUND		Sound::GetInstance()

@@ -1,14 +1,18 @@
 #include "framework.h"
 
 Application	 app;
-Scene* Window::main = nullptr;
+std::shared_ptr<Scene> Window::main = nullptr;
 
-WPARAM Window::Run(Scene* main)
+Window::Window()
+{
+}
+
+WPARAM Window::Run(std::shared_ptr<Scene> main)
 {
 	Window::main = main;
-	//Window->D3D->main
+	//Window->D3D.main
 	Create();
-	D3D->Create();
+	D3D.Create();
 	GameObject::CreateStaticMember();
 	ObLine::CreateStaticMember();
 	ObTriangle::CreateStaticMember();
@@ -32,50 +36,30 @@ WPARAM Window::Run(Scene* main)
 		}
 		else
 		{
-			TIMER->Chronometry(app.fixFrame);
-			INPUT->Update();
-			SOUND->Update();
-			GUI->Update();
-			TIMER->Update();
-			MAP->Update();
+			TIMER.Chronometry(app.fixFrame);
+			INPUT.Update();
+			SOUND.Update();
+			GUI.Update();
+			TIMER.Update();
+			MAP.Update();
 			main->Update();
 			main->LateUpdate();
-			CAM->Set();
-			LIGHT->Set();
-			D3D->SetRenderTarget();
-			D3D->Clear(app.background);
-			DWRITE->GetDC()->BeginDraw();
+			CAM.Set();
+			LIGHT.Set();
+			D3D.SetRenderTarget();
+			D3D.Clear(app.background);
+			DWRITE.GetDC()->BeginDraw();
 			{
-				MAP->Render();
+				MAP.Render();
 				main->Render();
-				GUI->Render();
+				GUI.Render();
 			}
-			DWRITE->GetDC()->EndDraw();
-			D3D->Present();
+			DWRITE.GetDC()->EndDraw();
+			D3D.Present();
 		}
 	}
 	Save();
-	GameObject::DeleteStaticMember();
-	ObLine::DeleteStaticMember();
-	ObTriangle::DeleteStaticMember();
-	ObRect::DeleteStaticMember();
-	ObCircle::DeleteStaticMember();
-	ObStar::DeleteStaticMember();
-	ObStarPointed::DeleteStaticMember();
-	ObImage::DeleteStaticMember();
 
-	main->Release();
-	TIMER->DeleteSingleton();
-	INPUT->DeleteSingleton();
-	GUI->DeleteSingleton();
-	CAM->DeleteSingleton();
-	RANDOM->DeleteSingleton();
-	SOUND->DeleteSingleton();
-	TEXTURE->DeleteSingleton();
-	LIGHT->DeleteSingleton();
-	SCENE->DeleteSingleton();
-	D3D->DeleteSingleton();
-	MAP->DeleteSingleton();
 	Destroy();
 
 	return msg.wParam;
@@ -199,24 +183,24 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 
 	if (message == WM_MOUSEMOVE)
 	{
-		INPUT->mouseScreenPos.x = (float)LOWORD(lParam);
-		INPUT->mouseScreenPos.y = (float)HIWORD(lParam);
+		INPUT.mouseScreenPos.x = (float)LOWORD(lParam);
+		INPUT.mouseScreenPos.y = (float)HIWORD(lParam);
 	}
 
 	if (message == WM_MOUSEWHEEL)
 	{
-		CAM->Zoom(GET_WHEEL_DELTA_WPARAM(wParam));
+		CAM.Zoom(GET_WHEEL_DELTA_WPARAM(wParam));
 	}
 
 	if (message == WM_SIZE)
 	{
-		if (D3D->GetCreated())
+		if (D3D.GetCreated())
 		{
 			float width = (float)LOWORD(lParam);
 			float height = (float)HIWORD(lParam);
-			D3D->ResizeScreen(width, height);
-			CAM->ResizeScreen();
-			GUI->ResizeScreen();
+			D3D.ResizeScreen(width, height);
+			CAM.ResizeScreen();
+			GUI.ResizeScreen();
 			if (main)
 				main->ResizeScreen();
 		}

@@ -59,13 +59,9 @@ float4 PS(PixelInput input) : SV_TARGET //SV_TARGET Àº Å¸°ÙÀÌµÉ »ö±ò
 	if (select == 0.0f)
 	{
 		if (dis > radius)
-		{
 			outputColor.rgb += (outColor.rgb * 2.0f - 1.0f);
-		}
 		else
-		{
 			outputColor.rgb += (lightColor.rgb * 2.0f - 1.0f);
-		}
 	}
 	else
 	{
@@ -73,7 +69,8 @@ float4 PS(PixelInput input) : SV_TARGET //SV_TARGET Àº Å¸°ÙÀÌµÉ »ö±ò
 		outputColor.rgb += (lightColor.rgb * 2.0f - 1.0f);
 		outputColor.rgb *= temp;
 	}
+
 	outputColor = saturate(outputColor);
     
 	return outputColor;
-	}
+}

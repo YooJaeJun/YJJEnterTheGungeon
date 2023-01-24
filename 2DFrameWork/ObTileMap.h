@@ -41,7 +41,7 @@ struct ComparePTile
 };
 
 
-const int tileImageCount = 3;
+const int tileImageCount = 4;
 
 class ObTileMap : public GameObject
 {
@@ -74,13 +74,13 @@ public:
 
     bool            isOnWall(const Int2 on);
     bool            isInTileState(const Vector2 wpos, const TileState tileState);
-    bool            isFootOnWall(const ObRect* colTile);
-    bool            isBodyOnPit(const ObRect* colTile);
+    bool            isFootOnWall(const shared_ptr<ObRect> colTile);
+    bool            isBodyOnPit(const shared_ptr<ObRect> colTile);
     bool            PathFinding(Int2 sour, Int2 dest, OUT vector<Tile>& way, bool checkDiagnoal = true);
 
 protected:
-    VertexTile*             vertices;
-    ID3D11Buffer*           vertexBuffer;
+    std::shared_ptr<VertexTile[]>               vertices;
+    Microsoft::WRL::ComPtr<ID3D11Buffer>        vertexBuffer;
     Int2                    tileSize;       //10x10 , 4x4
 
 public:

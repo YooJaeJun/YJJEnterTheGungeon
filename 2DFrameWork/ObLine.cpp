@@ -1,12 +1,13 @@
 #include "framework.h"
+using Microsoft::WRL::ComPtr;
 
-ID3D11Buffer* ObLine::vertexBuffer = nullptr;
+ComPtr<ID3D11Buffer> ObLine::vertexBuffer = nullptr;
 
 void ObLine::CreateStaticMember()
 {
     StaticVertexCount::Linestrip() = 2;
 
-    VertexPC* Vertex = new VertexPC[StaticVertexCount::Linestrip()];
+    shared_ptr<VertexPC[]> Vertex{ new VertexPC[StaticVertexCount::Linestrip()] };
 
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = 0.0f;
@@ -26,20 +27,13 @@ void ObLine::CreateStaticMember()
 
         D3D11_SUBRESOURCE_DATA data = { 0 };
         //하위 리소스를 초기화하기위한 데이터를 지정합니다.
-        data.pSysMem = Vertex;
+        data.pSysMem = Vertex.get();
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
-
-    delete[] Vertex;
-}
-
-void ObLine::DeleteStaticMember()
-{
-    vertexBuffer->Release();
 }
 
 
@@ -53,17 +47,17 @@ void ObLine::Render()
     UINT stride = sizeof(VertexPC);
     UINT offset = 0;
     //정점의 도형서술
-    D3D->GetDC()->IASetPrimitiveTopology
+    D3D.GetDC()->IASetPrimitiveTopology
         //(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
         (D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
-    D3D->GetDC()->IASetVertexBuffers(0,//입력슬롯(16~32개까지 설정가능)
+    D3D.GetDC()->IASetVertexBuffers(0,//입력슬롯(16~32개까지 설정가능)
         1,//입력슬롯에 붙이고자 하는 버퍼의 갯수
-        &vertexBuffer,
+        vertexBuffer.GetAddressOf(),
         &stride,//정점버퍼의 한 원소의 바이트단위 크기
         &offset);
 
-    D3D->GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
+    D3D.GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
 }
 
 

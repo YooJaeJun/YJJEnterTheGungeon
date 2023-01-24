@@ -2,12 +2,11 @@
 class ObRect: public GameObject, public StaticVertexCount<ObRect>
 {
 private:
-    static ID3D11Buffer* fillVertexBuffer;
-    static ID3D11Buffer* vertexBuffer;
+    static Microsoft::WRL::ComPtr<ID3D11Buffer> fillVertexBuffer;
+    static Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
 
 public:
     static void CreateStaticMember();
-    static void DeleteStaticMember();
 
 public:
     ObRect();

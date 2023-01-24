@@ -16,15 +16,15 @@ namespace Gungeon
 
     void Scene02::Init()
     {
-        MAP->useGui = false;
+        MAP.useGui = false;
 
         spawnEffect.resize(enemyMax);
         for (auto& elem : spawnEffect)
         {
             if (!elem)
             {
-                elem = new Effect;
-                elem->idle = new ObImage(L"EnterTheGungeon/Level/Spawn.png");
+                elem = make_shared<Effect>();
+                elem->idle = make_shared<ObImage>(L"EnterTheGungeon/Level/Spawn.png");
                 elem->state = State::die;
                 elem->idle->maxFrame.x = 18;
                 elem->idle->scale = Vector2(663.0f / 18.0f, 39.0f) * 3.5f;
@@ -35,16 +35,16 @@ namespace Gungeon
 
         SpawnEnemy();
 
-        gate = new Gate;
+        gate = make_shared<Gate>();
 
         door.resize(doorMax);
         for (auto& elem : door)
         {
-            elem = new Door;
+            elem = make_shared<Door>();
             elem->col->scale = Vector2(16.0f, 128.0f / 8.0f) * 6.0f;
             elem->col->pivot = OFFSET_LB;
             elem->SetPos(DEFAULTSPAWN);
-            elem->idle = new ObImage(L"EnterTheGungeon/Level/Door.png");
+            elem->idle = make_shared<ObImage>(L"EnterTheGungeon/Level/Door.png");
             elem->idle->maxFrame.y = 8;
             elem->idle->scale = Vector2(24.0f, 192.0f / 8.0f) * 4.0f;
             elem->idle->SetParentRT(*elem->col);
@@ -57,69 +57,36 @@ namespace Gungeon
             for (auto& elem : mapGen->selectedRooms)
             {
                 if (idx == 1)
-                {
                     elem->treasureSpawner->isVisible = false;
-                }
                 for (auto& enemySpawerElem : elem->enemySpawner)
-                {
                     enemySpawerElem->isVisible = false;
-                }
                 for (auto& gateSpawerElem : elem->gateSpawner)
-                {
                     gateSpawerElem->isVisible = false;
-                }
                 idx++;
             }
         }
 
-        cinematic = new Cinematic;
+        cinematic = make_shared<Cinematic>();
 
-        SOUND->Stop("BGM_MapGen");
-        SOUND->Play("BGM_Game");
-    }
-
-    void Scene02::Release()
-    {
-        int idx = 0;
-        for (auto& elem : mapGen->selectedRooms)
-        {
-            if (idx != 0 and idx != 1)
-            {
-                elem->cleared = false;
-            }
-            idx++;
-        }
-        for (auto& elem : enemy) SafeRelease(elem);
-        SafeRelease(curRoom);
-        SafeRelease(gate);
-        SafeRelease(cinematic);
-        for (auto& elem : door) SafeRelease(elem);
-        SafeRelease(treasureBox);
+        SOUND.Stop("BGM_MapGen");
+        SOUND.Play("BGM_Game");
     }
 
     void Scene02::Update()
     {
         if (ImGui::Button("Prev Scene"))
-        {
             ChangeScene1();
-        }
         ImGui::SameLine();
         if (ImGui::Button("Current Scene"))
-        {
             ChangeScene2();
-        }
         ImGui::SameLine();
         if (ImGui::Button("Next Scene"))
-        {
             ChangeScene3();
-        }
 
         ChangeUpdateScene();
 
-        if (INPUT->KeyDown('H'))
-        {
+        if (INPUT.KeyDown('H'))
             ColToggle();
-        }
 
         switch (gameState)
         {
@@ -151,15 +118,13 @@ namespace Gungeon
         for (auto& elem : enemy) if (elem) elem->Update();
         cinematic->Update();
 
-        SOUND->SetVolume("BGM_Game", 0.6f);
+        SOUND.SetVolume("BGM_Game", 0.6f);
     }
 
     void Scene02::LateUpdate()
     {
         if (mapGen)
-        {
             mapGen->LateUpdate();
-        }
 
         switch (gameState)
         {
@@ -181,17 +146,27 @@ namespace Gungeon
         {
             mapGen->Render();
 
-            for (auto& elem : spawnEffect) if (elem) elem->Render();
+            for (auto& elem : spawnEffect) 
+                if (elem) 
+                    elem->Render();
         }
 
         gate->Render();
-        for (auto& elem : door) elem->Render();
-        if (treasureBox) treasureBox->Render();
+        for (auto& elem : door) 
+            elem->Render();
+        if (treasureBox) 
+            treasureBox->Render();
 
-        if (player) player->shadow->Render();
-        for (auto& elem : enemy) if (elem) elem->shadow->Render();
-        for (auto& elem : enemy) if (elem) elem->Render();
-        if (player) player->Render();
+        if (player) 
+            player->shadow->Render();
+        for (auto& elem : enemy) 
+            if (elem) 
+                elem->shadow->Render();
+        for (auto& elem : enemy) 
+            if (elem) 
+                elem->Render();
+        if (player) 
+            player->Render();
         cinematic->Render();
     }
 
@@ -232,21 +207,17 @@ namespace Gungeon
     {
         // 골드 흡수
         for (auto& elem : enemy)
-        {
             if (elem->dropItem->flagAbsorbed)
-            {
                 elem->dropItem->targetPos = player->Pos();
-            }
-        }
 
         // 다음 방 입장 판단
         Int2 playerOn;
-        MAP->tilemap->WorldPosToTileIdx(player->Pos(), playerOn);
-        TileState tileState = MAP->tilemap->GetTileState(playerOn);
+        MAP.tilemap->WorldPosToTileIdx(player->Pos(), playerOn);
+        TileState tileState = MAP.tilemap->GetTileState(playerOn);
 
         if (tileState == TileState::floor)
         {
-            afterRoomIdx = MAP->tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
+            afterRoomIdx = MAP.tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
 
             if (afterRoomIdx > 0 &&
                 curRoomIdx != afterRoomIdx)
@@ -267,13 +238,13 @@ namespace Gungeon
                     if (false == mapGen->selectedRooms[afterRoomIdx]->cleared)
                     {
                         SpawnEffect();
-                        SOUND->Play("EnemySpawning");
+                        SOUND.Play("EnemySpawning");
 
                         int idx = 0;
                         for (auto& on : curRoom->doorTileIdxs)
                         {
-                            MAP->tilemap->SetTileState(on, TileState::wall);
-                            door[idx]->Spawn(MAP->tilemap->TileIdxToWorldPos(on), MAP->tilemap->GetTileDir(on));
+                            MAP.tilemap->SetTileState(on, TileState::wall);
+                            door[idx]->Spawn(MAP.tilemap->TileIdxToWorldPos(on), MAP.tilemap->GetTileDir(on));
                             idx++;
                         }
 
@@ -294,12 +265,8 @@ namespace Gungeon
         bool flagSpawnEffectAllDie = true;
 
         for (auto& elem : spawnEffect)
-        {
             if (elem->state != State::die)
-            {
                 flagSpawnEffectAllDie = false;
-            }
-        }
 
         if (flagSpawnEffectAllDie)
         {
@@ -307,7 +274,7 @@ namespace Gungeon
 
             gameState = GameState::fight;
 
-            SOUND->Play("EnemySpawn");
+            SOUND.Play("EnemySpawn");
         }
     }
 
@@ -330,14 +297,12 @@ namespace Gungeon
             case State::die:
                 break;
             default:
-                elem->FindPath(MAP->tilemap);
+                elem->FindPath(MAP.tilemap);
             }
         }
 
         if (flagAllDie)
-        {
             curRoom->cleared = true;
-        }
 
         if (curRoom->cleared)
         {
@@ -350,7 +315,7 @@ namespace Gungeon
                 int idx = 0;
                 for (auto& elem : curRoom->doorTileIdxs)
                 {
-                    MAP->tilemap->SetTileState(elem, TileState::door);
+                    MAP.tilemap->SetTileState(elem, TileState::door);
 
                     door[idx]->Disappear();
 
@@ -375,8 +340,9 @@ namespace Gungeon
 
     void Scene02::SetCamera()
     {
-        if (curRoom && curRoom->col) CAM->position = curRoom->Pos();
-        CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
+        if (curRoom && curRoom->col) 
+            CAM.position = curRoom->Pos();
+        CAM.zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
     }
 
     void Scene02::SpawnPlayer()
@@ -399,12 +365,16 @@ namespace Gungeon
         int idx = 0;
         for (auto& elem : enemy)
         {
-            SafeRelease(elem);
-            int randEnemyClass = RANDOM->Int(0, 6);
-            if (randEnemyClass < 2) elem = new Enemy3();
-            else if (randEnemyClass < 4) elem = new Enemy1();
-            else elem = new Enemy2();
-            if (curRoom) elem->Spawn(curRoom->enemySpawner[idx]->GetWorldPos());
+            elem.reset();
+            int randEnemyClass = RANDOM.Int(0, 6);
+            if (randEnemyClass < 2) 
+                elem = make_shared<Enemy3>();
+            else if (randEnemyClass < 4) 
+                elem = make_shared<Enemy1>();
+            else 
+                elem = make_shared<Enemy2>();
+            if (curRoom)
+                elem->Spawn(curRoom->enemySpawner[idx]->GetWorldPos());
             idx++;
         }
     }
@@ -413,7 +383,7 @@ namespace Gungeon
     {
         if (!treasureBox)
         {
-            treasureBox = new TreasureBox;
+            treasureBox = make_shared<TreasureBox>();
             treasureBox->Spawn(curRoom->treasureSpawner->GetWorldPos());
         }
     }
@@ -422,12 +392,10 @@ namespace Gungeon
     {
         if (player->state != State::die)
         {
-            if (MAP->tilemap->isFootOnWall(player->colTile))
-            {
+            if (MAP.tilemap->isFootOnWall(player->colTile))
                 player->StepBack();
-            }
 
-            if (MAP->tilemap->isBodyOnPit(player->colTile) && 
+            if (MAP.tilemap->isBodyOnPit(player->colTile) && 
                 player->state != State::fall &&
                 player->state != State::respawn &&
                 player->state != State::roll)
@@ -449,11 +417,11 @@ namespace Gungeon
                     {
                         player->flagInteractionUI = true;
 
-                        if (INPUT->KeyDown('E'))
+                        if (INPUT.KeyDown('E'))
                         {
                             treasureBox->treasureState = TreasureState::opening;
                             player->flagInteractionUI = false;
-                            SOUND->Play("ChestOpen");
+                            SOUND.Play("ChestOpen");
                         }
                     }
                 }
@@ -467,7 +435,7 @@ namespace Gungeon
                             elem->state == State::idle &&
                             player->col->Intersect(elem->col))
                         {
-                            if (INPUT->KeyDown('E'))
+                            if (INPUT.KeyDown('E'))
                             {
                                 elem->Hit();
                                 player->EquipWeapon(elem);
@@ -480,14 +448,7 @@ namespace Gungeon
                         weaponIdx++;
                     }
 
-                    if (flagOnceInteraction)
-                    {
-                        player->flagInteractionUI = true;
-                    }
-                    else
-                    {
-                        player->flagInteractionUI = false;
-                    }
+                    player->flagInteractionUI = flagOnceInteraction ? true : false;
                 }
             }
 
@@ -498,7 +459,7 @@ namespace Gungeon
                 {
                     if (player->colTile->Intersect(elem->col))
                     {
-                        DirState doorDir = MAP->tilemap->GetTileDir(elem->On());
+                        DirState doorDir = MAP.tilemap->GetTileDir(elem->On());
                         int x, y;
                         switch (doorDir)
                         {
@@ -562,10 +523,8 @@ namespace Gungeon
                     }
                 }
 
-                if (MAP->tilemap->isOnWall(bulletElem->On()))
-                {
+                if (MAP.tilemap->isOnWall(bulletElem->On()))
                     bulletElem->Hit(1);
-                }
             }
         }
     }
@@ -582,10 +541,8 @@ namespace Gungeon
                 player->StartHit(1);
             }
 
-            if (MAP->tilemap->isFootOnWall(enemyElem->colTile))
-            {
+            if (MAP.tilemap->isFootOnWall(enemyElem->colTile))
                 enemyElem->StepBack();
-            }
 
             if (enemyElem->col->Intersect(gate->col))
             {
@@ -607,7 +564,7 @@ namespace Gungeon
                         bulletElem->Hit(1);
                     }
 
-                    if (MAP->tilemap->isOnWall(bulletElem->On()))
+                    if (MAP.tilemap->isOnWall(bulletElem->On()))
                     {
                         bulletElem->Hit(1);
                     }
@@ -634,7 +591,6 @@ namespace Gungeon
         {
             roomClearCount = 0;
             gate->Spawn(curRoom->Pos());
-
         }
 
         switch (gate->gateState)
@@ -708,23 +664,21 @@ namespace Gungeon
     {
         if (isChangingScene)
         {
-            LIGHT->light.radius -= 2000.0f * DELTA;
-            LIGHT->light.lightColor.x += 0.5f * DELTA;
-            LIGHT->light.lightColor.y += 0.5f * DELTA;
-            LIGHT->light.lightColor.z += 0.5f * DELTA;
+            LIGHT.light.radius -= 2000.0f * DELTA;
+            LIGHT.light.lightColor.x += 0.5f * DELTA;
+            LIGHT.light.lightColor.y += 0.5f * DELTA;
+            LIGHT.light.lightColor.z += 0.5f * DELTA;
 
-            if (TIMER->GetTick(timeFade, 1.0f))
-            {
+            if (TIMER.GetTick(timeFade, 1.0f))
                 isChangingScene = false;
-            }
         }
         else
         {
-            LIGHT->light.radius += 2000.0f * DELTA;
-            LIGHT->light.radius = Utility::Saturate(LIGHT->light.radius, 0.0f, 2000.0f);
-            LIGHT->light.lightColor.x = 0.5f;
-            LIGHT->light.lightColor.y = 0.5f;
-            LIGHT->light.lightColor.z = 0.5f;
+            LIGHT.light.radius += 2000.0f * DELTA;
+            LIGHT.light.radius = Utility::Saturate(LIGHT.light.radius, 0.0f, 2000.0f);
+            LIGHT.light.lightColor.x = 0.5f;
+            LIGHT.light.lightColor.y = 0.5f;
+            LIGHT.light.lightColor.z = 0.5f;
         }
     }
 
@@ -732,20 +686,16 @@ namespace Gungeon
     {
         gameState = GameState::start;
         isChangingScene = true;
-        SCENE->ChangeScene("Scene01", 1.0f);
+        SCENE.ChangeScene("Scene01", 1.0f);
     }
 
     void Scene02::ChangeScene2()
     {
         gameState = GameState::start;
         if (curRoom)
-        {
             for (auto& elem : curRoom->doorTileIdxs)
-            {
-                MAP->tilemap->SetTileState(elem, TileState::door);
-            }
-        }
-        Release();
+                MAP.tilemap->SetTileState(elem, TileState::door);
+
         Init();
     }
 
@@ -753,11 +703,11 @@ namespace Gungeon
     {
         isChangingScene = true;
         {
-            Scene03* tempScene = new Scene03();
+            shared_ptr<Scene03> tempScene = make_shared<Scene03>();
             tempScene->player = player;
-            SCENE->AddScene("Scene03", tempScene);
+            SCENE.AddScene("Scene03", tempScene);
         }
-        SCENE->ChangeScene("Scene03", 1.0f);
+        SCENE.ChangeScene("Scene03", 1.0f);
     }
 
     // 치트
@@ -766,11 +716,11 @@ namespace Gungeon
         player->ColToggle();
 
         for (auto& elem : enemy)
-        {
             elem->ColToggle();
-        }
 
-        for (auto& elem : door) elem->ColToggle();
+        for (auto& elem : door) 
+            elem->ColToggle();
+
         gate->ColToggle();
     }
 }

@@ -6,7 +6,6 @@ namespace Gungeon
 	{
 	public:
 		Weapon3();
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;

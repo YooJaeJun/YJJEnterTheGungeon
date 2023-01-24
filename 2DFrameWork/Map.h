@@ -1,19 +1,29 @@
 #pragma once
-class Map : public Singleton<Map>
+class Map
 {
-public:
+private:
 	Map();
+
+public:
+	static Map& GetInstance()
+	{
+		static std::unique_ptr<Map> inst;
+		if (!inst)
+			inst = std::unique_ptr<Map>(new Map());
+		return *inst;
+	}
+
+public:
 	~Map();
 	
 	void Init();
-	void Release();
 	void Update();
 	void Render();
 	void SetTilemapGUI();
 
 public:
 	// Tilemap
-	ObTileMap*  tilemap;
+	std::shared_ptr<ObTileMap>  tilemap;
 	int			imgIdx;
 	Int2		tileSize;
 	Color		tileColor;

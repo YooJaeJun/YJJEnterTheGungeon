@@ -29,14 +29,14 @@ namespace Gungeon
 		float scaleFactor = 3.0f;
 		col->scale = Vector2(16.0f, 16.0f) * scaleFactor;
 
-		idle = new ObImage(L"EnterTheGungeon/enemy_1/Idle.png");
+		idle = make_shared<ObImage>(L"EnterTheGungeon/enemy_1/Idle.png");
 		idle->isVisible = false;
 		idle->maxFrame = Int2(2, 8);
 		idle->scale = Vector2(28.0f / 2.0f, 192.0f / 8.0f) * scaleFactor;
 		idle->ChangeAnim(AnimState::loop, 0.2f);
 		idle->SetParentRT(*col);
 
-		walk = new ObImage(L"EnterTheGungeon/enemy_1/Walk.png");
+		walk = make_shared<ObImage>(L"EnterTheGungeon/enemy_1/Walk.png");
 		walk->isVisible = false;
 		walk->maxFrame.x = 6;
 		walk->maxFrame = Int2(6, 8);
@@ -45,14 +45,14 @@ namespace Gungeon
 		walk->ChangeAnim(AnimState::loop, 0.1f);
 		walk->SetParentRT(*col);
 
-		hit = new ObImage(L"EnterTheGungeon/enemy_1/Hit.png");
+		hit = make_shared<ObImage>(L"EnterTheGungeon/enemy_1/Hit.png");
 		hit->isVisible = false;
 		hit->maxFrame.x = 1;
 		hit->scale = Vector2(16.0f, 24.0f) * scaleFactor;
 		hit->ChangeAnim(AnimState::once, 0.2f);
 		hit->SetParentRT(*col);
 
-		die = new ObImage(L"EnterTheGungeon/enemy_1/Die.png");
+		die = make_shared<ObImage>(L"EnterTheGungeon/enemy_1/Die.png");
 		die->isVisible = false;
 		die->maxFrame.x = 5;
 		die->scale = Vector2(110.0f / 5.0f, 22.0f) * scaleFactor;
@@ -64,7 +64,7 @@ namespace Gungeon
 
 	void Enemy1::InitWeapon()
 	{
-		weapon = new Weapon1;
+		weapon = make_shared<Weapon1>();
 		weapon->col->SetParentRT(*col);
 		weapon->col->SetLocalPos(Vector2(10.0f, -15.0f));
 		weapon->idle->SetParentRT(*weapon->col);
@@ -79,18 +79,13 @@ namespace Gungeon
 		bullet.resize(bulletMax);
 		for (auto& elem : bullet)
 		{
-			elem = new EnemyBullet;
+			elem = make_shared<EnemyBullet>();
 		}
 	}
 
 	void Enemy1::InitIntervalAttack()
 	{
-		intervalAttackStart = RANDOM->Float(1.5f, 2.0f);
-	}
-
-	void Enemy1::Release()
-	{
-		Enemy::Release();
+		intervalAttackStart = RANDOM.Float(1.5f, 2.0f);
 	}
 
 	void Enemy1::Update()
@@ -118,8 +113,8 @@ namespace Gungeon
 
 		InitIntervalAttack();
 
-		SOUND->Stop("Pistol");
-		SOUND->Play("Pistol");
+		SOUND.Stop("Pistol");
+		SOUND.Play("Pistol");
 
 		state = State::idle;
 	}

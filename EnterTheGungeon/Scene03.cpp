@@ -13,50 +13,50 @@ namespace Gungeon
     void Scene03::Init()
     {
         // tilemap
-        MAP->useGui = false;
+        MAP.useGui = false;
 
-        MAP->tilemap = new ObTileMap;
-        MAP->tilemap->scale = Vector2(100.0f, 100.0f);
-        MAP->tilemap->SetWorldPos(Vector2(-app.GetHalfWidth() - 1000.0f, -app.GetHalfHeight() - 1000.0f));
-        MAP->imgIdx = 1;
-        MAP->tileSize = Int2(30, 30);
-        MAP->tilemap->ResizeTile(MAP->tileSize);
-        MAP->tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
-        MAP->tileState = 0;
-        MAP->tilemap->CreateTileCost();
+        MAP.tilemap = make_shared<ObTileMap>();
+        MAP.tilemap->scale = Vector2(100.0f, 100.0f);
+        MAP.tilemap->SetWorldPos(Vector2(-app.GetHalfWidth() - 1000.0f, -app.GetHalfHeight() - 1000.0f));
+        MAP.imgIdx = 1;
+        MAP.tileSize = Int2(30, 30);
+        MAP.tilemap->ResizeTile(MAP.tileSize);
+        MAP.tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
+        MAP.tileState = 0;
+        MAP.tilemap->CreateTileCost();
 
         InitRoom();
 
-        CAM->position = curRoom->Pos();
-        CAM->zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
+        CAM.position = curRoom->Pos();
+        CAM.zoomFactor = Vector3(1.0f, 1.0f, 1.0f);
 
         player->Spawn(Vector2(0.0f, 0.0f));
         player->state = State::cinematic;
 
-        boss = new Boss();
+        boss = make_shared<Boss>();
         boss->Spawn(Vector2(0.0f, 300.0f));
         boss->state = State::cinematic;
         boss->idle->isVisible = false;
 
-        cinematic = new Cinematic;
+        cinematic = make_shared<Cinematic>();
         cinematic->cinematicState = CinematicState::cinematicBox1;
         UIOn(false);
 
-        SOUND->Stop("BGM_MapGen");
-        SOUND->Stop("BGM_Game");
-        SOUND->Play("BGM_Boss");
+        SOUND.Stop("BGM_MapGen");
+        SOUND.Stop("BGM_Game");
+        SOUND.Play("BGM_Boss");
     }
 
     void Scene03::InitRoom()
     {
-        MAP->imgIdx = 1;
+        MAP.imgIdx = 1;
 
-        curRoom = new Room;
+        curRoom = make_shared<Room>();
         curRoom->col->scale = Vector2(1500.0f, 1500.0f);
         curRoom->SetPos(Vector2(0.0f, 0.0f));
         curRoom->col->isVisible = false;
 
-        float tileScale = MAP->tilemap->scale.x;
+        float tileScale = MAP.tilemap->scale.x;
 
         Vector2 start;
         Vector2 end;
@@ -65,10 +65,10 @@ namespace Gungeon
 
         auto SetTile2 = [&](Int2 on, int roomIdx)
         {
-            MAP->tilemap->SetTile(on,
-                Int2(RANDOM->Int(floorImgMin.x, floorImgMax.x),
-                    RANDOM->Int(floorImgMin.y, floorImgMax.y)),
-                MAP->imgIdx,
+            MAP.tilemap->SetTile(on,
+                Int2(RANDOM.Int(floorImgMin.x, floorImgMax.x),
+                    RANDOM.Int(floorImgMin.y, floorImgMax.y)),
+                MAP.imgIdx,
                 (int)TileState::floor,
                 Color(0.5f, 0.5f, 0.5f, 1.0f),
                 roomIdx);
@@ -76,34 +76,30 @@ namespace Gungeon
 
         auto SetWall2 = [&](Int2 on, int roomIdx, Int2 frameIdx)
         {
-            MAP->tilemap->SetTile(on,
+            MAP.tilemap->SetTile(on,
                 frameIdx,
-                MAP->imgIdx,
+                MAP.imgIdx,
                 (int)TileState::wall,
                 Color(0.5f, 0.5f, 0.5f, 1.0f),
                 roomIdx);
         };
 
-        auto SetTile1 = [&](Room* elem, int roomIdx)
+        auto SetTile1 = [&](shared_ptr<Room> elem, int roomIdx)
         {
-            ObRect* r = dynamic_cast<ObRect*>(elem->col);
+            shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(elem->col);
 
             start.x = r->lb().x;
             start.y = r->lb().y;
             end.x = r->rt().x;
             end.y = r->rt().y;
 
-            MAP->tilemap->WorldPosToTileIdx(start, sour);
-            MAP->tilemap->WorldPosToTileIdx(end, dest);
+            MAP.tilemap->WorldPosToTileIdx(start, sour);
+            MAP.tilemap->WorldPosToTileIdx(end, dest);
 
 
             for (int y = sour.y + 1; y <= dest.y - 1; y++)
-            {
                 for (int x = sour.x + 1; x <= dest.x - 1; x++)
-                {
                     SetTile2(Int2(x, y), roomIdx);
-                }
-            }
 
             // wall - top, bottom, left, right, edge
 
@@ -128,26 +124,15 @@ namespace Gungeon
         SetTile1(curRoom, 99);
     }
 
-    void Scene03::Release()
-    {
-        SafeRelease(curRoom);
-        SafeRelease(boss);
-        SafeRelease(cinematic);
-    }
-
     void Scene03::Update()
     {
         if (ImGui::Button("Current Scene"))
-        {
             ChangeScene3();
-        }
 
         ChangeUpdateScene();
 
-        if (INPUT->KeyDown('H'))
-        {
+        if (INPUT.KeyDown('H'))
             ColToggle();
-        }
 
         if (!boss) return;
         
@@ -163,14 +148,14 @@ namespace Gungeon
             switch (boss->state)
             {
             case State::walk:
-                boss->FindPath(MAP->tilemap);
+                boss->FindPath(MAP.tilemap);
                 break;
             case State::attack:
                 switch (boss->pattern)
                 {
                 case BossPattern::tornado:
                 case BossPattern::trail:
-                    boss->FindPath(MAP->tilemap);
+                    boss->FindPath(MAP.tilemap);
                     break;
                 }
             default:
@@ -199,23 +184,22 @@ namespace Gungeon
         }
 
         if (boss->dropItem->flagAbsorbed)
-        {
             boss->dropItem->targetPos = player->Pos();
-        }
 
         CinematicProcess();
 
-        MAP->tilemap->Update();
+        MAP.tilemap->Update();
         player->Update();
         boss->Update();
         cinematic->Update();
 
-        SOUND->SetVolume("BGM_Boss", 0.6f);
+        SOUND.SetVolume("BGM_Boss", 0.6f);
     }
 
     void Scene03::LateUpdate()
     {
-        if (!boss) return;
+        if (!boss) 
+            return;
 
         IntersectPlayer();
         IntersectBoss();
@@ -223,21 +207,26 @@ namespace Gungeon
 
     void Scene03::Render()
     {
-        MAP->tilemap->Render();
-        if (player) player->shadow->Render();
-        if (boss) boss->shadow->Render();
-        if (boss) boss->Render();
-        if (player) player->Render();
+        MAP.tilemap->Render();
+        if (player) 
+            player->shadow->Render();
+        if (boss)
+        {
+            boss->shadow->Render();
+            boss->Render();
+        }
+        if (player) 
+            player->Render();
 
         cinematic->Render();
         if (cinematic->cinematicState == CinematicState::cutScene)
         {
             boss->cutScene->Render();
-            DWRITE->RenderText(boss->desc,
+            DWRITE.RenderText(boss->desc,
                 RECT{ 30, 50, (long)app.GetWidth(), (long)app.GetHeight() },
                 50.0f,
                 L"PF스타더스트");
-            DWRITE->RenderText(boss->name,
+            DWRITE.RenderText(boss->name,
                 RECT{ 60, 110, (long)app.GetWidth(), (long)app.GetHeight() },
                 70.0f,
                 L"PF스타더스트");
@@ -246,17 +235,18 @@ namespace Gungeon
 
     void Scene03::ResizeScreen()
     {
-        if (player) player->ResizeScreen();
-        if (boss) boss->ResizeScreen();
-        if (cinematic) cinematic->ResizeScreen();
+        if (player) 
+            player->ResizeScreen();
+        if (boss) 
+            boss->ResizeScreen();
+        if (cinematic) 
+            cinematic->ResizeScreen();
     }
 
     void Scene03::IntersectPlayer()
     {
-        if (MAP->tilemap->isFootOnWall(player->colTile))
-        {
+        if (MAP.tilemap->isFootOnWall(player->colTile))
             player->StepBack();
-        }
 
         // 플레이어 총알
         for (auto& bulletElem : player->bullet)
@@ -272,10 +262,8 @@ namespace Gungeon
                     bulletElem->Hit(1);
                 }
 
-                if (MAP->tilemap->isOnWall(bulletElem->On()))
-                {
+                if (MAP.tilemap->isOnWall(bulletElem->On()))
                     bulletElem->Hit(1);
-                }
             }
         }
     }
@@ -290,10 +278,8 @@ namespace Gungeon
             player->StartHit(1);
         }
 
-        if (MAP->tilemap->isFootOnWall(boss->colTile))
-        {
+        if (MAP.tilemap->isFootOnWall(boss->colTile))
             boss->StepBack();
-        }
 
         // 보스 총알
         for (auto& bulletElem : boss->bullet)
@@ -313,7 +299,7 @@ namespace Gungeon
                 switch (boss->pattern)
                 {
                 case BossPattern::trail:
-                    if (MAP->tilemap->isOnWall(on))
+                    if (MAP.tilemap->isOnWall(on))
                     {
                         if (on.y <= 6 || on.y >= 21)
                         {
@@ -329,7 +315,7 @@ namespace Gungeon
                     }
                     break;
                 case BossPattern::gravity:
-                    if (MAP->tilemap->isOnWall(on))
+                    if (MAP.tilemap->isOnWall(on))
                     {
                         if (on.y <= 6 || on.y >= 21)
                         {
@@ -345,7 +331,7 @@ namespace Gungeon
                     }
                     break;
                 default:
-                    if (MAP->tilemap->isInTileState(bulletElem->Pos(), TileState::wall))
+                    if (MAP.tilemap->isInTileState(bulletElem->Pos(), TileState::wall))
                     {
                         bulletElem->Hit(1);
                     }
@@ -381,14 +367,14 @@ namespace Gungeon
         case Gungeon::CinematicState::cinematicBox1:
             break;
         case Gungeon::CinematicState::cameraTargeting1:
-            camVelocity = CAM->position - boss->Pos();
-            CAM->position -= camVelocity * DELTA;
-            if (abs(CAM->position.x - boss->Pos().x) <= camDiff &&
-                abs(CAM->position.y - boss->Pos().y) <= camDiff)
+            camVelocity = CAM.position - boss->Pos();
+            CAM.position -= camVelocity * DELTA;
+            if (abs(CAM.position.x - boss->Pos().x) <= camDiff &&
+                abs(CAM.position.y - boss->Pos().y) <= camDiff)
             {
                 boss->SpawnAnim();
                 cinematic->cinematicState = CinematicState::bossSpawnAnim;
-                SOUND->Play("Voice_Boss_Spawn");
+                SOUND.Play("Voice_Boss_Spawn");
             }
             break;
         case Gungeon::CinematicState::bossSpawnAnim:
@@ -404,10 +390,10 @@ namespace Gungeon
         case Gungeon::CinematicState::cameraTargeting2:
             boss->CutSceneOff();
 
-            camVelocity = CAM->position - player->Pos();
-            CAM->position -= camVelocity * DELTA;
-            if (abs(CAM->position.x - player->Pos().x) <= camDiff &&
-                abs(CAM->position.y - player->Pos().y) <= camDiff)
+            camVelocity = CAM.position - player->Pos();
+            CAM.position -= camVelocity * DELTA;
+            if (abs(CAM.position.x - player->Pos().x) <= camDiff &&
+                abs(CAM.position.y - player->Pos().y) <= camDiff)
             {
                 cinematic->cinematicState = CinematicState::cinematicBox2;
             }
@@ -427,10 +413,10 @@ namespace Gungeon
             UIOn(false);
             break;
         case Gungeon::CinematicState::cameraTargeting3:
-            camVelocity = CAM->position - boss->Pos();
-            CAM->position -= camVelocity * DELTA;
-            if (abs(CAM->position.x - boss->Pos().x) <= camDiff &&
-                abs(CAM->position.y - boss->Pos().y) <= camDiff)
+            camVelocity = CAM.position - boss->Pos();
+            CAM.position -= camVelocity * DELTA;
+            if (abs(CAM.position.x - boss->Pos().x) <= camDiff &&
+                abs(CAM.position.y - boss->Pos().y) <= camDiff)
             {
                 cinematic->cinematicState = CinematicState::bossDieAnim;
             }
@@ -442,10 +428,10 @@ namespace Gungeon
             }
             break;
         case Gungeon::CinematicState::cameraTargeting4:
-            camVelocity = CAM->position - player->Pos();
-            CAM->position -= camVelocity * DELTA;
-            if (abs(CAM->position.x - player->Pos().x) <= camDiff &&
-                abs(CAM->position.y - player->Pos().y) <= camDiff)
+            camVelocity = CAM.position - player->Pos();
+            CAM.position -= camVelocity * DELTA;
+            if (abs(CAM.position.x - player->Pos().x) <= camDiff &&
+                abs(CAM.position.y - player->Pos().y) <= camDiff)
             {
                 cinematic->cinematicState = CinematicState::cinematicBox4;
             }
@@ -473,30 +459,30 @@ namespace Gungeon
     {
         if (isChangingScene)
         {
-            LIGHT->light.radius -= 2000.0f * DELTA;
-            LIGHT->light.lightColor.x += 0.5f * DELTA;
-            LIGHT->light.lightColor.y += 0.5f * DELTA;
-            LIGHT->light.lightColor.z += 0.5f * DELTA;
+            LIGHT.light.radius -= 2000.0f * DELTA;
+            LIGHT.light.lightColor.x += 0.5f * DELTA;
+            LIGHT.light.lightColor.y += 0.5f * DELTA;
+            LIGHT.light.lightColor.z += 0.5f * DELTA;
 
-            if (TIMER->GetTick(timeFade, 1.0f))
+            if (TIMER.GetTick(timeFade, 1.0f))
             {
                 isChangingScene = false;
             }
         }
         else
         {
-            LIGHT->light.radius += 2000.0f * DELTA;
-            LIGHT->light.radius = Utility::Saturate(LIGHT->light.radius, 0.0f, 2000.0f);
-            LIGHT->light.lightColor.x = 0.5f;
-            LIGHT->light.lightColor.y = 0.5f;
-            LIGHT->light.lightColor.z = 0.5f;
+            LIGHT.light.radius += 2000.0f * DELTA;
+            LIGHT.light.radius = Utility::Saturate(LIGHT.light.radius, 0.0f, 2000.0f);
+            LIGHT.light.lightColor.x = 0.5f;
+            LIGHT.light.lightColor.y = 0.5f;
+            LIGHT.light.lightColor.z = 0.5f;
         }
     }
 
     void Scene03::ChangeScene3()
     {
         isChangingScene = true;
-        SCENE->ChangeScene("Scene03", 1.0f);
+        SCENE.ChangeScene("Scene03", 1.0f);
     }
 
     // 치트

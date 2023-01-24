@@ -13,14 +13,13 @@ namespace Gungeon
 	{
 	public:
 		Item();
-		void Release();
 		void Update();
 		void LateUpdate();
 		void Render();
 		void Hit();
 
 	public:
-		ObImage*	idle = nullptr;
+		std::shared_ptr<ObImage>	idle = nullptr;
 		bool		flagAbsorbed = false;
 		Vector2		targetPos;
 	};

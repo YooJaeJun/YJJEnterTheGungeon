@@ -11,7 +11,7 @@ namespace Gungeon
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 
-        idle = new ObImage(L"EnterTheGungeon/boss_1/Bullet_1.png");
+        idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/Bullet_1.png");
         idle->isVisible = false;
         idle->scale = col->scale;
         idle->maxFrame.x = 4;
@@ -19,8 +19,8 @@ namespace Gungeon
         idle->SetParentRT(*col);
 
         float bombScaleFactor = 2.5f;
-        hitBomb = new Effect;
-        hitBomb->idle = new ObImage(L"EnterTheGungeon/boss_1/HitBomb.png");
+        hitBomb = make_shared<Effect>();
+        hitBomb->idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/HitBomb.png");
         hitBomb->idle->maxFrame.x = 4;
         hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * bombScaleFactor;
         hitBomb->idle->isVisible = false;
@@ -30,7 +30,7 @@ namespace Gungeon
 
         for (auto& trail : trails)
         {
-            trail = new ObImage(L"EnterTheGungeon/boss_1/Bullet_2.png");
+            trail = make_shared<ObImage>(L"EnterTheGungeon/boss_1/Bullet_2.png");
             trail->isVisible = false;
             trail->scale = col->scale;
         }
@@ -49,17 +49,11 @@ namespace Gungeon
         timeSpawnTrail = 0.0f;
     }
 
-    void TrailBullet::Release()
-    {
-        Bullet::Release();
-        for (auto& trail : trails) SafeDelete(trail);
-    }
-
     void TrailBullet::Update()
     {
         Bullet::Update();
 
-        if (TIMER->GetTick(timeSpawnTrail, timeTrail))
+        if (TIMER.GetTick(timeSpawnTrail, timeTrail))
         {
             trails[0]->isVisible = true;
             trails[0]->SetWorldPos(Pos() == Vector2(0.0f, 0.0f) ? DEFAULTSPAWN : Pos());
@@ -82,12 +76,8 @@ namespace Gungeon
     void TrailBullet::Render()
     {
         if (isFired)
-        {
             for (auto& elem : trails)
-            {
                 elem->Render();
-            }
-        }
         Bullet::Render();
     }
 }

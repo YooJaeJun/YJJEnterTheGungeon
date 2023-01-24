@@ -11,7 +11,7 @@ namespace Gungeon
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
 
-        idle = new ObImage(L"EnterTheGungeon/boss_1/Bullet_3.png");
+        idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/Bullet_3.png");
         idle->isVisible = false;
         idle->scale = col->scale;
         idle->maxFrame.x = 4;
@@ -19,8 +19,8 @@ namespace Gungeon
         idle->SetParentRT(*col);
 
         float bombScaleFactor = 2.5f;
-        hitBomb = new Effect;
-        hitBomb->idle = new ObImage(L"EnterTheGungeon/boss_1/HitBomb.png");
+        hitBomb = make_shared<Effect>();
+        hitBomb->idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/HitBomb.png");
         hitBomb->idle->maxFrame.x = 4;
         hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * bombScaleFactor;
         hitBomb->idle->isVisible = false;
@@ -45,15 +45,15 @@ namespace Gungeon
             switch (ShurikenBulletState)
             {
             case Gungeon::ShurikenBulletState::rotate:
-                col->rotation += RANDOM->Float(0.008f, 0.02f);
-                col->rotation2 += RANDOM->Float(0.008f, 0.02f);
-                if (TIMER->GetTick(timeTargeting, intervalTargeting))
+                col->rotation += RANDOM.Float(0.008f, 0.02f);
+                col->rotation2 += RANDOM.Float(0.008f, 0.02f);
+                if (TIMER.GetTick(timeTargeting, intervalTargeting))
                 {
                     ShurikenBulletState = ShurikenBulletState::targeting;
                 }
                 break;
             case Gungeon::ShurikenBulletState::targeting:
-                if (TIMER->GetTick(timeAttack, intervalAttack))
+                if (TIMER.GetTick(timeAttack, intervalAttack))
                 {
                     wposBeforeRot = col->GetWorldPos();
                     col->rotation = 0.0f;
@@ -62,7 +62,7 @@ namespace Gungeon
                     col->SetWorldPos(wposBeforeRot);
                     ShurikenBulletState = ShurikenBulletState::attack;
                     
-                    SOUND->Play("BulletKingThrow");
+                    SOUND.Play("BulletKingThrow");
                 }
                 break;
             case Gungeon::ShurikenBulletState::attack:

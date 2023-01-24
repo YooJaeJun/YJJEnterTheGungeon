@@ -3,11 +3,10 @@
 class ObLine : public GameObject, public StaticVertexCount<ObLine>
 {
 private:
-    static ID3D11Buffer* vertexBuffer;
+    static Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
 
 public:
     static void CreateStaticMember();
-    static void DeleteStaticMember();
     void Render();
 
 

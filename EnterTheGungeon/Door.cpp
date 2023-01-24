@@ -10,12 +10,6 @@ namespace Gungeon
     {
     }
 
-    void Door::Release()
-    {
-        Obstacle::Release();
-        SafeDelete(col);
-    }
-
     void Door::Update()
     {
         Obstacle::Update();
@@ -37,13 +31,13 @@ namespace Gungeon
         SetPos(wpos);
         idle->frame.y = dir;
         idle->isVisible = true;
-        SOUND->Play("DoorClosed");
+        SOUND.Play("DoorClosed");
     }
 
     void Door::Disappear()
     {
         SetPos(DEFAULTSPAWN);
         idle->isVisible = false;
-        SOUND->Play("DoorClosed");
+        SOUND.Play("DoorClosed");
     }
 }

@@ -1,20 +1,21 @@
 #include "Framework.h"
+using Microsoft::WRL::ComPtr;
 
 void Direct3D11::Create()
 {
 	//EnumerateAdapters
 	{
 		//IDXGIFactory1 DXGI 객체를 생성하기 위한 메소드를 구현
-		IDXGIFactory1* factory;
-		FAILED(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)&factory));
+		ComPtr<IDXGIFactory1> factory;
+		FAILED(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)factory.GetAddressOf()));
 
 		UINT index = 0;
 		while (true)
 		{
 			//어뎁터들을 담아둘 포인터
-			IDXGIAdapter1* adapter;
+			ComPtr<IDXGIAdapter1> adapter;
 			//IDXGIFactory1 객체를 통해 어뎁터를 열거
-			HRESULT hr = factory->EnumAdapters1(index, &adapter);
+			HRESULT hr = factory->EnumAdapters1(index, adapter.GetAddressOf());
 
 			//만약 index가 시스템에 존재하는 어뎁터의 개수와 같거나 더 크다면 종료
 			if (hr == DXGI_ERROR_NOT_FOUND)
@@ -23,20 +24,20 @@ void Direct3D11::Create()
 			Check(hr);
 
 			//위에 넣어둔 어뎁터들을 서술형 구조체에 정보 넣는 과정
-			D3DEnumAdapterInfo* adapterInfo = new D3DEnumAdapterInfo();
-			ZeroMemory(adapterInfo, sizeof(D3DEnumAdapterInfo));
+			shared_ptr<D3DEnumAdapterInfo> adapterInfo = make_shared< D3DEnumAdapterInfo>();
+			ZeroMemory(adapterInfo.get(), sizeof(D3DEnumAdapterInfo));
 			adapterInfo->adapterOrdinal = index;
 			adapter->GetDesc1(&adapterInfo->adapterDesc);
 			adapterInfo->adapter = adapter;
 
-			IDXGIOutput* output = NULL;
+			ComPtr<IDXGIOutput> output = NULL;
 
-			hr = adapterInfo->adapter->EnumOutputs(0, &output);
+			hr = adapterInfo->adapter->EnumOutputs(0, output.GetAddressOf());
 			if (DXGI_ERROR_NOT_FOUND == hr)
 				break;
 
-			D3DEnumOutputInfo* outputInfo = new D3DEnumOutputInfo();
-			ZeroMemory(outputInfo, sizeof(D3DEnumOutputInfo));
+			shared_ptr<D3DEnumOutputInfo> outputInfo = make_shared<D3DEnumOutputInfo>();
+			ZeroMemory(outputInfo.get(), sizeof(D3DEnumOutputInfo));
 
 			hr = output->GetDesc(&outputInfo->outputDesc);
 			Check(hr);
@@ -44,8 +45,6 @@ void Direct3D11::Create()
 			outputInfo->output = output;
 
 			UINT num_modes = 0;
-			//디스플레이 모드
-			DXGI_MODE_DESC* displayModes = nullptr;
 			//알파를 포함하여 채널당 8비트를 지원하는 4성분, 32비트 부호 없는 정규화 정수 형식.
 			DXGI_FORMAT format = DXGI_FORMAT_R8G8B8A8_UNORM;
 
@@ -54,8 +53,10 @@ void Direct3D11::Create()
 			//DXGI_ENUM_MODES_INTERLACED INTERLACE모드 : 전체 이미지의 저하 된 사본을 볼 수 있도록 비트 맵 이미지를 인코딩하는 방법
 			Check(hr);
 
-			displayModes = new DXGI_MODE_DESC[num_modes];
-			hr = output->GetDisplayModeList(format, DXGI_ENUM_MODES_INTERLACED, &num_modes, displayModes); // 디스플레이 모드 가져오기
+			//디스플레이 모드
+			shared_ptr<DXGI_MODE_DESC[]> displayModes{ new DXGI_MODE_DESC[num_modes] };
+
+			hr = output->GetDisplayModeList(format, DXGI_ENUM_MODES_INTERLACED, &num_modes, displayModes.get()); // 디스플레이 모드 가져오기
 			Check(hr);
 
 			for (UINT i = 0; i < num_modes; i++)
@@ -74,13 +75,10 @@ void Direct3D11::Create()
 
 			adapterInfo->outputInfo = outputInfo;
 
-			SafeDeleteArray(displayModes);
-
 			adapterInfos.push_back(adapterInfo);
 
 			index++;
 		}
-		SafeRelease(factory);
 	}
 
 	//CreateSwapChainAndDevice
@@ -139,7 +137,7 @@ void Direct3D11::Create()
 
 		HRESULT hr = D3D11CreateDeviceAndSwapChain
 		(
-			adapterInfos[selectedAdapterIndex]->adapter
+			adapterInfos[selectedAdapterIndex]->adapter.Get()
 			, D3D_DRIVER_TYPE_UNKNOWN
 			, NULL
 			, creationFlags
@@ -147,10 +145,10 @@ void Direct3D11::Create()
 			, 1
 			, D3D11_SDK_VERSION
 			, &swapChainDesc
-			, &swapChain
-			, &device
+			, swapChain.GetAddressOf()
+			, device.GetAddressOf()
 			, NULL
-			, &deviceContext
+			, deviceContext.GetAddressOf()
 		);
 		assert(SUCCEEDED(hr));
 	}
@@ -160,17 +158,17 @@ void Direct3D11::Create()
 	//사용하지않음 깊이
 	//Disable DepthStencil
 	{ 
-		ID3D11DepthStencilState* depthStencilState;
+		ComPtr<ID3D11DepthStencilState> depthStencilState;
 		D3D11_DEPTH_STENCIL_DESC desc = { 0 };
 		desc.DepthEnable = false;
 		desc.StencilEnable = false;
-		device->CreateDepthStencilState(&desc, &depthStencilState);
+		device->CreateDepthStencilState(&desc, depthStencilState.GetAddressOf());
 		//바인딩
-		deviceContext->OMSetDepthStencilState(depthStencilState, 0xFF);
+		deviceContext->OMSetDepthStencilState(depthStencilState.Get(), 0xFF);
 	}
 	//CullNone, FillSolid
 	{
-		ID3D11RasterizerState* rasterizerState;
+		ComPtr<ID3D11RasterizerState> rasterizerState;
 		D3D11_RASTERIZER_DESC desc;
 		ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
 		desc.FillMode = D3D11_FILL_SOLID;
@@ -183,9 +181,8 @@ void Direct3D11::Create()
 		desc.ScissorEnable = false; 
 		desc.MultisampleEnable = false; 
 		desc.AntialiasedLineEnable = false; 
-		device->CreateRasterizerState(&desc, &rasterizerState);
-		deviceContext->RSSetState(rasterizerState);
-		rasterizerState->Release();
+		device->CreateRasterizerState(&desc, rasterizerState.GetAddressOf());
+		deviceContext->RSSetState(rasterizerState.Get());
 	}
 	//알파값 처리
 	{
@@ -201,32 +198,26 @@ void Direct3D11::Create()
 		desc.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ONE; // 1
 		desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO; // 0
 		desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD; // 0 + 1
-		device->CreateBlendState(&desc, &blendState);
-		deviceContext->OMSetBlendState(blendState, NULL, 0xFF);
+		device->CreateBlendState(&desc, blendState.GetAddressOf());
+		deviceContext->OMSetBlendState(blendState.Get(), NULL, 0xFF);
 	}
 	isCreated = true;
 }
 
 Direct3D11::Direct3D11()
 :numerator(0), denominator(1), isCreated(0), backBuffer(nullptr), device(nullptr)
-,deviceContext(nullptr),renderTargetView(nullptr),swapChain(nullptr)
+, deviceContext(nullptr), renderTargetView(nullptr), swapChain(nullptr), blendState(nullptr)
 {
 
 }
 
 Direct3D11::~Direct3D11()
 {
-	DeleteBackBuffer();
-
 	if (swapChain != nullptr)
 		swapChain->SetFullscreenState(false, NULL);
-
-	SafeRelease(deviceContext);
-	SafeRelease(device);
-	SafeRelease(swapChain);
 }
 
-void Direct3D11::SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
+void Direct3D11::SetRenderTarget(ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv)
 {
 	if (rtv == nullptr)
 		rtv = renderTargetView;
@@ -234,10 +225,10 @@ void Direct3D11::SetRenderTarget(ID3D11RenderTargetView* rtv, ID3D11DepthStencil
 	//if (dsv == nullptr)
 	//	dsv = depthStencilView;
 
-	deviceContext->OMSetRenderTargets(1, &rtv, nullptr);
+	deviceContext->OMSetRenderTargets(1, rtv.GetAddressOf(), nullptr);
 }
 
-void Direct3D11::Clear(Color color, ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv)
+void Direct3D11::Clear(Color color, ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv)
 {
 	if (rtv == nullptr)
 		rtv = renderTargetView;
@@ -245,7 +236,7 @@ void Direct3D11::Clear(Color color, ID3D11RenderTargetView* rtv, ID3D11DepthSten
 	//if (dsv == nullptr)
 	//	dsv = depthStencilView;
 
-	deviceContext->ClearRenderTargetView(rtv, color);
+	deviceContext->ClearRenderTargetView(rtv.Get(), color);
 	//deviceContext->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
 }
 
@@ -262,14 +253,13 @@ void Direct3D11::ResizeScreen(float width, float height)
 	app.width = width;
 	app.height = height;
 
-	DWRITE->DeleteBackBuffer();
-	DeleteBackBuffer();
+	DWRITE.DeleteBackBuffer();
 	{
 		HRESULT hr = swapChain->ResizeBuffers(0, (UINT)width, (UINT)height, DXGI_FORMAT_UNKNOWN, 0);
 		assert(SUCCEEDED(hr));
 	}
 	CreateBackBuffer(width, height);
-	DWRITE->CreateBackBuffer(width, height);
+	DWRITE.CreateBackBuffer(width, height);
 }
 
 void Direct3D11::CreateBackBuffer(float width, float height)
@@ -278,42 +268,30 @@ void Direct3D11::CreateBackBuffer(float width, float height)
 
 	//Create RTV - System BackBuffer
 	{
-		ID3D11Texture2D* backbufferPointer;
-		hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backbufferPointer);
+		ComPtr<ID3D11Texture2D> backbufferPointer;
+		hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backbufferPointer.GetAddressOf());
 		Check(hr);
 
-		hr = device->CreateRenderTargetView(backbufferPointer, NULL, &renderTargetView);
+		hr = device->CreateRenderTargetView(backbufferPointer.Get(), NULL, renderTargetView.GetAddressOf());
 		Check(hr);
-
-		SafeRelease(backbufferPointer);
 	}
 }
 
-void Direct3D11::DeleteBackBuffer()
-{
-	//SafeRelease(depthStencilView);
-	SafeRelease(renderTargetView);
-	SafeRelease(backBuffer);
-}
-
 D3DEnumAdapterInfo::D3DEnumAdapterInfo()
-	: adapter(nullptr), outputInfo(nullptr)
+	: adapterOrdinal(0), adapter(nullptr), adapterDesc(DXGI_ADAPTER_DESC1()), outputInfo(nullptr)
 {
 }
 
 D3DEnumAdapterInfo::~D3DEnumAdapterInfo()
 {
-	SafeRelease(adapter);
-	SafeDelete(outputInfo);
 }
 
 
 D3DEnumOutputInfo::D3DEnumOutputInfo()
-	: output(nullptr), numerator(0), denominator(1)
+	: output(nullptr), outputDesc(DXGI_OUTPUT_DESC()), numerator(0), denominator(1)
 {
 }
 
 D3DEnumOutputInfo::~D3DEnumOutputInfo()
 {
-	SafeRelease(output);
 }

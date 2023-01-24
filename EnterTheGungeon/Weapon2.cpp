@@ -18,7 +18,7 @@ namespace Gungeon
 		scaleFactor = 2.0f;
 		col->scale = Vector2(84.0f / 2.0f, 23.0f) * scaleFactor;
 
-		idle = new ObImage(L"EnterTheGungeon/Weapon/2/Weapon.png");
+		idle = make_shared<ObImage>(L"EnterTheGungeon/Weapon/2/Weapon.png");
 		idle->isVisible = true;
 		idle->maxFrame.x = 2;
 		idle->scale = Vector2(84.0f / 2.0f, 23.0f) * scaleFactor;
@@ -27,14 +27,14 @@ namespace Gungeon
 
 		firePos->SetLocalPos(Vector2(col->scale.x / 2.0f, 0.0f));
 
-		fireEffect->idle = new ObImage(L"EnterTheGungeon/Weapon/2/Effect_Fire.png");
+		fireEffect->idle = make_shared<ObImage>(L"EnterTheGungeon/Weapon/2/Effect_Fire.png");
 		fireEffect->idle->isVisible = false;
 		fireEffect->idle->maxFrame.x = 3;
 		fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * scaleFactor;
 		fireEffect->idle->SetParentRT(*firePos);
 		fireEffect->intervalDie = 0.2f;
 
-		imgReloading = new ObImage(L"EnterTheGungeon/Weapon/2/Reloading.png");
+		imgReloading = make_shared<ObImage>(L"EnterTheGungeon/Weapon/2/Reloading.png");
 		imgReloading->isVisible = false;
 		imgReloading->pivot = Vector2(0.4f, 0.25f);
 		imgReloading->maxFrame.x = 2;
@@ -48,7 +48,7 @@ namespace Gungeon
 		localFirePosDefault = Vector2(80.0f, 6.0f);
 		state = State::die;
 
-		uiBulletFrame->img = new ObImage(L"EnterTheGungeon/Weapon/2/UI_Magazine.png");
+		uiBulletFrame->img = make_shared<ObImage>(L"EnterTheGungeon/Weapon/2/UI_Magazine.png");
 		uiBulletFrame->img->scale = Vector2(28.0f, 124.0f);
 		uiBulletFrame->img->pivot = OFFSET_RB;
 		uiBulletFrame->anchor = DirState::dirRB;
@@ -62,8 +62,8 @@ namespace Gungeon
 		uiBulletIdx = 0;
 		for (auto& elem : uiBullet)
 		{
-			elem = new UI;
-			elem->img = new ObImage(L"EnterTheGungeon/Weapon/UI_Bullet.png");
+			elem = make_shared<UI>();
+			elem->img = make_shared<ObImage>(L"EnterTheGungeon/Weapon/UI_Bullet.png");
 			elem->img->scale = Vector2(12.0f, 4.0f);
 			elem->anchor = DirState::dirRB;
 			elem->Spawn(Vector2(-40.0f, 56.0f + uiBulletIdx * 12.0f));
@@ -73,20 +73,14 @@ namespace Gungeon
 		}
 
 		uiWeaponScaleFactor = 2.5f;
-		uiWeapon->img = new ObImage(L"EnterTheGungeon/Weapon/2/UI_Weapon.png");
+		uiWeapon->img = make_shared<ObImage>(L"EnterTheGungeon/Weapon/2/UI_Weapon.png");
 		uiWeapon->img->scale = Vector2(44.0f, 15.0f) * uiWeaponScaleFactor;
 		uiWeapon->img->pivot = OFFSET_RB;
 		uiWeapon->anchor = DirState::dirRB;
 		uiWeaponSpawnPos = Vector2(-120.0f, 70.0f);
 		uiWeapon->Spawn(uiWeaponSpawnPos);
 		uiWeapon->img->space = Space::screen;
-		uiWeapon->img->zOrder = ZOrder::UI;
 		uiWeapon->img->isVisible = false;
-	}
-
-	void Weapon2::Release()
-	{
-		Weapon::Release();
 	}
 
 	void Weapon2::Update()

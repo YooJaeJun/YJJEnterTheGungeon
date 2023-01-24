@@ -11,8 +11,8 @@ namespace Gungeon
     {
         for (auto& elem : box)
         {
-            elem = new UI;
-            elem->img = new ObImage(L"EnterTheGungeon/Level/Cinematic_Box.png");
+            elem = make_shared<UI>();
+            elem->img = make_shared<ObImage>(L"EnterTheGungeon/Level/Cinematic_Box.png");
             elem->img->isVisible = false;
             elem->img->scale = Vector2(app.GetWidth(), 150.0f);
             elem->img->isFilled = true;
@@ -28,20 +28,13 @@ namespace Gungeon
         cinematicState = CinematicState::none;
 
         for (auto& elem : timeCinematic)
-        {
             elem = 0.0f;
-        }
 
         intervalCinematic[(int)CinematicState::cinematicBox1] = 1.0f;
         intervalCinematic[(int)CinematicState::cinematicBox2] = 1.0f;
         intervalCinematic[(int)CinematicState::cutScene] = 3.0f;
         intervalCinematic[(int)CinematicState::cinematicBox3] = 1.0f;
         intervalCinematic[(int)CinematicState::cinematicBox4] = 1.0f;
-    }
-
-    void Cinematic::Release()
-    {
-        for (auto& elem : box) elem->Release();
     }
 
     void Cinematic::Update()
@@ -56,7 +49,7 @@ namespace Gungeon
             box[1]->img->isVisible = true;
             BoxUp(true);
 
-            if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox1],
+            if (TIMER.GetTick(timeCinematic[(int)CinematicState::cinematicBox1],
                 intervalCinematic[(int)CinematicState::cinematicBox1]))
             {
                 cinematicState = CinematicState::cameraTargeting1;
@@ -67,7 +60,7 @@ namespace Gungeon
         case Gungeon::CinematicState::bossSpawnAnim:
             break;
         case Gungeon::CinematicState::cutScene:
-            if (TIMER->GetTick(timeCinematic[(int)CinematicState::cutScene],
+            if (TIMER.GetTick(timeCinematic[(int)CinematicState::cutScene],
                 intervalCinematic[(int)CinematicState::cutScene]))
             {
                 cinematicState = CinematicState::cameraTargeting2;
@@ -78,7 +71,7 @@ namespace Gungeon
         case Gungeon::CinematicState::cinematicBox2:
             BoxUp(false);
 
-            if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox2],
+            if (TIMER.GetTick(timeCinematic[(int)CinematicState::cinematicBox2],
                 intervalCinematic[(int)CinematicState::cinematicBox2]))
             {
                 cinematicState = CinematicState::finish;
@@ -93,7 +86,7 @@ namespace Gungeon
             box[1]->img->isVisible = true;
             BoxUp(true);
 
-            if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox3],
+            if (TIMER.GetTick(timeCinematic[(int)CinematicState::cinematicBox3],
                 intervalCinematic[(int)CinematicState::cinematicBox3]))
             {
                 cinematicState = CinematicState::cameraTargeting3;
@@ -107,11 +100,11 @@ namespace Gungeon
         case Gungeon::CinematicState::cinematicBox4:
             BoxUp(false);
 
-            if (TIMER->GetTick(timeCinematic[(int)CinematicState::cinematicBox4],
+            if (TIMER.GetTick(timeCinematic[(int)CinematicState::cinematicBox4],
                 intervalCinematic[(int)CinematicState::cinematicBox4]))
             {
                 cinematicState = CinematicState::finish2;
-                SOUND->Play("Win");
+                SOUND.Play("Win");
             }
         case Gungeon::CinematicState::finish2:
             break;
@@ -119,12 +112,14 @@ namespace Gungeon
             break;
         }
 
-        for (auto& elem : box) elem->Update();
+        for (auto& elem : box) 
+            elem->Update();
     }
 
     void Cinematic::Render()
     {
-        for (auto& elem : box) elem->Render();
+        for (auto& elem : box) 
+            elem->Render();
     }
 
     void Cinematic::ResizeScreen()
@@ -136,7 +131,8 @@ namespace Gungeon
     void Cinematic::BoxUp(const bool isUp)
     {
         float factor = 75.0f;
-        if (false == isUp) factor *= -1;
+        if (false == isUp) 
+            factor *= -1;
 
         box[0]->img->MoveWorldPos(Vector2(0.0f, -factor * DELTA));
         box[1]->img->MoveWorldPos(Vector2(0.0f, factor * DELTA));

@@ -12,8 +12,7 @@ Map::~Map()
 void Map::Init()
 {
     // tilemap
-    SafeDelete(tilemap);
-    tilemap = new ObTileMap;
+    tilemap.reset(new ObTileMap);
     tilemap->scale = Vector2(100.0f, 100.0f);
     tilemap->SetWorldPos(Vector2(-5000.0f, -5000.0f));
     imgIdx = 1;
@@ -23,11 +22,6 @@ void Map::Init()
     tileState = 0;
     tilemap->CreateTileCost();
     useGui = false;
-}
-
-void Map::Release()
-{
-    SafeDelete(tilemap);
 }
 
 void Map::Update()
@@ -78,13 +72,13 @@ void Map::SetTilemapGUI()
     for (int i = 0; i < tileImageCount; i++)
     {
         string str = "Texture" + to_string(i);
-        if (GUI->FileImGui(str.c_str(), str.c_str(),
+        if (GUI.FileImGui(str.c_str(), str.c_str(),
             ".jpg,.png,.bmp,.dds,.tga", "../Contents/Images/EnterTheGungeon"))
         {
             string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
             wstring wImgFile = L"";
             wImgFile.assign(path.begin(), path.end());
-            tilemap->tileImages[i] = make_shared<ObImage>(wImgFile);
+            tilemap->tileImages[i].reset(new ObImage(wImgFile));
         }
         if (i < 3)
         {
@@ -94,6 +88,7 @@ void Map::SetTilemapGUI()
 
     //ImageButton
     tilemap->RenderGui(pickingIdx, imgIdx);
+
     ImGui::Text("Picking Idx : %d , %d", pickingIdx.x, pickingIdx.y);
     ImGui::Text("Img Idx : %d", imgIdx);
 
@@ -101,12 +96,12 @@ void Map::SetTilemapGUI()
     ImGui::InputInt2("Max Frame", (int*)&tilemap->tileImages[imgIdx]->maxFrame);
 
     //Coord
-    ImGui::Text("Camera Pos : %f , %f", CAM->position.x, CAM->position.y);
-    ImGui::Text("Camera Zoom Factor : %f", CAM->zoomFactor.x);
+    ImGui::Text("Camera Pos : %f , %f", CAM.position.x, CAM.position.y);
+    ImGui::Text("Camera Zoom Factor : %f", CAM.zoomFactor.x);
 
-    ImGui::Text("Mouse Pos : %f , %f", INPUT->GetWorldMousePos().x, INPUT->GetWorldMousePos().y);
+    ImGui::Text("Mouse Pos : %f , %f", INPUT.GetWorldMousePos().x, INPUT.GetWorldMousePos().y);
 
-    if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx))
+    if (tilemap->WorldPosToTileIdx(INPUT.GetWorldMousePos(), mouseIdx))
     {
         ImGui::Text("Mouse Idx : %d , %d", mouseIdx.x, mouseIdx.y);
         ImGui::Text("MouseOver TileState : %d", tilemap->Tiles[mouseIdx.x][mouseIdx.y].state);
@@ -122,7 +117,7 @@ void Map::SetTilemapGUI()
     }
 
     //SaveLoad
-    if (GUI->FileImGui("Save", "Save Map",
+    if (GUI.FileImGui("Save", "Save Map",
         ".txt", "../Contents/TileMap"))
     {
         string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
@@ -130,7 +125,7 @@ void Map::SetTilemapGUI()
         tilemap->Save();
     }
     ImGui::SameLine();
-    if (GUI->FileImGui("Load", "Load Map",
+    if (GUI.FileImGui("Load", "Load Map",
         ".txt", "../Contents/TileMap"))
     {
         string path = ImGuiFileDialog::Instance()->GetCurrentFileName();
@@ -148,9 +143,9 @@ void Map::SetTilemapGUI()
     if (!ImGui::IsMouseHoveringRect(min, max, false) &&
         !ImGuiFileDialog::Instance()->IsOpened())
     {
-        if (INPUT->KeyPress(VK_LBUTTON))
+        if (INPUT.KeyPress(VK_LBUTTON))
         {
-            if (tilemap->WorldPosToTileIdx(INPUT->GetWorldMousePos(), mouseIdx))
+            if (tilemap->WorldPosToTileIdx(INPUT.GetWorldMousePos(), mouseIdx))
             {
                 tilemap->SetTile(mouseIdx, pickingIdx, imgIdx, tileState, tileColor);
             }

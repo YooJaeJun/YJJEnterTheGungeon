@@ -14,7 +14,6 @@ namespace Gungeon
 	{
 	public:
 		Weapon();
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
@@ -30,14 +29,14 @@ namespace Gungeon
 
 	public:
 		WeaponType	type = WeaponType::pistol;
-		GameObject* firePos = nullptr;
-		Effect*		fireEffect = nullptr;
-		ObImage*	imgReloading = nullptr;
-		UI*			uiBulletFrame = nullptr;
-		vector<UI*>	uiBullet;
-		UI*			uiWeapon = nullptr;
+		std::shared_ptr<GameObject> firePos = nullptr;
+		std::shared_ptr<Effect>		fireEffect = nullptr;
+		std::shared_ptr<ObImage>	imgReloading = nullptr;
+		std::shared_ptr<UI>			uiBulletFrame = nullptr;
+		vector<std::shared_ptr<UI>>	uiBullet;
+		std::shared_ptr<UI>			uiWeapon = nullptr;
 		int			bulletCount = 0;
-		UI*			uiBulletCountInfinity = nullptr;
+		std::shared_ptr<UI>			uiBulletCountInfinity = nullptr;
 		int			remainBulletCount = 0;
 		float		intervalFire;
 		Vector2		pivotDefault;

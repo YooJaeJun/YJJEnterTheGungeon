@@ -9,7 +9,6 @@ namespace Gungeon
 		~Scene01();
 
 		virtual void Init() override;
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
@@ -20,8 +19,8 @@ namespace Gungeon
 		void ChangeUpdateScene();
 
 	public:
-		ProcedureMapGeneration* mapGen = nullptr;
-		Player*					player = nullptr;
+		std::shared_ptr<ProcedureMapGeneration> mapGen = nullptr;
+		std::shared_ptr<Player>					player = nullptr;
 
 	private:
 		bool					isChangingScene = false;

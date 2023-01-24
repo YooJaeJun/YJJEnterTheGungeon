@@ -36,7 +36,7 @@ bool Sound::AddSound(string File, string Key, bool loop)
     }
 
     //중복된게 없다.
-    SoundNode * temp = new SoundNode();
+    SoundNode* temp = new SoundNode();
     system->createSound
     (
         path.c_str(),
@@ -72,7 +72,6 @@ bool Sound::DeleteSound(string Key)
     //first가 키, second 밸류
     iter->second->channel->stop();
     iter->second->sound->release();
-    delete iter->second;
 
     //맵에서도 삭제
     SoundList.erase(iter);

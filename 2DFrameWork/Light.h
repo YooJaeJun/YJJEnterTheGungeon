@@ -1,5 +1,5 @@
 #pragma once
-class Light : public Singleton<Light>
+class Light
 {
 private:
     struct PointLight
@@ -10,12 +10,23 @@ private:
         Color   lightColor;     //조명 색     // 16 + 16
         Color   outColor;       //조명 밖 색
     };
-    ID3D11Buffer * lightBuffer;
+    Microsoft::WRL::ComPtr<ID3D11Buffer> lightBuffer;
+
+private:
+    Light();
+
+public:
+    static Light& GetInstance()
+    {
+        static std::unique_ptr<Light> inst;
+        if (!inst)
+            inst = std::unique_ptr<Light>(new Light());
+        return *inst;
+    }
 
 public:
     PointLight light;
 
-    Light();
     ~Light();
 
     void        Set();

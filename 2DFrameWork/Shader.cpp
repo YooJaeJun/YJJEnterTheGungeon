@@ -2,18 +2,18 @@
 
 Shader::Shader(wstring file)
 {
-    ID3D10Blob*	    VsBlob;
-    ID3D10Blob*	    PsBlob;
+    Microsoft::WRL::ComPtr<ID3D10Blob> VsBlob;
+    Microsoft::WRL::ComPtr<ID3D10Blob> PsBlob;
 
     wstring path = L"../Shaders/" + file + L".hlsl";
 
     DWORD flags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG;
 
     D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
-        "VS", "vs_5_0", flags, 0, &VsBlob, nullptr);
+        "VS", "vs_5_0", flags, 0, VsBlob.GetAddressOf(), nullptr);
 
-    D3D->GetDevice()->CreateVertexShader(VsBlob->GetBufferPointer(), VsBlob->GetBufferSize(),
-        nullptr, &vertexShader);
+    D3D.GetDevice()->CreateVertexShader(VsBlob->GetBufferPointer(), VsBlob->GetBufferSize(),
+        nullptr, vertexShader.GetAddressOf());
 
     D3D11_INPUT_ELEMENT_DESC LayoutDesc[2];
 
@@ -39,13 +39,13 @@ Shader::Shader(wstring file)
 
         UINT NumElements = 2;
         // 받는 역할은 Input Layout인데, vertext Layout에 담아 쓰기
-        D3D->GetDevice()->CreateInputLayout
+        D3D.GetDevice()->CreateInputLayout
         (
             LayoutDesc,//정점구조체배열
             NumElements,//배열원소갯수
             VsBlob->GetBufferPointer(),//정점셰이더 포인터
             VsBlob->GetBufferSize(),//셰이더크기
-            &vertexLayout//입력배치를 포인터를 통해 돌려줌
+            vertexLayout.GetAddressOf()//입력배치를 포인터를 통해 돌려줌
         );
     }
     // 그 다음 12바이트부터 쓸 거야
@@ -63,13 +63,13 @@ Shader::Shader(wstring file)
 
         UINT NumElements = 2;
         // 받는 역할은 Input Layout인데, vertext Layout에 담아 쓰기
-        D3D->GetDevice()->CreateInputLayout
+        D3D.GetDevice()->CreateInputLayout
         (
             LayoutDesc,//정점구조체배열
             NumElements,//배열원소갯수
             VsBlob->GetBufferPointer(),//정점셰이더 포인터
             VsBlob->GetBufferSize(),//셰이더크기
-            &vertexLayout//입력배치를 포인터를 통해 돌려줌
+            vertexLayout.GetAddressOf()//입력배치를 포인터를 통해 돌려줌
         );
     }
     
@@ -86,38 +86,31 @@ Shader::Shader(wstring file)
 
         UINT NumElements = 7;
         // 받는 역할은 Input Layout인데, vertext Layout에 담아 쓰기
-        D3D->GetDevice()->CreateInputLayout
+        D3D.GetDevice()->CreateInputLayout
         (
             LayoutDesc,//정점구조체배열
             NumElements,//배열원소갯수
             VsBlob->GetBufferPointer(),//정점셰이더 포인터
             VsBlob->GetBufferSize(),//셰이더크기
-            &vertexLayout//입력배치를 포인터를 통해 돌려줌
+            vertexLayout.GetAddressOf()//입력배치를 포인터를 통해 돌려줌
         );
     }
 
-    VsBlob->Release();
-
     D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
-        "PS", "ps_5_0", flags, 0, &PsBlob, nullptr);
+        "PS", "ps_5_0", flags, 0, PsBlob.GetAddressOf(), nullptr);
 
-    D3D->GetDevice()->CreatePixelShader(PsBlob->GetBufferPointer(), PsBlob->GetBufferSize(),
-        nullptr, &pixelShader);
-
-    PsBlob->Release();
+    D3D.GetDevice()->CreatePixelShader(PsBlob->GetBufferPointer(), PsBlob->GetBufferSize(),
+        nullptr, pixelShader.GetAddressOf());
 }
 
 Shader::~Shader()
 {
-    vertexShader->Release();
-    pixelShader->Release();
-    vertexLayout->Release();
 }
 
 void Shader::Set()
 {
     //파이프라인에 바인딩
-    D3D->GetDC()->VSSetShader(vertexShader, 0, 0);
-    D3D->GetDC()->PSSetShader(pixelShader, 0, 0);
-    D3D->GetDC()->IASetInputLayout(vertexLayout);
+    D3D.GetDC()->VSSetShader(vertexShader.Get(), 0, 0);
+    D3D.GetDC()->PSSetShader(pixelShader.Get(), 0, 0);
+    D3D.GetDC()->IASetInputLayout(vertexLayout.Get());
 }

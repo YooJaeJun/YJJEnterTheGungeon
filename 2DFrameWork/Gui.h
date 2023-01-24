@@ -1,13 +1,24 @@
 #pragma once
-class Gui :public Singleton<Gui>
+class Gui
 {
 public:
 	static LRESULT MsgProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
+	Gui();
+
+public:
+	static Gui& GetInstance()
+	{
+		static std::unique_ptr<Gui> inst;
+		if (!inst)
+			inst = std::unique_ptr<Gui>(new Gui());
+		return *inst;
+	}
+
+private:
 	UINT fileID;
 public:
-	Gui();
 	~Gui();
 	void ResizeScreen();
 

@@ -29,7 +29,6 @@ namespace Gungeon
 	public:
 		Cinematic();
 		void Init();
-		void Release();
 		void Update();
 		void Render();
 		void ResizeScreen();
@@ -38,7 +37,7 @@ namespace Gungeon
 
 	public:
 		CinematicState cinematicState = CinematicState::none;
-		UI* box[2];
+		std::shared_ptr<UI> box[2];
 
 	private:
 		float timeCinematic[(int)CinematicState::max];

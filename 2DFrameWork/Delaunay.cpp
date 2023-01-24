@@ -1,6 +1,6 @@
 #include "framework.h"
 
-const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<ObNode>& nodes)
+const std::vector<ObTriangle>& Delaunay::Triangulate(std::vector<ObNode>& nodes)
 {
 	// Determinate the super triangle
 	float minX = nodes[0].x;
@@ -81,18 +81,18 @@ const std::vector<ObTriangle>& Delaunay::triangulate(std::vector<ObNode>& nodes)
 		edges.push_back(ObLine(t.b, t.c));
 		edges.push_back(ObLine(t.c, t.a));
 
-		if (validChecker(t.a, t.b)) nodesLinked[t.a].push_back(t.b);
-		if (validChecker(t.a, t.c)) nodesLinked[t.a].push_back(t.c);
-		if (validChecker(t.b, t.a)) nodesLinked[t.b].push_back(t.a);
-		if (validChecker(t.b, t.c)) nodesLinked[t.b].push_back(t.c);
-		if (validChecker(t.c, t.a)) nodesLinked[t.c].push_back(t.a);
-		if (validChecker(t.c, t.b)) nodesLinked[t.c].push_back(t.b);
+		if (ValidChecker(t.a, t.b)) nodesLinked[t.a].push_back(t.b);
+		if (ValidChecker(t.a, t.c)) nodesLinked[t.a].push_back(t.c);
+		if (ValidChecker(t.b, t.a)) nodesLinked[t.b].push_back(t.a);
+		if (ValidChecker(t.b, t.c)) nodesLinked[t.b].push_back(t.c);
+		if (ValidChecker(t.c, t.a)) nodesLinked[t.c].push_back(t.a);
+		if (ValidChecker(t.c, t.b)) nodesLinked[t.c].push_back(t.b);
 	}
 
 	return triangles;
 }
 
-bool Delaunay::validChecker(const ObNode& n1, const ObNode& n2)
+bool Delaunay::ValidChecker(const ObNode& n1, const ObNode& n2)
 {
 	return find(nodesLinked[n1].begin(), nodesLinked[n1].end(), n2) == nodesLinked[n1].end();
 }

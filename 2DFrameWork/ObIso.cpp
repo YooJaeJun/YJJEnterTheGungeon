@@ -2,9 +2,6 @@
 
 ObIso::ObIso()
 {
-    SafeRelease(vertexBuffer);
-    SafeDeleteArray(vertices);
-
     tileSize.x = 20;
     tileSize.y = 20;
     file = "map1.txt";
@@ -20,8 +17,6 @@ ObIso::ObIso()
 
 ObIso::~ObIso()
 {
-    SafeRelease(vertexBuffer);
-    SafeDeleteArray(vertices);
 }
 
 bool ObIso::WorldPosToTileIdx(Vector2 WPos, Int2& TileIdx)
@@ -63,65 +58,66 @@ bool ObIso::WorldPosToTileIdx(Vector2 WPos, Int2& TileIdx)
     return true;
 }
 
-void ObIso::ResizeTile(Int2 TileSize)
+void ObIso::ResizeTile(Int2 newTileSize)
 {
-    VertexTile* Vertices = new VertexTile[TileSize.x * TileSize.y * 6];
+    shared_ptr<VertexTile[]> newVertices{ new VertexTile[newTileSize.x * newTileSize.y * 6] };
 
     // Init
-    for (int i = 0; i < TileSize.y; i++)
+    for (int i = 0; i < newTileSize.y; i++)
     {
-        for (int j = 0; j < TileSize.x; j++)
+        for (int j = 0; j < newTileSize.x; j++)
         {
             // Å¸ÀÏÁÂÇ¥ ( tileSize.x * yÁÂÇ¥ + xÁÂÇ¥ )
             // ²ÀÁöÁ¡ ÁÂÇ¥ ( tileSize.x * yÁÂÇ¥ + xÁÂÇ¥ ) * 6
-            int tileIdx = TileSize.x * i + j;
-            Vertices[tileIdx * 6].position.x = -0.5f + (j - i) * 0.5f;
-            Vertices[tileIdx * 6].position.y = -TWODIVROOT3 - (j + i) * TWODIVROOT3QUARTER;
-            Vertices[tileIdx * 6].uv = Vector2(0.0f, 1.0f);
+            int tileIdx = newTileSize.x * i + j;
+            newVertices[tileIdx * 6].position.x = -0.5f + (j - i) * 0.5f;
+            newVertices[tileIdx * 6].position.y = -TWODIVROOT3 - (j + i) * TWODIVROOT3QUARTER;
+            newVertices[tileIdx * 6].uv = Vector2(0.0f, 1.0f);
             //1                             
-            Vertices[tileIdx * 6 + 1].position.x = -0.5f + (j - i) * 0.5f;
-            Vertices[tileIdx * 6 + 1].position.y = 0.0f - (j + i) * TWODIVROOT3QUARTER;
-            Vertices[tileIdx * 6 + 1].uv = Vector2(0.0f, 0.0f);
+            newVertices[tileIdx * 6 + 1].position.x = -0.5f + (j - i) * 0.5f;
+            newVertices[tileIdx * 6 + 1].position.y = 0.0f - (j + i) * TWODIVROOT3QUARTER;
+            newVertices[tileIdx * 6 + 1].uv = Vector2(0.0f, 0.0f);
             //2                             
-            Vertices[tileIdx * 6 + 2].position.x = 0.5f + (j - i) * 0.5f;
-            Vertices[tileIdx * 6 + 2].position.y = -TWODIVROOT3 - (j + i) * TWODIVROOT3QUARTER;
-            Vertices[tileIdx * 6 + 2].uv = Vector2(1.0f, 1.0f);
+            newVertices[tileIdx * 6 + 2].position.x = 0.5f + (j - i) * 0.5f;
+            newVertices[tileIdx * 6 + 2].position.y = -TWODIVROOT3 - (j + i) * TWODIVROOT3QUARTER;
+            newVertices[tileIdx * 6 + 2].uv = Vector2(1.0f, 1.0f);
             //3
-            Vertices[tileIdx * 6 + 3].position.x = 0.5f + (j - i) * 0.5f;
-            Vertices[tileIdx * 6 + 3].position.y = 0.0f - (j + i) * TWODIVROOT3QUARTER;
-            Vertices[tileIdx * 6 + 3].uv = Vector2(1.0f, 0.0f);
+            newVertices[tileIdx * 6 + 3].position.x = 0.5f + (j - i) * 0.5f;
+            newVertices[tileIdx * 6 + 3].position.y = 0.0f - (j + i) * TWODIVROOT3QUARTER;
+            newVertices[tileIdx * 6 + 3].uv = Vector2(1.0f, 0.0f);
             //4
-            Vertices[tileIdx * 6 + 4].position.x = 0.5f + (j - i) * 0.5f;
-            Vertices[tileIdx * 6 + 4].position.y = -TWODIVROOT3 - (j + i) * TWODIVROOT3QUARTER;
-            Vertices[tileIdx * 6 + 4].uv = Vector2(1.0f, 1.0f);
+            newVertices[tileIdx * 6 + 4].position.x = 0.5f + (j - i) * 0.5f;
+            newVertices[tileIdx * 6 + 4].position.y = -TWODIVROOT3 - (j + i) * TWODIVROOT3QUARTER;
+            newVertices[tileIdx * 6 + 4].uv = Vector2(1.0f, 1.0f);
             //5
-            Vertices[tileIdx * 6 + 5].position.x = -0.5f + (j - i) * 0.5f;
-            Vertices[tileIdx * 6 + 5].position.y = 0.0f - (j + i) * TWODIVROOT3QUARTER;
-            Vertices[tileIdx * 6 + 5].uv = Vector2(0.0f, 0.0f);
+            newVertices[tileIdx * 6 + 5].position.x = -0.5f + (j - i) * 0.5f;
+            newVertices[tileIdx * 6 + 5].position.y = 0.0f - (j + i) * TWODIVROOT3QUARTER;
+            newVertices[tileIdx * 6 + 5].uv = Vector2(0.0f, 0.0f);
         }
     }
 
     // Copy
     if (vertices)
     {
-        Int2 Min = Int2(min(TileSize.x, tileSize.x), min(TileSize.y, tileSize.y));
+        Int2 Min = Int2(min(newTileSize.x, tileSize.x), min(newTileSize.y, tileSize.y));
         for (int i = 0; i < Min.y; i++)
         {
             for (int j = 0; j < Min.x; j++)
             {
                 int SrcIdx = tileSize.x * i + j;
-                int DestIdx = TileSize.x * i + j;
+                int DestIdx = newTileSize.x * i + j;
                 for (int k = 0; k < 6; k++)
                 {
-                    Vertices[DestIdx * 6 + k] = vertices[SrcIdx * 6 + k];
+                    newVertices[DestIdx * 6 + k] = vertices[SrcIdx * 6 + k];
                 }
             }
         }
     }
-    SafeDeleteArray(vertices);
-    vertices = Vertices;
-    tileSize = TileSize;
-    SafeRelease(vertexBuffer);
+
+    vertices = nullptr;
+    vertices = newVertices;
+    tileSize = newTileSize;
+    vertexBuffer = nullptr;
     // CreateVertexBuffer
     {
         D3D11_BUFFER_DESC desc;
@@ -130,8 +126,8 @@ void ObIso::ResizeTile(Int2 TileSize)
         desc.ByteWidth = sizeof(VertexTile) * tileSize.x * tileSize.y * 6;
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
         D3D11_SUBRESOURCE_DATA data = { 0 };
-        data.pSysMem = vertices;
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
+        data.pSysMem = vertices.get();
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         Check(hr);
     }
 }

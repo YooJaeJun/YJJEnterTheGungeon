@@ -1,14 +1,26 @@
 #pragma once
-class Texture :public Singleton<Texture>
+class Texture
 {
 private:
-    map<wstring, ID3D11ShaderResourceView*> textureList;
+    Texture();
+
+public:
+    static Texture& GetInstance()
+    {
+        static std::unique_ptr<Texture> inst;
+        if (!inst)
+            inst = std::unique_ptr<Texture>(new Texture());
+        return *inst;
+    }
+
+private:
+    std::map<wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> textureList;
 
 public:
     ~Texture();
-    ID3D11ShaderResourceView* LoadTexture(wstring file);
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> LoadTexture(wstring file);
     bool DeleteTexture(wstring file);
 
-    ScratchImage* GetTexture(wstring file);
+    std::shared_ptr<ScratchImage> GetTexture(wstring file);
 };
 

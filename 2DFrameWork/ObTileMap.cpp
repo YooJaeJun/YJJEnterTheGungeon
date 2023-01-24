@@ -2,8 +2,8 @@
 
 ObTileMap::ObTileMap()
 {
-    SafeRelease(vertexBuffer);
-    SafeDeleteArray(vertices);
+    vertexBuffer.Reset();;
+    vertices.reset();
 
     //타일 가로 세로 개수
     tileSize.x = 20;
@@ -19,13 +19,17 @@ ObTileMap::ObTileMap()
     tileImages[1] = make_shared<ObImage>(L"EnterTheGungeon/Level/Tileset.png");
     tileImages[1]->maxFrame = Int2(10, 10);
 
+    tileImages[2] = make_shared<ObImage>(L"Tile.png");
+    tileImages[2]->maxFrame = Int2(8, 6);
+
+    tileImages[3] = make_shared<ObImage>(L"Tile2.png");
+    tileImages[3]->maxFrame = Int2(11, 7);
+
     ResizeTile(tileSize);
 }
 
 ObTileMap::~ObTileMap()
 {
-    SafeRelease(vertexBuffer);
-    SafeDeleteArray(vertices);
 }
 
 void ObTileMap::CreateTileCost()
@@ -62,7 +66,7 @@ void ObTileMap::CreateTileCost()
 //사이즈 재조정, 정정 재조정
 void ObTileMap::ResizeTile(Int2 newTileSize)
 {
-    VertexTile* newVertices = new VertexTile[newTileSize.x * newTileSize.y * 6];
+    shared_ptr<VertexTile[]> newVertices { new VertexTile[newTileSize.x * newTileSize.y * 6] };
 
     //세로
     for (int i = 0; i < newTileSize.y; i++)
@@ -117,11 +121,10 @@ void ObTileMap::ResizeTile(Int2 newTileSize)
         }
     }
 
-    SafeDeleteArray(vertices);
+    vertices.reset();
     vertices = newVertices;
+    vertexBuffer.Reset();
     tileSize = newTileSize;
-
-    SafeRelease(vertexBuffer);
     //CreateVertexBuffer
     {
         D3D11_BUFFER_DESC desc;
@@ -130,8 +133,8 @@ void ObTileMap::ResizeTile(Int2 newTileSize)
         desc.ByteWidth = sizeof(VertexTile) * tileSize.x * tileSize.y * 6;
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
         D3D11_SUBRESOURCE_DATA data = { 0 };
-        data.pSysMem = vertices;
-        HRESULT hr = D3D->GetDevice()->CreateBuffer(&desc, &data, &vertexBuffer);
+        data.pSysMem = vertices.get();
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         Check(hr);
     }
 }
@@ -177,7 +180,7 @@ void ObTileMap::RenderGui(Int2& guiPickingIdx, int& imgIdx)
             RB.y = 1.0f / MF.y * (i + 1);
 
             ImGui::PushID(index);
-            if (ImGui::ImageButton((void*)tileImages[imgIdx]->SRV, size, LT, RB))
+            if (ImGui::ImageButton((void*)tileImages[imgIdx]->SRV.Get(), size, LT, RB))
             {
                 guiPickingIdx.x = j;
                 guiPickingIdx.y = i;
@@ -197,8 +200,8 @@ void ObTileMap::Render()
     {
         if (tileImages[i])
         {
-            D3D->GetDC()->PSSetShaderResources(i, 1, &tileImages[i]->SRV);
-            D3D->GetDC()->PSSetSamplers(i, 1, &tileImages[i]->sampler);
+            D3D.GetDC()->PSSetShaderResources(i, 1, tileImages[i]->SRV.GetAddressOf());
+            D3D.GetDC()->PSSetSamplers(i, 1, tileImages[i]->sampler.GetAddressOf());
         }
     }
 
@@ -208,9 +211,9 @@ void ObTileMap::Render()
     UINT offset = 0;
 
     //버텍스버퍼 바인딩
-    D3D->GetDC()->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
-    D3D->GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    D3D->GetDC()->Draw(tileSize.x * tileSize.y * 6, 0);
+    D3D.GetDC()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
+    D3D.GetDC()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    D3D.GetDC()->Draw(tileSize.x * tileSize.y * 6, 0);
 }
 
 void ObTileMap::SetTile(Int2 tileIdx, Int2 frameIdx, int imgIdx, int tileState, Color color, int roomIdx, DirState dir)
@@ -243,7 +246,7 @@ void ObTileMap::SetTile(Int2 tileIdx, Int2 frameIdx, int imgIdx, int tileState, 
     }
 
     // SubResource - CPU와 GPU의 중간다리 역할
-    D3D->GetDC()->UpdateSubresource(vertexBuffer, 0, NULL, vertices, 0, 0);
+    D3D.GetDC()->UpdateSubresource(vertexBuffer.Get(), 0, NULL, vertices.get(), 0, 0);
 }
 
 bool ObTileMap::WorldPosToTileIdx(Vector2 wpos, Int2& tileIdx)
@@ -447,7 +450,7 @@ void ObTileMap::Load()
         CreateTileCost();
     }
 
-    D3D->GetDC()->UpdateSubresource(vertexBuffer, 0, NULL, vertices, 0, 0);
+    D3D.GetDC()->UpdateSubresource(vertexBuffer.Get(), 0, NULL, vertices.get(), 0, 0);
 
     fin.close();
 }
@@ -467,7 +470,7 @@ bool ObTileMap::isInTileState(const Vector2 wpos, const TileState tileState)
     return false;
 }
 
-bool ObTileMap::isFootOnWall(const ObRect* colTile)
+bool ObTileMap::isFootOnWall(const shared_ptr<ObRect> colTile)
 {
     Vector2 pos;
     bool flag = false;
@@ -484,7 +487,7 @@ bool ObTileMap::isFootOnWall(const ObRect* colTile)
     return flag;
 }
 
-bool ObTileMap::isBodyOnPit(const ObRect* colTile)
+bool ObTileMap::isBodyOnPit(const shared_ptr<ObRect> colTile)
 {
     Vector2 pos;
     bool flag = true;

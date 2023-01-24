@@ -3,12 +3,11 @@
 Random::Random()
 {
 	random_device rd;
-	randomEngine = new default_random_engine(rd());
+	randomEngine = make_shared<default_random_engine>(rd());
 }
 
 Random::~Random()
 {
-	delete randomEngine;
 }
 
 int Random::Int(int min, int max)

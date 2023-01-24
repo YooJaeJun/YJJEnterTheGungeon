@@ -6,12 +6,11 @@ namespace Gungeon
 	{
 	public:
 		Obstacle();
-		void Release();
 		void Update();
 		void LateUpdate();
 		void Render();
 
 	public:
-		ObImage*	idle = nullptr;
+		std::shared_ptr<ObImage>	idle = nullptr;
 	};
 }

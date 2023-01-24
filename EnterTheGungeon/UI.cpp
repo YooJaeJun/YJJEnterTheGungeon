@@ -6,14 +6,10 @@ namespace Gungeon
     {
     }
 
-    void UI::Release()
-    {
-        SafeDelete(img);
-    }
-
     void UI::Update()
     {
-        if (img) img->Update();
+        if (img) 
+            img->Update();
     }
 
     void UI::LateUpdate()
@@ -22,7 +18,8 @@ namespace Gungeon
 
     void UI::Render()
     {
-        if (img) img->Render(); // RENDER->push(img);
+        if (img) 
+            img->Render();
     }
 
     void UI::Spawn(const Vector2 factor)

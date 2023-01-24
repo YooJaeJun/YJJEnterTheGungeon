@@ -1,16 +1,28 @@
 #pragma once
-class Sound : public Singleton<Sound>
+// 나중에 델리게이트 이벤트로...
+class Sound
 {
-	struct SoundNode
-	{
-		FMOD::Sound * sound;        //출력할 사운드 데이터
-		FMOD::Channel * channel;    //출력해줄 채널
-	};
-	map<string, SoundNode*> SoundList;
-	FMOD::System * system;
+    struct SoundNode
+    {
+        FMOD::Sound* sound;        //출력할 사운드 데이터
+        FMOD::Channel* channel;    //출력해줄 채널
+    };
+    map<string, SoundNode*> SoundList;
+    FMOD::System* system;
+
+private:
+    Sound();
 
 public:
-    Sound();
+    static Sound& GetInstance()
+    {
+        static std::unique_ptr<Sound> inst;
+        if (!inst)
+            inst = std::unique_ptr<Sound>(new Sound());
+        return *inst;
+    }
+
+public:
     ~Sound();
     //전역에서 사운드 추가 
     bool AddSound(string File, string Key, bool loop = false);

@@ -1,34 +1,29 @@
 #include "framework.h"
+using Microsoft::WRL::ComPtr;
+
+Texture::Texture()
+{
+}
 
 Texture::~Texture()
 {
-    for (auto i = textureList.begin();
-        i != textureList.end(); i++)
-    {
-        //i->first; // key
-        //i->second;// value
-        if (i->second)
-        {
-            i->second->Release();
-        }
-    }
     textureList.clear();
 }
 
-ID3D11ShaderResourceView* Texture::LoadTexture(wstring file)
+ComPtr<ID3D11ShaderResourceView> Texture::LoadTexture(wstring file)
 {
     auto iter = textureList.find(file);
     //중복된게 없다.
     if (iter == textureList.end())
     {
-        ID3D11ShaderResourceView* temp;
+        ComPtr<ID3D11ShaderResourceView> temp;
         wstring path = L"../Contents/Images/" + file;
 
         ScratchImage image;
         LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, nullptr, image);
 
-        HRESULT hr = CreateShaderResourceView(D3D->GetDevice(), image.GetImages(), image.GetImageCount(),
-            image.GetMetadata(), &temp);
+        HRESULT hr = CreateShaderResourceView(D3D.GetDevice().Get(), image.GetImages(), image.GetImageCount(),
+            image.GetMetadata(), temp.GetAddressOf());
 
 
         // 텍스쳐에서 좌표값
@@ -58,8 +53,6 @@ bool Texture::DeleteTexture(wstring file)
     {
         return false;
     }
-    //first가 키, second 밸류
-    iter->second->Release();
 
     //맵에서도 삭제
     textureList.erase(iter);
@@ -67,12 +60,12 @@ bool Texture::DeleteTexture(wstring file)
     return true;
 }
 
-ScratchImage* Texture::GetTexture(wstring file)
+shared_ptr<ScratchImage> Texture::GetTexture(wstring file)
 {
     // ID3D11ShaderResourceView* temp;
     wstring path = L"../Contents/Images/" + file;
 
-    ScratchImage* image = new ScratchImage();
+    std::shared_ptr<ScratchImage> image = make_shared<ScratchImage>();
     LoadFromWICFile(path.c_str(), WIC_FLAGS_NONE, nullptr, *image);
 
     return image;

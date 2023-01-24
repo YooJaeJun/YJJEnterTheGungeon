@@ -20,11 +20,10 @@ private:
 
 public:
     static void CreateStaticMember();
-    static void DeleteStaticMember();
 
 private:
-    ID3D11ShaderResourceView*   SRV;
-    ID3D11SamplerState*         sampler;
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>   SRV;
+    Microsoft::WRL::ComPtr<ID3D11SamplerState>         sampler;
     D3D11_SAMPLER_DESC	        samplerDesc;
 
     AnimState                   animState;

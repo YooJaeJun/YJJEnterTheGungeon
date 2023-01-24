@@ -1,8 +1,31 @@
 #pragma once
 
-class Input : public Singleton<Input>
+class Input
 {
     friend class Window;
+
+private:
+    Input();
+
+public:
+    static Input& GetInstance()
+    {
+        static std::unique_ptr<Input> inst;
+        if (!inst)
+            inst = std::unique_ptr<Input>(new Input());
+        return *inst;
+    }
+
+public:
+    ~Input();
+
+    bool KeyDown(int KeyCode); //눌렀을때 최초1회
+    bool KeyPress(int KeyCode);//누르고있을때
+    bool KeyUp(int KeyCode); //눌렀다가 떼었을때 최초1회
+    void Update();
+
+    Vector2 GetScreenMousePos() { return mouseScreenPos; }
+    Vector2 GetWorldMousePos() { return mouseWorldPos; }
 
 private:
     unsigned char keyState[256];
@@ -21,17 +44,5 @@ private:
         KEY_INPUT_STATUS_NONE,
         KEY_INPUT_STATUS_UP,
     };
-
-public:
-    Input();
-    ~Input();
-
-    bool KeyDown(int KeyCode); //눌렀을때 최초1회
-    bool KeyPress(int KeyCode);//누르고있을때
-    bool KeyUp(int KeyCode); //눌렀다가 떼었을때 최초1회
-    void Update();
-
-    Vector2 GetScreenMousePos() { return mouseScreenPos; }
-    Vector2 GetWorldMousePos() { return mouseWorldPos; }
 };
 

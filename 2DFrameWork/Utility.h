@@ -10,13 +10,13 @@ namespace Utility
         Vector2 min;
         Vector2 max;
         Vector2 lt, lb, rt, rb;
-        RECT(Vector2 pivot, Vector2 scale);
+        RECT(const Vector2 pivot, const Vector2 scale);
     };
     struct CIRCLE
     {
         Vector2 pivot;
         float   radius;
-        CIRCLE(Vector2 pivot, Vector2 scale);
+        CIRCLE(const Vector2 pivot, const Vector2 scale);
     };
     struct LINE
     {
@@ -27,27 +27,25 @@ namespace Utility
 
 
     // 선 선
-    ColPos IntersectLineLine(LINE& l1, LINE& l2);
+    ColPos IntersectLineLine(const LINE& line1, const LINE& line2);
 
     // 사각형 점
-    ColPos IntersectRectCoord(RECT & rc, Vector2 coord);
+    ColPos IntersectRectCoord(const RECT& rc, const Vector2 coord);
     // 사각형 선
-    ColPos IntersectRectLine(RECT& rc, LINE& l);
+    ColPos IntersectRectLine(const RECT& rc, const LINE& l);
     // 사각형 사각형
-    ColPos IntersectRectRect(RECT & rc1, RECT & rc2);
+    ColPos IntersectRectRect(const RECT& rc1, const RECT& rc2);
     // 사각형 사각형 OBB 
-    ColPos IntersectRectRect(GameObject * ob1, GameObject * ob2);
+    ColPos IntersectRectRect(std::shared_ptr<GameObject> ob1, std::shared_ptr<GameObject> ob2);
     // 사각형 원
-    ColPos IntersectRectCircle(RECT& rc, CIRCLE& cc);
+    ColPos IntersectRectCircle(const RECT& rc, const CIRCLE& cc);
 
     // 원 점
-    ColPos IntersectCircleCoord(CIRCLE& cc, Vector2 coord);
+    ColPos IntersectCircleCoord(const CIRCLE& cc, const Vector2 coord);
     // 원 선
-    ColPos IntersectCircleLine(CIRCLE& cc, LINE& l);
+    ColPos IntersectCircleLine(const CIRCLE& cc, const LINE& l);
     // 원 원
-    ColPos IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2);
-
-    // bool IntersectRectCircle(GameObject* ob1, GameObject* ob2, COLDIR& result);
+    ColPos IntersectCircleCircle(const CIRCLE& cc1, const CIRCLE& cc2);
 
     float DirToRadian(Vector2 Dir);
 

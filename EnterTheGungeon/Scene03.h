@@ -10,7 +10,6 @@ namespace Gungeon
 
 		virtual void Init() override;
 		void InitRoom();
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
@@ -24,13 +23,13 @@ namespace Gungeon
 		void ColToggle();
 
 	public:
-		Player* player = nullptr;
+		std::shared_ptr<Player>		player = nullptr;
 
 	private:
-		Room*		curRoom = nullptr;
-		Boss*		boss = nullptr;
-		Cinematic*	cinematic = nullptr;
-		bool		isChangingScene = false;
-		float		timeFade = 0.0f;
+		std::shared_ptr<Room>		curRoom = nullptr;
+		std::shared_ptr<Boss>		boss = nullptr;
+		std::shared_ptr<Cinematic>	cinematic = nullptr;
+		bool						isChangingScene = false;
+		float						timeFade = 0.0f;
 	};
 }

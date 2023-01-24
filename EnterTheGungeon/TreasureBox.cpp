@@ -13,25 +13,19 @@ namespace Gungeon
         col->SetWorldPos(DEFAULTSPAWN);
         col->isVisible = false;
 
-        idle = new ObImage(L"EnterTheGungeon/Level/Treasure.png");
+        idle = make_shared<ObImage>(L"EnterTheGungeon/Level/Treasure.png");
         idle->maxFrame.x = 5;
         idle->scale = Vector2(135.0f / 5.0f, 26.0f) * 3.0f;
         idle->ChangeAnim(AnimState::loop, 0.2f);
         idle->SetParentT(*col);
 
-        open = new ObImage(L"EnterTheGungeon/Level/Treasure_Open.png");
+        open = make_shared<ObImage>(L"EnterTheGungeon/Level/Treasure_Open.png");
         open->isVisible = false;
         open->maxFrame.x = 2;
         open->scale = Vector2(54.0f / 2.0f, 26.0f) * 3.0f;
         open->SetParentT(*col);
 
         for (auto& elem : weapon) elem = nullptr;
-    }
-
-    void TreasureBox::Release()
-    {
-        Obstacle::Release();
-        SafeDelete(col);
     }
 
     void TreasureBox::Update()
@@ -52,8 +46,8 @@ namespace Gungeon
             weaponIdx = 0;
             for (auto& elem : weapon)
             {
-                if (weaponIdx == 0) elem = new Weapon2;
-                else if (weaponIdx == 1) elem = new Weapon3;
+                if (weaponIdx == 0) elem = make_shared<Weapon2>();
+                else if (weaponIdx == 1) elem = make_shared<Weapon3>();
                 elem->Spawn(Vector2(Pos().x, Pos().y));
                 elem->idle->isVisible = true;
                 weaponIdx++;
@@ -124,6 +118,6 @@ namespace Gungeon
     {
         SetPos(wpos);
         treasureState = TreasureState::spawn;
-        SOUND->Play("ChestUnlock");
+        SOUND.Play("ChestUnlock");
     }
 }

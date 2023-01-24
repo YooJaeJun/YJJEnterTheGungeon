@@ -17,7 +17,6 @@ namespace Gungeon
 	public:
 		Room();
 		virtual void Init() override;
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
@@ -30,12 +29,12 @@ namespace Gungeon
 		int TileHeight() const;
 
 	public:
-		bool			selected = false;
-		ObCircle*		enemySpawner[enemySpawnPosMax];
-		ObCircle*		treasureSpawner;
-		ObCircle*		gateSpawner[9];
-		bool			cleared = false;
-		RoomType		roomType = RoomType::enemy;
-		vector<Int2>	doorTileIdxs;
+		bool				selected = false;
+		std::shared_ptr<ObCircle>		enemySpawner[enemySpawnPosMax];
+		std::shared_ptr<ObCircle>		treasureSpawner;
+		std::shared_ptr<ObCircle>		gateSpawner[9];
+		bool				cleared = false;
+		RoomType			roomType = RoomType::enemy;
+		std::vector<Int2>	doorTileIdxs;
 	};
 }

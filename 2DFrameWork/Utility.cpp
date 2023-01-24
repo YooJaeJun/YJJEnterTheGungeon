@@ -1,4 +1,5 @@
 #include "framework.h"
+using Microsoft::WRL::ComPtr;
 
 Utility::RECT::RECT(Vector2 pivot, Vector2 scale)
 {
@@ -12,13 +13,13 @@ Utility::RECT::RECT(Vector2 pivot, Vector2 scale)
     rb = { max.x, min.y };
 }
 
-Utility::CIRCLE::CIRCLE(Vector2 pivot, Vector2 scale)
+Utility::CIRCLE::CIRCLE(const Vector2 pivot, const Vector2 scale)
 {
     this->pivot = pivot;
     radius = scale.x * 0.5f;
 }
 
-Utility::LINE::LINE(Vector2 begin, Vector2 end)
+Utility::LINE::LINE(const Vector2 begin, const Vector2 end)
 {
     this->begin = begin;
     this->end = end;
@@ -26,11 +27,14 @@ Utility::LINE::LINE(Vector2 begin, Vector2 end)
 
 
 
-ColPos Utility::IntersectLineLine(LINE& l1, LINE& l2)
+ColPos Utility::IntersectLineLine(const LINE& line1, const LINE& line2)
 {
     //외적 양수 반시계, 외적 음수 시계, 외적 0 평행	
     //(x()1, y()1) 외적 (x()2, y()2) == (x()1*y()2) - (x()2*y()1).	
     //각 선분의 begin에서 다른 선분의 begin까지, end까지 외적이 하나는 양수, 하나는 음수로 나와야 함. 다른 선의 begin도 반복.
+
+    LINE l1 = line1;
+    LINE l2 = line2;
 
     auto compare = [&](const Vector2& l, const Vector2& r)
     {
@@ -79,7 +83,7 @@ ColPos Utility::IntersectLineLine(LINE& l1, LINE& l2)
     return ColPos::none;
 }
 
-ColPos Utility::IntersectRectCoord(RECT & rc, Vector2 coord)
+ColPos Utility::IntersectRectCoord(const RECT& rc, const Vector2 coord)
 {
     if (rc.min.x <= coord.x && coord.x <= rc.max.x &&
         rc.min.y <= coord.y && coord.y <= rc.max.y)
@@ -89,7 +93,7 @@ ColPos Utility::IntersectRectCoord(RECT & rc, Vector2 coord)
     return ColPos::none;
 }
 
-ColPos Utility::IntersectRectLine(RECT& rc, LINE& l)
+ColPos Utility::IntersectRectLine(const RECT& rc, const LINE& l)
 {
     // lt-lb  lb-rb  rb-rt  rt-lt
     LINE line1(rc.lt, rc.lb);
@@ -111,7 +115,7 @@ ColPos Utility::IntersectRectLine(RECT& rc, LINE& l)
     return ColPos::none;
 }
 
-ColPos Utility::IntersectRectRect(RECT & rc1, RECT & rc2)
+ColPos Utility::IntersectRectRect(const RECT& rc1, const RECT& rc2)
 {
     if (rc1.min.x <= rc2.max.x &&
         rc1.max.x >= rc2.min.x &&
@@ -123,7 +127,7 @@ ColPos Utility::IntersectRectRect(RECT & rc1, RECT & rc2)
     return ColPos::none;
 }
 
-ColPos Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
+ColPos Utility::IntersectRectRect(shared_ptr<GameObject> ob1, shared_ptr<GameObject> ob2)
 {
     //중심점
     Vector2 rc1Pivot = ob1->GetWorldPivot();
@@ -195,7 +199,7 @@ ColPos Utility::IntersectRectRect(GameObject* ob1, GameObject* ob2)
     return ColPos::inter;
 }
 
-ColPos Utility::IntersectRectCircle(RECT & rc, CIRCLE & cc)
+ColPos Utility::IntersectRectCircle(const RECT& rc, const CIRCLE& cc)
 {
     Vector2 rectPivot = (rc.min + rc.max) * 0.5f;
     Vector2 RectScale = rc.max - rc.min;
@@ -272,7 +276,7 @@ bool Utility::IntersectRectCircle(GameObject * ob1, GameObject * ob2, COLDIR & r
 }
 */
 
-ColPos Utility::IntersectCircleCoord(CIRCLE & cc, Vector2 coord)
+ColPos Utility::IntersectCircleCoord(const CIRCLE& cc, const Vector2 coord)
 {
     Vector2 Distance = cc.pivot - coord;
     if (Distance.Length() < cc.radius)
@@ -282,7 +286,7 @@ ColPos Utility::IntersectCircleCoord(CIRCLE & cc, Vector2 coord)
     return ColPos::none;
 }
 
-ColPos Utility::IntersectCircleLine(CIRCLE& cc, LINE& l)
+ColPos Utility::IntersectCircleLine(const CIRCLE& cc, const LINE& l)
 {
     //이하 코드는 구글링 후 조건만 좀 변경함.
     const Vector2& origin_to_begin = l.begin - cc.pivot;
@@ -334,7 +338,7 @@ ColPos Utility::IntersectCircleLine(CIRCLE& cc, LINE& l)
     return ColPos::none;
 }
 
-ColPos Utility::IntersectCircleCircle(CIRCLE & cc1, CIRCLE & cc2)
+ColPos Utility::IntersectCircleCircle(const CIRCLE& cc1, const CIRCLE& cc2)
 {
     Vector2 distance = cc1.pivot - cc2.pivot;
     if (distance.Length() < cc1.radius + cc2.radius)

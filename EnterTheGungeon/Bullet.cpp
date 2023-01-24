@@ -4,7 +4,7 @@ namespace Gungeon
 {
     Bullet::Bullet()
     {
-        col = new ObCircle();
+        col = make_shared<ObCircle>();
         col->isVisible = false;
         col->isFilled = false;
         Init();
@@ -19,13 +19,6 @@ namespace Gungeon
         SetPos(DEFAULTSPAWN);
         timeLife = 0.0f;
         intervalLife = 10.0f;
-    }
-
-    void Bullet::Release()
-    {
-        Character::Release();
-        SafeDelete(idle);
-        hitBomb->Release();
     }
 
     void Bullet::Update()
@@ -91,7 +84,7 @@ namespace Gungeon
     void Bullet::Hit(const float damage)
     {
         hitBomb->Spawn(idle->GetWorldPos());
-        SOUND->Play("Bomb");
+        SOUND.Play("Bomb");
         Reload();
     }
 

@@ -20,7 +20,6 @@ namespace Gungeon
 	public:
 		Gate();
 		virtual void Init() override;
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
@@ -33,7 +32,7 @@ namespace Gungeon
 		Vector2		playerDest;
 
 	private:
-		ObImage*	bottom = nullptr;
+		std::shared_ptr<ObImage>	bottom = nullptr;
 		float		timeOpen = 0.0f;
 		float		timeProcess = 0.0f;
 		float		timeCinematicBox = 0.0f;

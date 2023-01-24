@@ -12,7 +12,6 @@ namespace Gungeon
 		void InitWeapon();
 		void InitBullet();
 		virtual void InitIntervalAttack() override;
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;

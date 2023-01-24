@@ -34,7 +34,7 @@ namespace Gungeon
 		ProcedureMapGeneration();
 
 		void Init();
-		void Release();
+		void Clear();
 		void Update();
 		void LateUpdate();
 		void Render();
@@ -68,7 +68,7 @@ namespace Gungeon
 		void SetEnemySpawner();
 		void SetTreasureSpawner();
 		void MaximalSquare(const Room* elem);
-		void Histogram(const Room* elem);
+		void Histogram(const shared_ptr<Room> elem);
 		void Save();
 		void Load();
 
@@ -90,34 +90,34 @@ namespace Gungeon
 		const Int2 propPitFloorImgMax = { 6, 8 };
 
 	public:
-		vector<Room*>				selectedRooms;
+		std::vector<std::shared_ptr<Room>>	selectedRooms;
 
 	private:
 		// 동적할당하지 않은 변수들은 보여주기 용도
-		bool						autoProcess = false;
-		float						timer = 0.0f;
+		bool								autoProcess = false;
+		float								timer = 0.0f;
 		// Room
-		vector<Room*>				candidateRooms;
-		MapGenState					state = MapGenState::none;
-		MapGenState					finalState = MapGenState::none;
-		float						roomScaleForSelect = 0.0f;
+		std::vector<std::shared_ptr<Room>>	candidateRooms;
+		MapGenState							state = MapGenState::none;
+		MapGenState							finalState = MapGenState::none;
+		float								roomScaleForSelect = 0.0f;
 		// Delaunay Triangulation
-		vector<ObNode>				roomNode;
-		Delaunay					triangulation;
+		std::vector<ObNode>					roomNode;
+		Delaunay							triangulation;
 		// MST - Prim
-		priority_queue<ObLine, vector<ObLine>, greater<ObLine>>	edgePq;
-		unordered_map<int, bool>	visited;
-		vector<ObLine>				linesTriangulated;
-		vector<ObLine>				linesMST;
+		std::priority_queue<ObLine, vector<ObLine>, greater<ObLine>>	edgePq;
+		std::unordered_map<int, bool>		visited;
+		std::vector<ObLine>					linesTriangulated;
+		std::vector<ObLine>					linesMST;
 		// Passage
-		map<ObNode, int>			nodesForRoomIndex;
-		vector<Tile>				way;
-		vector<vector<Int2>>		passages;
-		string						file;
+		std::map<ObNode, int>				nodesForRoomIndex;
+		std::vector<Tile>					way;
+		std::vector<vector<Int2>>			passages;
+		string								file;
 		// propWall, propPit
-		int							areaMax = 0;
-		int							xMax = 0;
-		int							yMax = 0;
-		Int2						propSour, propDest;
+		int									areaMax = 0;
+		int									xMax = 0;
+		int									yMax = 0;
+		Int2								propSour, propDest;
 	};
 }

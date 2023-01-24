@@ -14,8 +14,6 @@ namespace Gungeon
 	{
 	public:
 		UI();
-
-		void Release();
 		void Update();
 		void LateUpdate();
 		void Render();
@@ -24,7 +22,7 @@ namespace Gungeon
 		bool DownGauge();
 
 	public:
-		ObImage*	img = nullptr;
+		std::shared_ptr<ObImage>	img = nullptr;
 		DirState	anchor = DirState::dirNone;
 		Vector2		imgSize;
 	};

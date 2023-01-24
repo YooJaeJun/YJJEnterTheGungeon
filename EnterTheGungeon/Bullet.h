@@ -7,7 +7,6 @@ namespace Gungeon
 	public:
 		Bullet();
 		virtual void Init() override;
-		virtual void Release() override;
 		virtual void Update() override;
 		virtual void Update(const bool notRotation) override;
 		virtual void LateUpdate() override;
@@ -20,8 +19,8 @@ namespace Gungeon
 		virtual void Reload();
 
 	public:
-		ObImage*	idle = nullptr;
-		Effect*		hitBomb = nullptr;
+		std::shared_ptr<ObImage>	idle = nullptr;
+		std::shared_ptr<Effect>		hitBomb = nullptr;
 		bool		isFired = false;
 		Vector2		moveDir;
 		int			damage = 1;
