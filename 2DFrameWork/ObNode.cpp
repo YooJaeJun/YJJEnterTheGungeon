@@ -2,7 +2,7 @@
 
 bool ObNode::almostEqualNode(const ObNode& ohter)
 {
-    return almostEqualFloat(x, ohter.x) && almostEqualFloat(y, ohter.y);
+    return AlmostEqualFloat(x, ohter.x) && AlmostEqualFloat(y, ohter.y);
 }
 
 float ObNode::DirToRadian(ObNode Dir)

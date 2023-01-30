@@ -25,6 +25,7 @@ namespace Utility
         LINE(Vector2 begin, Vector2 end);
     };
 
+    int Ccw(const Vector2& v1, const Vector2& v2, const Vector2& v3);
 
     // ¼± ¼±
     ColPos IntersectLineLine(const LINE& line1, const LINE& line2);

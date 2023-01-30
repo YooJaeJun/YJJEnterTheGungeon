@@ -66,29 +66,28 @@ using namespace SimpleMath;
 #include "../Libs/ImGui/ImGuiFileDialogConfig.h"
 
 //Macro(Pascal)
-#define Check(hr)			{ assert(SUCCEEDED(hr)); }
-// inline void Check(HRESULT hr) { assert(SUCCEEDED(hr)); }
-#define	ToRadian			0.0174532f
+inline void Check(HRESULT hr) { assert(SUCCEEDED(hr)); }
+const float ToRadian = 0.0174532f;
 
 //Macro(WINAPI Style)
-#define	PI					3.1415926f	//180
-#define	DIV2PI				1.5707963f	//90
-#define	DIV4PI				0.7853981f	//45
-#define	DIV8PI				0.3926991f	//22.5
-#define	UP					Vector2(0.0f,1.0f)
-#define	DOWN				Vector2(0.0f,-1.0f)
-#define	LEFT				Vector2(-1.0f,0.0f)
-#define	RIGHT				Vector2(1.0f,0.0f)
-#define OFFSET_N            Vector2(0.0f, 0.0f)
-#define OFFSET_L            Vector2(0.5f, 0.0f)
-#define OFFSET_R            Vector2(-0.5f, 0.0f)
-#define OFFSET_B            Vector2(0.0f, 0.5f)
-#define OFFSET_T            Vector2(0.0f, -0.5f)
-#define OFFSET_LB           Vector2(0.5f, 0.5f)
-#define OFFSET_RB           Vector2(-0.5f, 0.5f)
-#define OFFSET_LT           Vector2(0.5f, -0.5f)
-#define OFFSET_RT           Vector2(-0.5f, -0.5f)
-#define DEFAULTSPAWN        Vector2(5000.0f, 5000.0f)
+const float PI = 3.1415926f;	//180
+const float DIV2PI = 1.5707963f;	//90
+const float DIV4PI = 0.7853981f;	//45
+const float DIV8PI = 0.3926991f;	//22.5
+const Vector2 UP    = Vector2(0.0f, 1.0f);
+const Vector2 DOWN  = Vector2(0.0f, -1.0f);
+const Vector2 LEFT  = Vector2(-1.0f, 0.0f);
+const Vector2 RIGHT = Vector2(1.0f, 0.0f);
+const Vector2 OFFSET_N      = Vector2(0.0f, 0.0f);
+const Vector2 OFFSET_L      = Vector2(0.5f, 0.0f);
+const Vector2 OFFSET_R      = Vector2(-0.5f, 0.0f);
+const Vector2 OFFSET_B      = Vector2(0.0f, 0.5f);
+const Vector2 OFFSET_T      = Vector2(0.0f, -0.5f);
+const Vector2 OFFSET_LB     = Vector2(0.5f, 0.5f);
+const Vector2 OFFSET_RB     = Vector2(-0.5f, 0.5f);
+const Vector2 OFFSET_LT     = Vector2(0.5f, -0.5f);
+const Vector2 OFFSET_RT     = Vector2(-0.5f, -0.5f);
+const Vector2 DEFAULTSPAWN  = Vector2(5000.0f, 5000.0f);
 
 // enum
 enum ColPos

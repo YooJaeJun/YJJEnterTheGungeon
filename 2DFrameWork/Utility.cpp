@@ -27,6 +27,15 @@ Utility::LINE::LINE(const Vector2 begin, const Vector2 end)
 
 
 
+int Utility::Ccw(const Vector2& v1, const Vector2& v2, const Vector2& v3)
+{
+    float res = v1.x * v2.y + v2.x * v3.y + v3.x * v1.y
+        - (v1.y * v2.x + v2.y * v3.x + v3.y * v1.x);
+    if (res > 0) return 1;
+    if (res < 0) return -1;
+    else return 0;
+}
+
 ColPos Utility::IntersectLineLine(const LINE& line1, const LINE& line2)
 {
     //외적 양수 반시계, 외적 음수 시계, 외적 0 평행	
@@ -46,8 +55,8 @@ ColPos Utility::IntersectLineLine(const LINE& line1, const LINE& line2)
     };
 
     //두 선분이 한 직선 위에 있거나, 끝점이 겹치는 경우
-    float ab = static_cast<float>(ccw(l1.begin, l1.end, l2.begin) * ccw(l1.begin, l1.end, l2.end));
-    float cd = static_cast<float>(ccw(l2.begin, l2.end, l1.begin) * ccw(l2.begin, l2.end, l1.end));
+    float ab = static_cast<float>(Ccw(l1.begin, l1.end, l2.begin) * Ccw(l1.begin, l1.end, l2.end));
+    float cd = static_cast<float>(Ccw(l2.begin, l2.end, l1.begin) * Ccw(l2.begin, l2.end, l1.end));
 
     if (ab == 0.0f && cd == 0.0f)
     {

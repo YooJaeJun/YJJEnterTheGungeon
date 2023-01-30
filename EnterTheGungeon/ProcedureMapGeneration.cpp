@@ -341,11 +341,11 @@ namespace Gungeon
             for (int roomIdx = 0; roomIdx < selectedRooms.size(); roomIdx++)
             {
                 Vector2 v = Vector2(elem.V().x, elem.V().y);
-                if (almostEqualVector2(v, selectedRooms[roomIdx]->Pos()))
+                if (AlmostEqualVector2(v, selectedRooms[roomIdx]->Pos()))
                     nodesForRoomIndex[v] = roomIdx;
 
                 Vector2 w = Vector2(elem.W().x, elem.W().y);
-                if (almostEqualVector2(w, selectedRooms[roomIdx]->Pos()))
+                if (AlmostEqualVector2(w, selectedRooms[roomIdx]->Pos()))
                     nodesForRoomIndex[w] = roomIdx;
             }
         }
