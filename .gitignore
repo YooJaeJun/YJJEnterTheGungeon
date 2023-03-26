@@ -47,3 +47,6 @@
 # C++ Folder
 **/x86/
 **/x64/
+
+# IP
+**/Contents/
