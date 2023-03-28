@@ -1,3 +1,7 @@
-# EnterTheGungeon_CopyPractice
+# YJJEnterTheGungeon
+
+엔터 더 건전 리소스를 바탕으로 제작한 2D 탑다운 슈팅 게임
+
+맵 랜덤 시스템 / 2D 시네마틱 / 탄막 알고리즘 / 기타 구현
 
 저작권을 위해 이미지, 사운드 등은 업로드하지 않습니다.
