@@ -34,7 +34,7 @@
 # Unreal Assets Folder
 **/Assets/
 
-# Unreal Temp Folder
+# Temp Folder
 **/Binaries/
 **/DerivedDataCache/
 **/Intermediate/
@@ -43,6 +43,13 @@
 **/Debug/
 **/Debug_Framework/
 **/Debug_ModelEditor/
+**/2DFrameWork/
+**/Obj/
+
+# Build
+*.pdb
+*.exe
+*.exp
 
 # C++ Folder
 **/x86/

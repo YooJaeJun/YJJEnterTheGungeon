@@ -135,19 +135,18 @@ void ObIso::ResizeTile(Int2 newTileSize)
 void ObIso::CreateTileCost()
 {
     for (int i = 0; i < Tiles.size(); i++)
-    {
         Tiles[i].clear();
-    }
+
     Tiles.clear();
 
     Tiles.resize(tileSize.x);
     for (int i = 0; i < Tiles.size(); i++)
-    {
         Tiles[i].resize(tileSize.y);
-    }
 
     float half = scale.y * TWODIVROOT3QUARTER;
+
     Update();
+
     for (int i = 0; i < tileSize.x; i++)
     {
         for (int j = 0; j < tileSize.y; j++)

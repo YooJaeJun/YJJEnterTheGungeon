@@ -7,7 +7,6 @@ namespace Gungeon
 	public:
 		Weapon3();
 		virtual void Update() override;
-		virtual void LateUpdate() override;
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
 	};

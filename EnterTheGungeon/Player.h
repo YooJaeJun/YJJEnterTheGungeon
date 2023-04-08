@@ -9,6 +9,7 @@ namespace Gungeon
 	{
 	public:
 		Player();
+		virtual ~Player() {}
 		virtual void Init() override;
 		void InitVar();
 		void InitCol();

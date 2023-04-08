@@ -15,7 +15,7 @@ namespace Gungeon
 		if (col)
 		{
 			col->Update();
-			MAP.tilemap->WorldPosToTileIdx(Pos(), on);
+			MAPINFO.tilemap->WorldPosToTileIdx(Pos(), on);
 		}
 		if (colTile) 
 			colTile->Update();

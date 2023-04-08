@@ -61,7 +61,7 @@ namespace Gungeon
     {
         shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
         Int2 on;
-        MAP.tilemap->WorldPosToTileIdx(r->lb(), on);
+        MAPINFO.tilemap->WorldPosToTileIdx(r->lb(), on);
         return on;
     }
 
@@ -69,7 +69,7 @@ namespace Gungeon
     {
         shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
         Int2 on;
-        MAP.tilemap->WorldPosToTileIdx(r->lt(), on);
+        MAPINFO.tilemap->WorldPosToTileIdx(r->lt(), on);
         return on;
     }
 
@@ -77,7 +77,7 @@ namespace Gungeon
     {
         shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
         Int2 on;
-        MAP.tilemap->WorldPosToTileIdx(r->rb(), on);
+        MAPINFO.tilemap->WorldPosToTileIdx(r->rb(), on);
         return on;
     }
 
@@ -85,7 +85,7 @@ namespace Gungeon
     {
         shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
         Int2 on;
-        MAP.tilemap->WorldPosToTileIdx(r->rt(), on);
+        MAPINFO.tilemap->WorldPosToTileIdx(r->rt(), on);
         return on;
     }
 

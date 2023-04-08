@@ -32,8 +32,8 @@ ComPtr<ID3D11ShaderResourceView> Texture::LoadTexture(wstring file)
         // cout << (int)image.GetPixels()[4 * (79 * 10 + 130) + 1] << endl;
         // cout << (int)image.GetPixels()[4 * (79 * 10 + 130) + 2] << endl;
 
-        cout << "width: " << image.GetMetadata().width << ", ";
-        cout << "height: " << image.GetMetadata().height << endl;
+        // cout << "width: " << image.GetMetadata().width << ", ";
+        // cout << "height: " << image.GetMetadata().height << endl;
 
 
         Check(hr);
@@ -50,9 +50,7 @@ bool Texture::DeleteTexture(wstring file)
 
     //중복된게 없다.
     if (iter == textureList.end())
-    {
         return false;
-    }
 
     //맵에서도 삭제
     textureList.erase(iter);

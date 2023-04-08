@@ -88,8 +88,10 @@ namespace Gungeon
 			break;
 		}
 
-		if (weapon) weapon->Update();
-		for (auto& elem : bullet) elem->Update();
+		if (weapon) 
+			weapon->Update();
+		for (auto& elem : bullet) 
+			elem->Update();
 		dropItem->Update();
 	}
 
@@ -99,10 +101,12 @@ namespace Gungeon
 
 	void Enemy::Render()
 	{
-		for (auto& elem : bullet) elem->Render();
+		for (auto& elem : bullet) 
+			elem->Render();
 		Unit::Render();
 
-		if (weapon) weapon->Render();
+		if (weapon) 
+			weapon->Render();
 		dropItem->Render();
 	}
 
@@ -132,9 +136,7 @@ namespace Gungeon
 		col->MoveWorldPos(pushedDir * pushedScalar * cos(timeRealDie / 0.63f * DIV2PI) * DELTA);
 
 		if (timeRealDie > 0.63f)
-		{
 			pushedDir = Vector2(0.0f, 0.0f);
-		}
 	}
 
 	void Enemy::Fire()
@@ -149,14 +151,7 @@ namespace Gungeon
 
 		hit->ChangeAnim(AnimState::once, 0.1f);
 
-		if (pushedDir.x < 0.0f)
-		{
-			hit->reverseLR = true;
-		}
-		else
-		{
-			hit->reverseLR = false;
-		}
+		hit->reverseLR = (pushedDir.x < 0.0f) ? true : false;
 
 		way.clear();
 
@@ -166,12 +161,8 @@ namespace Gungeon
 	void Enemy::Hitting()
 	{
 		if (isHit)
-		{
 			if (TIMER.GetTick(timeHit, 0.01f))
-			{
 				isHit = false;
-			}
-		}
 
 		if (isHitAnim)
 		{
@@ -220,16 +211,10 @@ namespace Gungeon
 
 		way.clear();
 
-		if (weapon) weapon->idle->isVisible = false;
+		if (weapon) 
+			weapon->idle->isVisible = false;
 
-		if (pushedDir.x < 0.0f)
-		{
-			die->reverseLR = true;
-		}
-		else
-		{
-			die->reverseLR = false;
-		}
+		die->reverseLR = (pushedDir.x < 0.0f) ? true : false;
 
 		dropItem->Spawn(Pos());
 		dropItem->idle->isVisible = true;
@@ -244,16 +229,10 @@ namespace Gungeon
 
 		InitVar();
 
-		if (weapon) weapon->idle->isVisible = true;
+		if (weapon) 
+			weapon->idle->isVisible = true;
 
-		if (pushedDir.x < 0.0f)
-		{
-			die->reverseLR = true;
-		}
-		else
-		{
-			die->reverseLR = false;
-		}
+		die->reverseLR = (pushedDir.x < 0.0f) ? true : false;
 
 		dropItem->idle->isVisible = false;
 		dropItem->state = State::die;
@@ -283,11 +262,11 @@ namespace Gungeon
 	void Enemy::ColToggle()
 	{
 		Character::ColToggle();
-		if (weapon) weapon->col->isVisible ^= 1;
-		if (weapon) weapon->firePos->isVisible ^= 1;
+		if (weapon) 
+			weapon->col->isVisible ^= 1;
+		if (weapon) 
+			weapon->firePos->isVisible ^= 1;
 		for (auto& bulletElem : bullet)
-		{
 			bulletElem->col->isVisible ^= 1;
-		}
 	}
 }

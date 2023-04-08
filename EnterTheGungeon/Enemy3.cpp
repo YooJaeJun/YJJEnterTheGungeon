@@ -205,9 +205,7 @@ namespace Gungeon
 		case Gungeon::Enemy3FireState::toWalk:
 
 			for (auto& elem : bullet)
-			{
 				elem->moveFactor = cos(timeAttackToWalk / 1.5f * DIV2PI);
-			}
 
 			if (TIMER.GetTick(timeAttackToWalk, 1.5f))
 			{

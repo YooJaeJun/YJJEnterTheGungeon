@@ -106,9 +106,7 @@ namespace Gungeon
 		weapons[curWeaponIdx]->Equip();
 
 		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
-		{
 			elem->img->isVisible = true;
-		}
 
 		weapons[curWeaponIdx]->uiBulletFrame->img->isVisible = true;
 		weapons[curWeaponIdx]->uiWeapon->img->isVisible = true;
@@ -119,9 +117,7 @@ namespace Gungeon
 		curBulletIdx = weapons[curWeaponIdx]->bulletCount - 1;
 		bullet.resize(weapons[curWeaponIdx]->bulletCount);
 		for (auto& elem : bullet)
-		{
 			elem = make_shared<PlayerBullet>();
-		}
 	}
 
 	void Player::InitEffect()
@@ -176,10 +172,7 @@ namespace Gungeon
 		uiWeaponFrame->img->isVisible = true;
 
 		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
-		{
 			elem->img->isVisible = true;
-		}
-
 
 		uiHeartNone.resize(maxHp / 2);
 		uiHeartHalf.resize(maxHp / 2);
@@ -293,30 +286,32 @@ namespace Gungeon
 		SetWeaponFrameToOrigin();
 
 		if (INPUT.KeyDown('P'))
-		{
 			godModeByForce ^= 1;
-		}
 		if (godModeByForce)
-		{
 			godMode = true;
-		}
 
-
-		for (auto& elem : dust) elem->Update();
+		for (auto& elem : dust) 
+			elem->Update();
 		roll->Update();
 		respawn->Update();
 		fall->Update();
 		respawn->Update();
 
 		weapons[curWeaponIdx]->Update();
-		for (auto& elem : bullet) elem->Update();
+		for (auto& elem : bullet) 
+			elem->Update();
 		uiReload->Update();
 		uiReloadBar->Update();
-		if (uiWeaponFrame) uiWeaponFrame->Update();
-		for (auto& elem : uiHeartNone) elem->Update();
-		for (auto& elem : uiHeartHalf) elem->Update();
-		for (auto& elem : uiHeartFull) elem->Update();
-		for (auto& elem : uiBlank) elem->Update();
+		if (uiWeaponFrame) 
+			uiWeaponFrame->Update();
+		for (auto& elem : uiHeartNone) 
+			elem->Update();
+		for (auto& elem : uiHeartHalf) 
+			elem->Update();
+		for (auto& elem : uiHeartFull) 
+			elem->Update();
+		for (auto& elem : uiBlank) 
+			elem->Update();
 		uiKey->Update();
 		uiGold->Update();
 	}
@@ -372,9 +367,7 @@ namespace Gungeon
 				L"Alagard");
 
 			if (weapons[curWeaponIdx]->remainBulletCount == INT_MAX)
-			{
 				weapons[curWeaponIdx]->uiBulletCountInfinity->img->isVisible = true;
-			}
 			else
 			{
 				DWRITE.RenderText(to_wstring(weapons[curWeaponIdx]->remainBulletCount),
@@ -397,12 +390,10 @@ namespace Gungeon
 
 	void Player::ResizeScreen()
 	{
-		int idx = 0;
-
 		weapons[curWeaponIdx]->ResizeScreen();
 		uiWeaponFrame->Spawn(Vector2(-70.0f, 30.0f));
 
-		idx = 0;
+		int idx = 0;
 		for (auto& elem : uiHeartNone)
 		{
 			elem->Spawn(Vector2(10.0f + idx * 60.0f, -40.0f));
@@ -514,7 +505,8 @@ namespace Gungeon
 	void Player::Die()
 	{
 		Unit::Die();
-		for (auto& elem : dust) elem->idle->isVisible = false;
+		for (auto& elem : dust) 
+			elem->idle->isVisible = false;
 		weapons[curWeaponIdx]->idle->isVisible = false;
 		weapons[curWeaponIdx]->imgReloading->isVisible = false;
 	}
@@ -533,15 +525,15 @@ namespace Gungeon
 				{
 					int nx = On().x + dx[j] * i;
 					int ny = On().y + dy[j] * i;
-					TileState nState = MAP.tilemap->GetTileState(Int2(nx, ny));
+					TileState nState = MAPINFO.tilemap->GetTileState(Int2(nx, ny));
 					switch (nState)
 					{
 					case TileState::floor:
 					case TileState::prop:
 					case TileState::spawner:
-						Vector2 wpos = MAP.tilemap->TileIdxToWorldPos(Int2(nx, ny));
-						wpos.x += MAP.tilemap->scale.x / 2.0f;
-						wpos.y += MAP.tilemap->scale.x / 2.0f;
+						Vector2 wpos = MAPINFO.tilemap->TileIdxToWorldPos(Int2(nx, ny));
+						wpos.x += MAPINFO.tilemap->scale.x / 2.0f;
+						wpos.y += MAPINFO.tilemap->scale.x / 2.0f;
 						SetPos(wpos);
 						Update();
 						flagLoopBreak = true;
@@ -617,9 +609,7 @@ namespace Gungeon
 			}
 
 			if ((INPUT.KeyPress(VK_LBUTTON) || INPUT.KeyDown(VK_LBUTTON)))
-			{
 				Fire();
-			}
 		}
 	}
 
@@ -635,9 +625,7 @@ namespace Gungeon
 		flagLbutton = true;
 
 		if (curBulletIdx < 0)
-		{
 			SOUND.Play("EmptyBullet");
-		}
 		else
 		{
 			switch (weapons[curWeaponIdx]->type)
@@ -823,9 +811,7 @@ namespace Gungeon
 			if (TIMER.GetTick(timeReload, 1.5f))
 			{
 				if (weapons[curWeaponIdx]->remainBulletCount == INT_MAX)
-				{
 					curBulletIdx = weapons[curWeaponIdx]->bulletCount - 1;
-				}
 				else
 				{
 					int tempRemain = weapons[curWeaponIdx]->remainBulletCount;
@@ -929,7 +915,6 @@ namespace Gungeon
 			beforeWeapon->uiBulletFrame->img->isVisible = false;
 
 		curWeaponIdx++;
-
 
 		// »õ ¹«±â
 		shared_ptr<Weapon>& afterWeapon = weapons[curWeaponIdx];

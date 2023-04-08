@@ -48,10 +48,9 @@ namespace Gungeon
                 col->rotation += RANDOM.Float(0.008f, 0.02f);
                 col->rotation2 += RANDOM.Float(0.008f, 0.02f);
                 if (TIMER.GetTick(timeTargeting, intervalTargeting))
-                {
                     ShurikenBulletState = ShurikenBulletState::targeting;
-                }
                 break;
+
             case Gungeon::ShurikenBulletState::targeting:
                 if (TIMER.GetTick(timeAttack, intervalAttack))
                 {
@@ -65,6 +64,7 @@ namespace Gungeon
                     SOUND.Play("BulletKingThrow");
                 }
                 break;
+
             case Gungeon::ShurikenBulletState::attack:
                 velocity = moveDir * scalar * DELTA;
                 col->MoveWorldPos(velocity);

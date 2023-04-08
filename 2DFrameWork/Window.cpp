@@ -41,7 +41,7 @@ WPARAM Window::Run(std::shared_ptr<Scene> main)
 			SOUND.Update();
 			GUI.Update();
 			TIMER.Update();
-			MAP.Update();
+			MAPINFO.Update();
 			main->Update();
 			main->LateUpdate();
 			CAM.Set();
@@ -50,7 +50,7 @@ WPARAM Window::Run(std::shared_ptr<Scene> main)
 			D3D.Clear(app.background);
 			DWRITE.GetDC()->BeginDraw();
 			{
-				MAP.Render();
+				MAPINFO.Render();
 				main->Render();
 				GUI.Render();
 			}
@@ -181,18 +181,20 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 	if (Gui::MsgProc(handle, message, wParam, lParam))
 		return true;
 
-	if (message == WM_MOUSEMOVE)
+	switch (message)
+	{
+	case WM_MOUSEMOVE:
 	{
 		INPUT.mouseScreenPos.x = (float)LOWORD(lParam);
 		INPUT.mouseScreenPos.y = (float)HIWORD(lParam);
+		break;
 	}
-
-	if (message == WM_MOUSEWHEEL)
+	case WM_MOUSEWHEEL:
 	{
 		CAM.Zoom(GET_WHEEL_DELTA_WPARAM(wParam));
+		break;
 	}
-
-	if (message == WM_SIZE)
+	case WM_SIZE:
 	{
 		if (D3D.GetCreated())
 		{
@@ -204,14 +206,16 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 			if (main)
 				main->ResizeScreen();
 		}
+		break;
 	}
-
-	if (message == WM_CLOSE || message == WM_DESTROY)
+	case WM_CLOSE:
+	case WM_DESTROY:
 	{
 		PostQuitMessage(0);
 
 		return 0;
-	}
+	}//case
+	}//swith
 
 	return DefWindowProc(handle, message, wParam, lParam);
 }

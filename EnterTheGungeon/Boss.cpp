@@ -397,12 +397,8 @@ namespace Gungeon
         }
 
         for (auto& elem : bullet)
-        {
             if (elem)
-            {
                 elem->Update();
-            }
-        }
 
         attack1Start->Update();
         attack1->Update();
@@ -425,9 +421,7 @@ namespace Gungeon
         spawnPlayerByForce->Update();
 
         for (auto& elem : dieBomb)
-        {
             elem->Update();
-        }
 
         cutScene->Update();
     }
@@ -554,9 +548,7 @@ namespace Gungeon
             case Gungeon::BossPattern::brute:
             case Gungeon::BossPattern::gravity:
                 if (attack1->frame.x == attack1->maxFrame.x - 1)
-                {
                     SOUND.Play("BulletKingSpin");
-                }
                 break;
 
             case Gungeon::BossPattern::miro:
@@ -564,25 +556,19 @@ namespace Gungeon
             case Gungeon::BossPattern::shuriken:
             case Gungeon::BossPattern::wave:
                 if (attack2->frame.x == attack2->maxFrame.x - 1)
-                {
                     SOUND.Play("BulletKingThrow");
-                }
                 break;
 
             case Gungeon::BossPattern::circular:
             case Gungeon::BossPattern::string:
             case Gungeon::BossPattern::trail:
                 if (attack3->frame.x == attack3->maxFrame.x - 1)
-                {
                     SOUND.Play("BulletKingChairDown");
-                }
                 break;
             }
 
             if (TIMER.GetTick(timeAttackEnd, intervalEnd[(int)pattern]))
-            {
                 attackState = BossAttackState::reload;
-            }
             break;
         case Gungeon::BossAttackState::reload:
             idle->isVisible = true;
@@ -612,9 +598,7 @@ namespace Gungeon
 
         if (attackState != BossAttackState::reload &&
             attackState != BossAttackState::end)
-        {
             UpdateBullet();
-        }
     }
 
     void Boss::Die()
@@ -678,14 +662,7 @@ namespace Gungeon
         }
 
 
-        if (pushedDir.x < 0.0f)
-        {
-            hit->reverseLR = true;
-        }
-        else
-        {
-            hit->reverseLR = false;
-        }
+        hit->reverseLR = (pushedDir.x < 0.0f) ? true : false;
     }
 
     void Boss::Hitting()
@@ -706,9 +683,7 @@ namespace Gungeon
             }
 
             if (TIMER.GetTick(timeHit, 0.01f))
-            {
                 isHit = false;
-            }
         }
 
         if (isHitAnim)
@@ -831,14 +806,7 @@ namespace Gungeon
 
         InitVar();
 
-        if (pushedDir.x < 0.0f)
-        {
-            die->reverseLR = true;
-        }
-        else
-        {
-            die->reverseLR = false;
-        }
+        die->reverseLR = (pushedDir.x < 0.0f) ? true : false;
 
         dropItem->idle->isVisible = false;
         dropItem->state = State::die;
@@ -847,12 +815,8 @@ namespace Gungeon
     void Boss::HitBullet()
     {
         for (auto& elem : bullet)
-        {
             if (elem->isFired)
-            {
                 elem->Hit(1);
-            }
-        }
     }
 
     void Boss::SpawnByForceInMiro(const Vector2 wpos)
@@ -903,9 +867,7 @@ namespace Gungeon
         firePosTargeting->isVisible ^= 1;
         firePosCannon->isVisible ^= 1;
         for (auto& bulletElem : bullet)
-        {
             bulletElem->col->isVisible ^= 1;
-        }
     }
 
 
@@ -1161,7 +1123,8 @@ namespace Gungeon
             while (t--)
             {
                 bullet[curBulletIdx++]->Spawn(bulletSpawnPos);
-                if (curBulletIdx >= circularMax) curBulletIdx = 0;
+                if (curBulletIdx >= circularMax) 
+                    curBulletIdx = 0;
             }
 
             SOUND.Stop("BulletKingShot");
@@ -1215,7 +1178,8 @@ namespace Gungeon
 
             for (auto& elem : bullet)
             {
-                if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) continue;
+                if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) 
+                    continue;
 
                 elem->Spawn(bulletSpawnPos);
             }
@@ -1256,9 +1220,7 @@ namespace Gungeon
         {
             curBulletIdx++;
             if (curBulletIdx >= spiralMax)
-            {
                 curBulletIdx = 0;
-            }
 
             SOUND.Stop("BulletKingThrow");
             SOUND.Play("BulletKingThrow");
@@ -1359,12 +1321,8 @@ namespace Gungeon
         {
             shared_ptr<ShurikenBullet> childElem;
             if (childElem = dynamic_pointer_cast<ShurikenBullet>(elem))
-            {
                 if (childElem->ShurikenBulletState == ShurikenBulletState::targeting)
-                {
                     childElem->moveDir = targetPos - childElem->Pos();
-                }
-            }
             idx++;
         }
     }
@@ -1374,10 +1332,10 @@ namespace Gungeon
         if (TIMER.GetTick(timeFire, intervalFire[(int)BossPattern::gravity]))
         {
             bullet[curBulletIdx]->Spawn(bulletSpawnPos, 
-                Vector2(RANDOM.Float(-1.0f, 1.0f), 
-                    RANDOM.Float(0.0f, 1.0f)));
+                Vector2(RANDOM.Float(-1.0f, 1.0f), RANDOM.Float(0.0f, 1.0f)));
             curBulletIdx++;
-            if (curBulletIdx >= gravityMax) curBulletIdx = 0;
+            if (curBulletIdx >= gravityMax) 
+                curBulletIdx = 0;
 
             SOUND.Stop("BulletKingShot");
             SOUND.Play("BulletKingShot");
@@ -1391,7 +1349,8 @@ namespace Gungeon
             Vector2 fialSpawnPos = bulletSpawnPos;
             bullet[curBulletIdx]->Spawn(fialSpawnPos, Vector2(-0.8f, -1.0f));
             curBulletIdx++;
-            if (curBulletIdx >= waveMax) curBulletIdx = 0;
+            if (curBulletIdx >= waveMax) 
+                curBulletIdx = 0;
 
             SOUND.Stop("BulletKingShot");
             SOUND.Play("BulletKingShot");
@@ -1402,17 +1361,15 @@ namespace Gungeon
         {
             if (elem->isFired)
             {
-                if (elem->increaseState) elem->moveDir.x += 6.0f * DELTA;
-                else elem->moveDir.x -= 6.0f * DELTA;
+                if (elem->increaseState) 
+                    elem->moveDir.x += 6.0f * DELTA;
+                else 
+                    elem->moveDir.x -= 6.0f * DELTA;
 
                 if (elem->moveDir.x > 0.8f)
-                {
                     elem->increaseState = false;
-                }
                 else if (elem->moveDir.x < -0.8f)
-                {
                     elem->increaseState = true;
-                }
             }
 
             idx++;

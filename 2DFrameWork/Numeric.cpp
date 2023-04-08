@@ -1,9 +1,7 @@
 #include "framework.h"
 
-/*
-	* @brief use of machine epsilon to compare floating-point values for equality
-	* http://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
-*/
+// float epsilon compare
+// http://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
 
 bool AlmostEqualFloat(const float x, const float y, int ulp)
 {

@@ -56,7 +56,6 @@ namespace Gungeon
 		void PropWall();
 		void Finish();
 
-		void MSTPrim();
 		void SetTileRange(const TileState tileState, const Int2 imgMin, const Int2 imgMax, 
 			const Int2 sour, const Int2 dest, const int roomIdx);
 		void SetTileSpecificDir(const TileState tileState, const Int2 imgDir[], 
@@ -67,7 +66,7 @@ namespace Gungeon
 		void SetGateSpawner();
 		void SetEnemySpawner();
 		void SetTreasureSpawner();
-		void MaximalSquare(const Room* elem);
+		// void MaximalSquare(const Room* elem);
 		void Histogram(const shared_ptr<Room> elem);
 		void Save();
 		void Load();
@@ -105,8 +104,6 @@ namespace Gungeon
 		std::vector<ObNode>					roomNode;
 		Delaunay							triangulation;
 		// MST - Prim
-		std::priority_queue<ObLine, vector<ObLine>, greater<ObLine>>	edgePq;
-		std::unordered_map<int, bool>		visited;
 		std::vector<ObLine>					linesTriangulated;
 		std::vector<ObLine>					linesMST;
 		// Passage

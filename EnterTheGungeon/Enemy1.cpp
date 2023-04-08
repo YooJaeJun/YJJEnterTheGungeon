@@ -78,9 +78,7 @@ namespace Gungeon
 	{
 		bullet.resize(bulletMax);
 		for (auto& elem : bullet)
-		{
 			elem = make_shared<EnemyBullet>();
-		}
 	}
 
 	void Enemy1::InitIntervalAttack()
@@ -109,7 +107,8 @@ namespace Gungeon
 
 		bullet[curBulletIdx++]->Spawn(weapon->firePos->GetWorldPos(), moveDir);
 
-		if (curBulletIdx >= bulletMax) curBulletIdx = 0;
+		if (curBulletIdx >= bulletMax) 
+			curBulletIdx = 0;
 
 		InitIntervalAttack();
 

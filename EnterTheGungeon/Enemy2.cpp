@@ -76,9 +76,7 @@ namespace Gungeon
 	{
 		bullet.resize(bulletMax);
 		for (auto& elem : bullet)
-		{
 			elem = make_shared<EnemyBullet>();
-		}
 	}
 
 	void Enemy2::InitIntervalAttack()
@@ -115,7 +113,8 @@ namespace Gungeon
 			curBulletIdx++;
 		}
 
-		if (curBulletIdx >= bulletMax) curBulletIdx = 0;
+		if (curBulletIdx >= bulletMax) 
+			curBulletIdx = 0;
 
 		InitIntervalAttack();
 

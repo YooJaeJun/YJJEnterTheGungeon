@@ -25,7 +25,8 @@ namespace Gungeon
         open->scale = Vector2(54.0f / 2.0f, 26.0f) * 3.0f;
         open->SetParentT(*col);
 
-        for (auto& elem : weapon) elem = nullptr;
+        for (auto& elem : weapon) 
+            elem = nullptr;
     }
 
     void TreasureBox::Update()
@@ -38,6 +39,7 @@ namespace Gungeon
         case Gungeon::TreasureState::none:
         case Gungeon::TreasureState::spawn:
             break;
+
         case Gungeon::TreasureState::opening:
             idle->isVisible = false;
             open->isVisible = true;
@@ -102,6 +104,7 @@ namespace Gungeon
         case Gungeon::TreasureState::spawn:
         case Gungeon::TreasureState::opening:
             break;
+
         case Gungeon::TreasureState::dropping:
         case Gungeon::TreasureState::finish:
             int weaponIdx = 0;

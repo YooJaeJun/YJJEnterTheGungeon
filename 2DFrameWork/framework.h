@@ -69,7 +69,7 @@ using namespace SimpleMath;
 inline void Check(HRESULT hr) { assert(SUCCEEDED(hr)); }
 const float ToRadian = 0.0174532f;
 
-//Macro(WINAPI Style)
+//Macro(WINAPI Style) -> const 변경
 const float PI = 3.1415926f;	//180
 const float DIV2PI = 1.5707963f;	//90
 const float DIV4PI = 0.7853981f;	//45
@@ -133,6 +133,7 @@ extern Application app;//Extern Global
 #include "SceneManager.h"
 #include "DWrite.h"
 #include "Numeric.h"
+#include "Tile.h"
 
 #include "VertexType.h"
 #include "Shader.h"
@@ -148,8 +149,10 @@ extern Application app;//Extern Global
 #include "ObImage.h"
 #include "ObTileMap.h"
 #include "ObIso.h"
-#include "Map.h"
+#include "MapInfo.h"
 #include "Delaunay.h"
+#include "MSTPrim.h"
+#include "AStar.h"
 
 //Singleton Macro
 #define	D3D			Direct3D11::GetInstance()
@@ -165,4 +168,6 @@ extern Application app;//Extern Global
 #define LIGHT		Light::GetInstance()
 #define SCENE       SceneManager::GetInstance()
 #define DWRITE		DWrite::GetInstance()
-#define MAP         Map::GetInstance()
+#define MAPINFO     MapInfo::GetInstance()
+#define MSTPRIM     MSTPrim::GetInstance()
+#define ASTAR       AStar::GetInstance()

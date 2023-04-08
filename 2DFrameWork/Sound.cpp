@@ -31,9 +31,7 @@ bool Sound::AddSound(string File, string Key, bool loop)
 
     //중복된게 있다.
     if (iter != SoundList.end())
-    {
         return false;
-    }
 
     //중복된게 없다.
     SoundNode* temp = new SoundNode();
@@ -46,13 +44,9 @@ bool Sound::AddSound(string File, string Key, bool loop)
     );
 
     if (loop)
-    {
         temp->sound->setMode(FMOD_LOOP_NORMAL);
-    }
     else
-    {
         temp->sound->setMode(FMOD_LOOP_OFF);
-    }
 
     //맵에 할당한 배열 원소넣기
     SoundList[Key] = temp;
@@ -66,9 +60,7 @@ bool Sound::DeleteSound(string Key)
 
     //중복된게 없다.
     if (iter == SoundList.end())
-    {
         return false;
-    }
     //first가 키, second 밸류
     iter->second->channel->stop();
     iter->second->sound->release();
@@ -104,9 +96,7 @@ void Sound::Stop(string Key)
 
     //중복된게 있을때
     if (iter != SoundList.end())
-    {
         iter->second->channel->stop();
-    }
 }
 
 void Sound::Pause(string Key)
@@ -115,9 +105,7 @@ void Sound::Pause(string Key)
 
     //중복된게 있을때
     if (iter != SoundList.end())
-    {
         iter->second->channel->setPaused(true);
-    }
 }
 
 void Sound::Resume(string Key)
@@ -126,9 +114,7 @@ void Sound::Resume(string Key)
 
     //중복된게 있을때
     if (iter != SoundList.end())
-    {
         iter->second->channel->setPaused(false);
-    }
 }
 
 void Sound::SetVolume(string Key, float scale)
@@ -137,17 +123,13 @@ void Sound::SetVolume(string Key, float scale)
 
     //중복된게 있을때
     if (iter != SoundList.end())
-    {
         iter->second->channel->setVolume(scale * app.soundScale);
-    }
 }
 
 void Sound::SetMasterVolume()
 {
     for (auto iter = SoundList.begin(); iter != SoundList.end(); iter++)
-    {
         iter->second->channel->setVolume(app.soundScale);
-    }
 }
 
 void Sound::Update()

@@ -39,17 +39,21 @@ namespace Gungeon
 		Character::Update();
 
 		idle->Update();
-		if (firePos) firePos->Update();
-		if (fireEffect) fireEffect->Update();
-		if (imgReloading) imgReloading->Update();
-		if (uiBulletFrame) uiBulletFrame->Update();
-		for (auto& elem : uiBullet) if (elem) elem->Update();
-		if (uiWeapon) uiWeapon->Update();
-		if (uiBulletCountInfinity) uiBulletCountInfinity->Update();
-	}
-
-	void Weapon::LateUpdate()
-	{
+		if (firePos) 
+			firePos->Update();
+		if (fireEffect) 
+			fireEffect->Update();
+		if (imgReloading) 
+			imgReloading->Update();
+		if (uiBulletFrame) 
+			uiBulletFrame->Update();
+		for (auto& elem : uiBullet) 
+			if (elem) 
+				elem->Update();
+		if (uiWeapon) 
+			uiWeapon->Update();
+		if (uiBulletCountInfinity) 
+			uiBulletCountInfinity->Update();
 	}
 
 	void Weapon::Render()
@@ -63,11 +67,17 @@ namespace Gungeon
 
 		if (isUIRendering)
 		{
-			if (imgReloading) imgReloading->Render();
-			if (uiBulletFrame) uiBulletFrame->Render();
-			for (auto& elem : uiBullet) if (elem) elem->Render();
-			if (uiWeapon) uiWeapon->Render();
-			if (uiBulletCountInfinity) uiBulletCountInfinity->Render();
+			if (imgReloading) 
+				imgReloading->Render();
+			if (uiBulletFrame) 
+				uiBulletFrame->Render();
+			for (auto& elem : uiBullet) 
+				if (elem) 
+					elem->Render();
+			if (uiWeapon) 
+				uiWeapon->Render();
+			if (uiBulletCountInfinity) 
+				uiBulletCountInfinity->Render();
 		}
 	}
 

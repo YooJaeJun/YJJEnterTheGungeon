@@ -5,9 +5,7 @@ namespace Gungeon
     Scene02::Scene02()
     {
         for (auto& elem : enemy)
-        {
             elem = nullptr;
-        }
     }
 
     Scene02::~Scene02()
@@ -16,7 +14,7 @@ namespace Gungeon
 
     void Scene02::Init()
     {
-        MAP.useGui = false;
+        MAPINFO.useGui = false;
 
         spawnEffect.resize(enemyMax);
         for (auto& elem : spawnEffect)
@@ -109,13 +107,20 @@ namespace Gungeon
 
         GateProcess();
 
-        if (mapGen) mapGen->Update();
+        if (mapGen) 
+            mapGen->Update();
         gate->Update();
-        if (treasureBox) treasureBox->Update();
-        for (auto& elem : door) elem->Update();
-        for (auto& elem : spawnEffect) if (elem) elem->Update();
+        if (treasureBox) 
+            treasureBox->Update();
+        for (auto& elem : door) 
+            elem->Update();
+        for (auto& elem : spawnEffect) 
+            if (elem) 
+                elem->Update();
         player->Update();
-        for (auto& elem : enemy) if (elem) elem->Update();
+        for (auto& elem : enemy) 
+            if (elem) 
+                elem->Update();
         cinematic->Update();
 
         SOUND.SetVolume("BGM_Game", 0.6f);
@@ -131,6 +136,7 @@ namespace Gungeon
         case Gungeon::GameState::start:
         case Gungeon::GameState::waitingRoom:
             break;
+
         case Gungeon::GameState::enteringRoom:
         case Gungeon::GameState::waitingSpawn:
         case Gungeon::GameState::fight:
@@ -188,9 +194,7 @@ namespace Gungeon
         mapGen->Update();
 
         if (mapGen->selectedRooms.size() > 0)
-        {
             gameState = GameState::waitingRoom;
-        }
     }
 
     void Scene02::WaitingRoom()
@@ -212,12 +216,12 @@ namespace Gungeon
 
         // 다음 방 입장 판단
         Int2 playerOn;
-        MAP.tilemap->WorldPosToTileIdx(player->Pos(), playerOn);
-        TileState tileState = MAP.tilemap->GetTileState(playerOn);
+        MAPINFO.tilemap->WorldPosToTileIdx(player->Pos(), playerOn);
+        TileState tileState = MAPINFO.tilemap->GetTileState(playerOn);
 
         if (tileState == TileState::floor)
         {
-            afterRoomIdx = MAP.tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
+            afterRoomIdx = MAPINFO.tilemap->Tiles[playerOn.x][playerOn.y].roomIdx;
 
             if (afterRoomIdx > 0 &&
                 curRoomIdx != afterRoomIdx)
@@ -243,8 +247,8 @@ namespace Gungeon
                         int idx = 0;
                         for (auto& on : curRoom->doorTileIdxs)
                         {
-                            MAP.tilemap->SetTileState(on, TileState::wall);
-                            door[idx]->Spawn(MAP.tilemap->TileIdxToWorldPos(on), MAP.tilemap->GetTileDir(on));
+                            MAPINFO.tilemap->SetTileState(on, TileState::wall);
+                            door[idx]->Spawn(MAPINFO.tilemap->TileIdxToWorldPos(on), MAPINFO.tilemap->GetTileDir(on));
                             idx++;
                         }
 
@@ -297,7 +301,7 @@ namespace Gungeon
             case State::die:
                 break;
             default:
-                elem->FindPath(MAP.tilemap);
+                elem->FindPath(MAPINFO.tilemap);
             }
         }
 
@@ -315,7 +319,7 @@ namespace Gungeon
                 int idx = 0;
                 for (auto& elem : curRoom->doorTileIdxs)
                 {
-                    MAP.tilemap->SetTileState(elem, TileState::door);
+                    MAPINFO.tilemap->SetTileState(elem, TileState::door);
 
                     door[idx]->Disappear();
 
@@ -323,12 +327,8 @@ namespace Gungeon
                 }
 
                 for (auto& elem : enemy)
-                {
                     if (elem)
-                    {
                         elem->dropItem->flagAbsorbed = true;
-                    }
-                }
                 break;
             }
 
@@ -392,22 +392,18 @@ namespace Gungeon
     {
         if (player->state != State::die)
         {
-            if (MAP.tilemap->isFootOnWall(player->colTile))
+            if (MAPINFO.tilemap->isFootOnWall(player->colTile))
                 player->StepBack();
 
-            if (MAP.tilemap->isBodyOnPit(player->colTile) && 
+            if (MAPINFO.tilemap->isBodyOnPit(player->colTile) &&
                 player->state != State::fall &&
                 player->state != State::respawn &&
                 player->state != State::roll)
-            {
                 player->StartFall();
-            }
 
             if (false == gate->flagIntersectPlayer &&
                 player->col->Intersect(gate->col))
-            {
                 player->col->MoveWorldPos(Vector2(150.0f, -100.0f) * DELTA);
-            }
 
             if (treasureBox)
             {
@@ -441,14 +437,12 @@ namespace Gungeon
                                 player->EquipWeapon(elem);
                             }
                             else
-                            {
                                 flagOnceInteraction = true;
-                            }
                         }
                         weaponIdx++;
                     }
 
-                    player->flagInteractionUI = flagOnceInteraction ? true : false;
+                    player->flagInteractionUI = (flagOnceInteraction) ? true : false;
                 }
             }
 
@@ -459,8 +453,8 @@ namespace Gungeon
                 {
                     if (player->colTile->Intersect(elem->col))
                     {
-                        DirState doorDir = MAP.tilemap->GetTileDir(elem->On());
-                        int x, y;
+                        DirState doorDir = MAPINFO.tilemap->GetTileDir(elem->On());
+                        int x = 0, y = 0;
                         switch (doorDir)
                         {
                         case dirB:
@@ -523,7 +517,7 @@ namespace Gungeon
                     }
                 }
 
-                if (MAP.tilemap->isOnWall(bulletElem->On()))
+                if (MAPINFO.tilemap->isOnWall(bulletElem->On()))
                     bulletElem->Hit(1);
             }
         }
@@ -537,11 +531,9 @@ namespace Gungeon
                 player->state != State::die && 
                 enemyElem->state != State::die &&
                 enemyElem->col->Intersect(player->col))
-            {
                 player->StartHit(1);
-            }
 
-            if (MAP.tilemap->isFootOnWall(enemyElem->colTile))
+            if (MAPINFO.tilemap->isFootOnWall(enemyElem->colTile))
                 enemyElem->StepBack();
 
             if (enemyElem->col->Intersect(gate->col))
@@ -564,7 +556,7 @@ namespace Gungeon
                         bulletElem->Hit(1);
                     }
 
-                    if (MAP.tilemap->isOnWall(bulletElem->On()))
+                    if (MAPINFO.tilemap->isOnWall(bulletElem->On()))
                     {
                         bulletElem->Hit(1);
                     }
@@ -601,9 +593,7 @@ namespace Gungeon
 
         case Gungeon::GateState::open:
             if (gate->colTile->Intersect(player->col))
-            {
                 gate->flagIntersectPlayer = true;
-            }
             break;
 
         case Gungeon::GateState::cinematic:
@@ -630,9 +620,7 @@ namespace Gungeon
                 player->col->MoveWorldPos(dir * 80.0f * DELTA);
             }
             else
-            {
                 gate->gateState = GateState::setting;
-            }
             break;
 
         case Gungeon::GateState::setting:
@@ -694,7 +682,7 @@ namespace Gungeon
         gameState = GameState::start;
         if (curRoom)
             for (auto& elem : curRoom->doorTileIdxs)
-                MAP.tilemap->SetTileState(elem, TileState::door);
+                MAPINFO.tilemap->SetTileState(elem, TileState::door);
 
         Init();
     }

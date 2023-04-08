@@ -88,11 +88,6 @@ namespace Gungeon
 		Weapon::Update();
 	}
 
-	void Weapon2::LateUpdate()
-	{
-		Weapon::LateUpdate();
-	}
-
 	void Weapon2::Render()
 	{
 		Weapon::Render();

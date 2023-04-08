@@ -21,13 +21,9 @@ namespace Gungeon
             for (auto& elem : mapGen->selectedRooms)
             {
                 if (idx == 1)
-                {
                     elem->treasureSpawner->isVisible = true;
-                }
                 for (auto& enemySpawerElem : elem->enemySpawner)
-                {
                     enemySpawerElem->isVisible = true;
-                }
                 idx++;
             }
         }
@@ -82,7 +78,7 @@ namespace Gungeon
 
     void Scene01::ChangeScene1()
     {
-        MAP.Init();
+        MAPINFO.Init();
         mapGen->Init();
     }
 

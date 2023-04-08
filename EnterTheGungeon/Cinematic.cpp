@@ -44,6 +44,7 @@ namespace Gungeon
             // 등장연출
         case Gungeon::CinematicState::none:
             break;
+
         case Gungeon::CinematicState::cinematicBox1:
             box[0]->img->isVisible = true;
             box[1]->img->isVisible = true;
@@ -51,32 +52,32 @@ namespace Gungeon
 
             if (TIMER.GetTick(timeCinematic[(int)CinematicState::cinematicBox1],
                 intervalCinematic[(int)CinematicState::cinematicBox1]))
-            {
                 cinematicState = CinematicState::cameraTargeting1;
-            }
             break;
+
         case Gungeon::CinematicState::cameraTargeting1:
             break;
+
         case Gungeon::CinematicState::bossSpawnAnim:
             break;
+
         case Gungeon::CinematicState::cutScene:
             if (TIMER.GetTick(timeCinematic[(int)CinematicState::cutScene],
                 intervalCinematic[(int)CinematicState::cutScene]))
-            {
                 cinematicState = CinematicState::cameraTargeting2;
-            }
             break;
+
         case Gungeon::CinematicState::cameraTargeting2:
             break;
+
         case Gungeon::CinematicState::cinematicBox2:
             BoxUp(false);
 
             if (TIMER.GetTick(timeCinematic[(int)CinematicState::cinematicBox2],
                 intervalCinematic[(int)CinematicState::cinematicBox2]))
-            {
                 cinematicState = CinematicState::finish;
-            }
             break;
+
         case Gungeon::CinematicState::finish:
             break;
 
@@ -88,14 +89,15 @@ namespace Gungeon
 
             if (TIMER.GetTick(timeCinematic[(int)CinematicState::cinematicBox3],
                 intervalCinematic[(int)CinematicState::cinematicBox3]))
-            {
                 cinematicState = CinematicState::cameraTargeting3;
-            }
             break;
+
         case Gungeon::CinematicState::cameraTargeting3:
             break;
+
         case Gungeon::CinematicState::bossDieAnim:
             break;
+
         case Gungeon::CinematicState::cameraTargeting4:
         case Gungeon::CinematicState::cinematicBox4:
             BoxUp(false);
@@ -106,8 +108,10 @@ namespace Gungeon
                 cinematicState = CinematicState::finish2;
                 SOUND.Play("Win");
             }
+
         case Gungeon::CinematicState::finish2:
             break;
+
         case Gungeon::CinematicState::clear:
             break;
         }

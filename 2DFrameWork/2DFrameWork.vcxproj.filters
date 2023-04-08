@@ -86,10 +86,19 @@
     <ClInclude Include="ObIso.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="Map.h">
+    <ClInclude Include="MapInfo.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="MSTPrim.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="AStar.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
       <Filter>System</Filter>
     </ClInclude>
   </ItemGroup>
@@ -189,11 +198,17 @@
     <ClCompile Include="ObIso.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="Map.cpp">
+    <ClCompile Include="MapInfo.cpp">
       <Filter>System</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
+    <ClCompile Include="MSTPrim.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="AStar.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

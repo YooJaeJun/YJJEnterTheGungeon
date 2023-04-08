@@ -6,6 +6,7 @@ namespace Gungeon
 	{
 	public:
 		Unit();
+		virtual ~Unit() {}
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;

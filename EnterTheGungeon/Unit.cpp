@@ -26,27 +26,28 @@ namespace Gungeon
 		{
 		case Gungeon::State::idle:
 			if (false == (moveDir.x == 0.0f && moveDir.y == 0.0f))
-			{
 				StartWalk();
-			}
 			break;
 		case Gungeon::State::walk:
 			if (moveDir.x == 0.0f && moveDir.y == 0.0f)
-			{
 				StartIdle();
-			}
 			break;
 		}
 
 		Character::Update();
 
-		if (respawn) respawn->Update();
+		if (respawn) 
+			respawn->Update();
 		idle->Update();
 		walk->Update();
-		if (hit) hit->Update();
-		if (fall) fall->Update();
-		if (die) die->Update();
-		if (shadow) shadow->Update();
+		if (hit) 
+			hit->Update();
+		if (fall) 
+			fall->Update();
+		if (die) 
+			die->Update();
+		if (shadow) 
+			shadow->Update();
 	}
 
 	void Unit::LateUpdate()
@@ -88,16 +89,12 @@ namespace Gungeon
 			if (targetDir.x >= 0.0f)
 			{
 				if (targetDirBefore.x < 0.0f)
-				{
 					weapon->EquipRight();
-				}
 			}
 			else
 			{
 				if (targetDirBefore.x >= 0.0f)
-				{
 					weapon->EquipLeft();
-				}
 			}
 		}
 	}
@@ -151,9 +148,12 @@ namespace Gungeon
 
 		idle->isVisible = false;
 		walk->isVisible = false;
-		if (attack) attack->isVisible = false;
-		if (attackEnd) attackEnd->isVisible = false;
-		if (hit) hit->isVisible = false;
+		if (attack) 
+			attack->isVisible = false;
+		if (attackEnd) 
+			attackEnd->isVisible = false;
+		if (hit) 
+			hit->isVisible = false;
 		shadow->isVisible = false;
 		die->isVisible = true;
 
@@ -206,38 +206,23 @@ namespace Gungeon
 		float rotation = Utility::DirToRadian(dir);
 
 		if (rotation >= 30.0f * ToRadian && rotation < 60.0f * ToRadian)
-		{
 			dirState = dirRT;
-		}
 		else if (rotation >= 120.0f * ToRadian && rotation < 150.0f * ToRadian)
-		{
 			dirState = dirLT;
-		}
 		else if (rotation >= -150.0f * ToRadian && rotation < -120.0f * ToRadian)
-		{
 			dirState = dirLB;
-		}
 		else if (rotation >= -60.0f * ToRadian && rotation < -30.0f * ToRadian)
-		{
 			dirState = dirRB;
-		}
+
 		else if (rotation >= -30.0f * ToRadian && rotation < 30.0f * ToRadian)
-		{
 			dirState = dirR;
-		}
 		else if ((rotation > -181.0f * ToRadian && rotation <= -150.0f * ToRadian) ||
 			(rotation >= 150.0f * ToRadian && rotation < 181.0f * ToRadian))
-		{
 			dirState = dirL;
-		}
 		else if (rotation >= 60.0f * ToRadian && rotation < 120.0f * ToRadian)
-		{
 			dirState = dirT;
-		}
 		else if (rotation >= -120.0f * ToRadian && rotation < -60.0f * ToRadian)
-		{
 			dirState = dirB;
-		}
 	}
 
 	void Unit::FindPath(std::shared_ptr<ObTileMap> map)
@@ -245,14 +230,12 @@ namespace Gungeon
 		if (TIMER.GetTick(timeFindPath, 1.0f))
 		{
 			Int2 sour, dest;
-			bool isFind;
-
-			isFind = map->WorldPosToTileIdx(Pos(), sour);
+			bool isFind = map->WorldPosToTileIdx(Pos(), sour);
 			isFind &= map->WorldPosToTileIdx(targetPos, dest);
 
 			if (isFind)
 			{
-				if (map->PathFinding(sour, dest, way))
+				if (ASTAR.FindPath(map, sour, dest, way))
 				{
 					g = 0.0f;
 					start = Pos();
@@ -277,9 +260,7 @@ namespace Gungeon
 				start = end;
 				way.pop_back();
 				if (false == way.empty())
-				{
 					end = way.back().Pos;
-				}
 			}
 		}
 	}
@@ -295,8 +276,10 @@ namespace Gungeon
 		Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
 		idle->color = c;
 		walk->color = c;
-		if (hit) hit->color = c;
-		if (die) die->color = c;
+		if (hit) 
+			hit->color = c;
+		if (die) 
+			die->color = c;
 	}
 
 	void Unit::Stop()

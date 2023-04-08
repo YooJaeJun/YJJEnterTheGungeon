@@ -1,50 +1,10 @@
 #pragma once
-enum class TileState
-{
-    none,
-    floor,
-    wall,
-    door,
-    prop,
-    spawner,
-    pit,
-    max
-};
-
-class Tile
-{
-public:
-    int                 F = 0; //타일 비용
-    int                 G = 0; //타일 비용
-    int                 H = 0; //타일 비용
-    Int2                idx;    //타일 인덱스
-    shared_ptr<Tile>    P;      //나를 갱신시킨 타일
-    bool                isFind; //검사한적이 있는가?
-    Vector2             Pos; //타일의 중점
-    TileState           state;
-    int                 roomIdx;
-    int                 dir;
-
-    void ClearCost();
-    void ClacH(Int2 DestIdx);
-    void ClacF();
-};
-
-using PTile = pair<Tile, int>;
-
-struct ComparePTile
-{
-    bool operator()(PTile& a, PTile& b) const
-    {
-        return a.second > b.second;
-    }
-};
-
-
-const int tileImageCount = 4;
 
 class ObTileMap : public GameObject
 {
+public:
+    enum { tileImageCount = 4 };    // MapInfo에도 있음
+
 public:
     ObTileMap();
 
@@ -76,7 +36,6 @@ public:
     bool            isInTileState(const Vector2 wpos, const TileState tileState);
     bool            isFootOnWall(const shared_ptr<ObRect> colTile);
     bool            isBodyOnPit(const shared_ptr<ObRect> colTile);
-    bool            PathFinding(Int2 sour, Int2 dest, OUT vector<Tile>& way, bool checkDiagnoal = true);
 
 protected:
     std::shared_ptr<VertexTile[]>               vertices;
@@ -90,4 +49,3 @@ public:
     shared_ptr<ObImage>     tileImages[tileImageCount];
     string                  file;
 };
-

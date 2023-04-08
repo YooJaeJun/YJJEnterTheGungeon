@@ -14,9 +14,8 @@ bool SceneManager::AddScene(string key, std::shared_ptr<Scene> value)
     auto iter = scenes.find(key);
 
     if (iter != scenes.end())
-    {
         return false;
-    }
+
     scenes[key] = value;
 
     return true;
@@ -27,9 +26,7 @@ bool SceneManager::DeleteScene(string key)
     auto iter = scenes.find(key);
 
     if (iter == scenes.end())
-    {
         return false;
-    }
 
     scenes.erase(iter);
 
@@ -62,9 +59,7 @@ shared_ptr<Scene> SceneManager::GetScene(string key)
     auto iter = scenes.find(key);
 
     if (iter == scenes.end())
-    {
         return nullptr;
-    }
 
     return iter->second;
 }
@@ -99,18 +94,21 @@ void SceneManager::Update()
 
 void SceneManager::LateUpdate()
 {
-    if (isChanging)return;
+    if (isChanging)
+        return;
     currentScene->LateUpdate();
 }
 
 void SceneManager::Render()
 {
-    if (isChanging)return;
+    if (isChanging)
+        return;
     currentScene->Render();
 }
 
 void SceneManager::ResizeScreen()
 {
-    if (isChanging || !currentScene)return;
+    if (isChanging || !currentScene)
+        return;
     currentScene->ResizeScreen();
 }

@@ -31,6 +31,7 @@ namespace Gungeon
 	{
 	public:
 		Boss();
+		virtual ~Boss() {}
 		virtual void Init() override;
 		void InitVar();
 		void InitSelf();

@@ -78,9 +78,7 @@ void ObImage::PlayAnim()
                 {
                     frame.x++;
                     if (frame.x == maxFrame.x)
-                    {
                         frame.x = 0;
-                    }
                 }
                 else if (animState == AnimState::once)
                 {
@@ -95,9 +93,7 @@ void ObImage::PlayAnim()
                 {
                     frame.x--;
                     if (frame.x == -1)
-                    {
                         frame.x = maxFrame.x - 1;
-                    }
                 }
                 else //REVERSE_ONCE
                 {
@@ -115,9 +111,7 @@ void ObImage::PlayAnim()
                 {
                     frame.y++;
                     if (frame.y == maxFrame.y)
-                    {
                         frame.y = 0;
-                    }
                 }
                 else if (animState == AnimState::once)
                 {
@@ -132,9 +126,7 @@ void ObImage::PlayAnim()
                 {
                     frame.y--;
                     if (frame.y == -1)
-                    {
                         frame.y = maxFrame.y - 1;
-                    }
                 }
                 else //REVERSE_ONCE
                 {
@@ -213,9 +205,8 @@ void ObImage::Render()
         memcpy_s(mappedResource.pData, sizeof(Vector4), &reUv, sizeof(Vector4));
     }
     else
-    {
         memcpy_s(mappedResource.pData, sizeof(Vector4), &uv, sizeof(Vector4));
-    }
+
     D3D.GetDC()->Unmap(uvBuffer.Get(), 0);
 
     UINT stride = sizeof(VertexPT);

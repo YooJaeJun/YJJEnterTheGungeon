@@ -83,9 +83,8 @@ void GameObject::Update()
 
 	//P의 주소가 있으면
 	if (P)
-	{
 		RT *= *P;
-	}
+
 	W = Pi * S * RT;
 }
 
@@ -308,9 +307,7 @@ ColPos GameObject::IntersectScreenMouse(Vector2 coord)
 void GameObject::SetWorldPos(Vector2 worldPos)
 {
 	if (!P)
-	{
 		position = worldPos;
-	}
 	else
 	{
 		Vector2 location = Vector2::Transform(worldPos, P->Invert());
@@ -321,9 +318,7 @@ void GameObject::SetWorldPos(Vector2 worldPos)
 void GameObject::SetWorldPosX(float worldPosX)
 {
 	if (!P)
-	{
 		position.x = worldPosX;
-	}
 	else
 	{
 		Vector2 location = Vector2::Transform(Vector2(worldPosX, 0), P->Invert());
@@ -333,9 +328,7 @@ void GameObject::SetWorldPosX(float worldPosX)
 void GameObject::SetWorldPosY(float worldPosY)
 {
 	if (!P)
-	{
 		position.y = worldPosY;
-	}
 	else
 	{
 		Vector2 location = Vector2::Transform(Vector2(0, worldPosY), P->Invert());
@@ -345,9 +338,7 @@ void GameObject::SetWorldPosY(float worldPosY)
 void GameObject::MoveWorldPos(Vector2 velocity)
 {
 	if (!P)
-	{
 		position += velocity;
-	}
 	else
 	{
 		Vector2 locVelocity = Vector2::TransformNormal(velocity, P->Invert());

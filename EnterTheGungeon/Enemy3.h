@@ -15,6 +15,7 @@ namespace Gungeon
 	{
 	public:
 		Enemy3();
+		virtual ~Enemy3() {}
 		virtual void Init() override;
 		void InitVar();
 		void InitSelf();
