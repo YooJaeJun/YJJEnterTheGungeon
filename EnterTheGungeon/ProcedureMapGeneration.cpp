@@ -177,14 +177,14 @@ namespace Gungeon
                 room->col->scale.y = 100.0f * RANDOM.Int(9, 14);
             }
 
-            map<Int2, int> dic;
+            map<Vec2i, int> dic;
             int xRand = 0, yRand = 0;
             do {
                 xRand = RANDOM.Int(-10, 10);
                 yRand = RANDOM.Int(-10, 10);
-            } while (dic[Int2(xRand, yRand)]);
+            } while (dic[Vec2i(xRand, yRand)]);
 
-            dic[Int2(xRand, yRand)]++;
+            dic[Vec2i(xRand, yRand)]++;
 
             room->SetPosX(100.0f * xRand);
             room->SetPosY(100.0f * yRand);
@@ -245,7 +245,7 @@ namespace Gungeon
             {
                 elem->col->scale.x -= 200.0f;
                 elem->col->scale.y -= 200.0f;
-                Int2 on;
+                Vec2i on;
                 if (MAPINFO.tilemap->WorldPosToTileIdx(elem->Pos(), on))
                     elem->SetPos(MAPINFO.tilemap->TileIdxToWorldPos(on));
                 elem->col->isFilled = true;
@@ -262,7 +262,7 @@ namespace Gungeon
         for (auto& elem : selectedRooms)
         {
             // 들로네 삼각분할 위한 노드
-            roomNode.emplace_back(ObNode(idx, elem->Pos()));
+            roomNode.emplace_back(Vec2f(idx, elem->Pos()));
             idx++;
         }
 
@@ -319,7 +319,7 @@ namespace Gungeon
 
     void ProcedureMapGeneration::RoomTile()
     {
-        Int2 sour, dest;
+        Vec2i sour, dest;
         int roomIdx = 0;
         for (auto& elem : selectedRooms)
         {
@@ -345,17 +345,17 @@ namespace Gungeon
             for (int roomIdx = 0; roomIdx < selectedRooms.size(); roomIdx++)
             {
                 Vector2 v = Vector2(elem.V().x, elem.V().y);
-                if (AlmostEqualVector2(v, selectedRooms[roomIdx]->Pos()))
+                if (NearlyEqualVector2(v, selectedRooms[roomIdx]->Pos()))
                     nodesForRoomIndex[v] = roomIdx;
 
                 Vector2 w = Vector2(elem.W().x, elem.W().y);
-                if (AlmostEqualVector2(w, selectedRooms[roomIdx]->Pos()))
+                if (NearlyEqualVector2(w, selectedRooms[roomIdx]->Pos()))
                     nodesForRoomIndex[w] = roomIdx;
             }
         }
 
         // 1. 8방향 체크해 문의 방향을 정하고, 2. 방향에 따라 다른 이미지, 3. 모서리에 위치할 시 예외처리
-        auto SetDoor = [&](Int2 on, const int roomIdx, const DirState dir)
+        auto SetDoor = [&](Vec2i on, const int roomIdx, const DirState dir)
         {
             deque<bool> dirWall(8);
 
@@ -364,13 +364,13 @@ namespace Gungeon
                 int nx = on.x + dx[i];
                 int ny = on.y + dy[i];
 
-                if (MAPINFO.tilemap->GetTileState(Int2(nx, ny)) == TileState::wall ||
-                    MAPINFO.tilemap->GetTileState(Int2(nx, ny)) == TileState::door)
+                if (MAPINFO.tilemap->GetTileState(Vec2i(nx, ny)) == TileState::wall ||
+                    MAPINFO.tilemap->GetTileState(Vec2i(nx, ny)) == TileState::door)
                     dirWall[i] = true;
             }
 
-            Int2 doorTileIdx = on;
-            Int2 floorTileIdx;
+            Vec2i doorTileIdx = on;
+            Vec2i floorTileIdx;
 
             // 가로, 세로
             if (dirWall[DirState::dirB] && dirWall[DirState::dirT]) 
@@ -405,7 +405,7 @@ namespace Gungeon
                 }
 
                 MAPINFO.tilemap->SetTile(floorTileIdx,
-                    Int2(RANDOM.Int(floorImgMin.x, floorImgMax.x),
+                    Vec2i(RANDOM.Int(floorImgMin.x, floorImgMax.x),
                         RANDOM.Int(floorImgMin.y, floorImgMax.y)),
                     MAPINFO.imgIdx,
                     (int)TileState::floor, 
@@ -415,7 +415,7 @@ namespace Gungeon
             }
 
             MAPINFO.tilemap->SetTile(doorTileIdx,
-                Int2(RANDOM.Int(floorImgMin.x, floorImgMax.x),
+                Vec2i(RANDOM.Int(floorImgMin.x, floorImgMax.x),
                     RANDOM.Int(floorImgMin.y, floorImgMax.y)),
                 MAPINFO.imgIdx,
                 (int)TileState::door,
@@ -431,20 +431,20 @@ namespace Gungeon
         // 1. 시작방 중점 -> 시작방 벽
         // 2. 시작방 벽 -> 끝방 벽
 
-        auto FindValidLoad = [&](Int2 sour, Int2 dest, bool first, const int passageIdx) ->Int2
+        auto FindValidLoad = [&](Vec2i sour, Vec2i dest, bool first, const int passageIdx) ->Vec2i
         {
             if (ASTAR.FindPath(MAPINFO.tilemap, sour, dest, way, false))
             {
                 int sourRoomIdx = MAPINFO.tilemap->GetTileRoomIndex(sour);
                 int destRoomIdx = MAPINFO.tilemap->GetTileRoomIndex(dest);
 
-                Int2 beforeOn = way.back().idx;
+                Vec2i beforeOn = way.back().idx;
                 int beforeRoomIdx = MAPINFO.tilemap->GetTileRoomIndex(beforeOn);
                 DirState beforeDir = MAPINFO.tilemap->GetTileDir(beforeOn);
 
                 for (int cur = way.size() - 2; cur >= 0; cur--)
                 {
-                    Int2 curOn = way[cur].idx;
+                    Vec2i curOn = way[cur].idx;
                     TileState curTileState = MAPINFO.tilemap->GetTileState(curOn);
                     int curRoomIdx = MAPINFO.tilemap->GetTileRoomIndex(curOn);
                     DirState curDir = MAPINFO.tilemap->GetTileDir(curOn);
@@ -452,7 +452,7 @@ namespace Gungeon
                     if (curTileState == TileState::none)
                     {
                         MAPINFO.tilemap->SetTile(curOn,
-                            Int2(RANDOM.Int(floorImgMin.x, floorImgMax.x),
+                            Vec2i(RANDOM.Int(floorImgMin.x, floorImgMax.x),
                                 RANDOM.Int(floorImgMin.y, floorImgMax.y)),
                             MAPINFO.imgIdx,
                             (int)TileState::floor);
@@ -494,10 +494,10 @@ namespace Gungeon
         passages.resize(linesMST.size());
         for (auto& elem : linesMST)
         {
-            const ObNode& v = elem.V();
-            const ObNode& w = elem.W();
+            const Vec2f& v = elem.V();
+            const Vec2f& w = elem.W();
 
-            ObNode mid = ObNode((w.x + v.x) / 2.0f, (w.y + v.y) / 2.0f);
+            Vec2f mid = Vec2f((w.x + v.x) / 2.0f, (w.y + v.y) / 2.0f);
 
             // Vector2 vScaleHalf = selectedRooms[nodesForRoomIndex[v]]->col->scale / 2.0f;
             // Vector2 wScaleHalf = selectedRooms[nodesForRoomIndex[w]]->col->scale / 2.0f;
@@ -505,7 +505,7 @@ namespace Gungeon
             Vector2	start = Vector2(v.x, v.y);
             Vector2 end = Vector2(w.x, w.y);
 
-            Int2 sour, dest;
+            Vec2i sour, dest;
             MAPINFO.tilemap->WorldPosToTileIdx(start, sour);
             MAPINFO.tilemap->WorldPosToTileIdx(end, dest);
 
@@ -530,10 +530,10 @@ namespace Gungeon
                     int ny = on.y + dy[j];
                     if (nx < 0 || nx >= MAPINFO.tileSize.x || ny < 0 || ny >= MAPINFO.tileSize.y) continue;
 
-                    if (MAPINFO.tilemap->GetTileState(Int2(nx, ny)) == TileState::none)
+                    if (MAPINFO.tilemap->GetTileState(Vec2i(nx, ny)) == TileState::none)
                     {
-                        MAPINFO.tilemap->SetTile(Int2(nx, ny),
-                            Int2(RANDOM.Int(passagePitImgMin.x, passagePitImgMax.x),
+                        MAPINFO.tilemap->SetTile(Vec2i(nx, ny),
+                            Vec2i(RANDOM.Int(passagePitImgMin.x, passagePitImgMax.x),
                                 RANDOM.Int(passagePitImgMin.y, passagePitImgMax.y)),
                             MAPINFO.imgIdx,
                             (int)TileState::pit);
@@ -547,10 +547,10 @@ namespace Gungeon
     {
         for (auto& elem : selectedRooms)
         {
-            Int2 on;
+            Vec2i on;
             MAPINFO.tilemap->WorldPosToTileIdx(elem->Pos(), on);
-            Int2 scaleOn = Int2(static_cast<int>(elem->col->scale.x / 100), static_cast<int>(elem->col->scale.y / 100));
-            Int2 halfScaleOn = scaleOn / 2;
+            Vec2i scaleOn = Vec2i(static_cast<int>(elem->col->scale.x / 100), static_cast<int>(elem->col->scale.y / 100));
+            Vec2i halfScaleOn = scaleOn / 2;
 
             int xStart = elem->TileLB().x + 1;
             int xEnd = elem->TileRB().x - 1;
@@ -564,10 +564,10 @@ namespace Gungeon
                 int rx = RANDOM.Int(xStart, xEnd);
                 int ry = RANDOM.Int(yStart, yEnd);
 
-                if (MAPINFO.tilemap->GetTileState(Int2(rx, ry)) == TileState::floor)
+                if (MAPINFO.tilemap->GetTileState(Vec2i(rx, ry)) == TileState::floor)
                 {
-                    MAPINFO.tilemap->SetTile(Int2(rx, ry),
-                        Int2(RANDOM.Int(propImgMin.x, propImgMax.x),
+                    MAPINFO.tilemap->SetTile(Vec2i(rx, ry),
+                        Vec2i(RANDOM.Int(propImgMin.x, propImgMax.x),
                             RANDOM.Int(propImgMin.y, propImgMax.y)),
                         MAPINFO.imgIdx,
                         (int)TileState::prop,
@@ -590,13 +590,7 @@ namespace Gungeon
         int roomIdx = 0;
         for (auto& elem : selectedRooms)
         {
-            propSour = Int2(0, 0);
-            propDest = Int2(0, 0);
-            areaMax = 0;
-            xMax = 0;
-            yMax = 0;
-
-            Histogram(elem);
+            WrappingFuncHistogram(elem);
 
             if (xMax > 1 && yMax > 1)
             {
@@ -613,13 +607,7 @@ namespace Gungeon
         int roomIdx = 0;
         for (auto& elem : selectedRooms)
         {
-            propSour = Int2(0, 0);
-            propDest = Int2(0, 0);
-            areaMax = 0;
-            xMax = 0;
-            yMax = 0;
-
-            Histogram(elem);
+            WrappingFuncHistogram(elem);
 
             if (xMax > 2 && yMax > 2)
             {
@@ -652,15 +640,15 @@ namespace Gungeon
         }
     }
 
-    void ProcedureMapGeneration::SetTileRange(const TileState tileState, const Int2 imgMin, const Int2 imgMax, 
-        const Int2 sour, const Int2 dest, const int roomIdx)
+    void ProcedureMapGeneration::SetTileRange(const TileState tileState, const Vec2i imgMin, const Vec2i imgMax,
+        const Vec2i sour, const Vec2i dest, const int roomIdx)
     {
         for (int y = sour.y + 1; y <= dest.y - 1; y++)
         {
             for (int x = sour.x + 1; x <= dest.x - 1; x++)
             {
-                MAPINFO.tilemap->SetTile(Int2(x, y),
-                    Int2(RANDOM.Int(imgMin.x, imgMax.x),
+                MAPINFO.tilemap->SetTile(Vec2i(x, y),
+                    Vec2i(RANDOM.Int(imgMin.x, imgMax.x),
                         RANDOM.Int(imgMin.y, imgMax.y)),
                     MAPINFO.imgIdx,
                     (int)tileState,
@@ -670,8 +658,8 @@ namespace Gungeon
         }
     };
 
-    void ProcedureMapGeneration::SetTileSpecificDir(const TileState tileState, const Int2 imgDir[], 
-        const Int2 on, const DirState dir, const int roomIdx)
+    void ProcedureMapGeneration::SetTileSpecificDir(const TileState tileState, const Vec2i imgDir[], 
+        const Vec2i on, const DirState dir, const int roomIdx)
     {
         MAPINFO.tilemap->SetTile(on,
             imgDir[(int)dir],
@@ -682,24 +670,24 @@ namespace Gungeon
             dir);
     }
 
-    void ProcedureMapGeneration::SetTileAllDir(const TileState tileState, const Int2 imgDir[], 
-        const Int2 sour, const Int2 dest, const int roomIdx)
+    void ProcedureMapGeneration::SetTileAllDir(const TileState tileState, const Vec2i imgDir[], 
+        const Vec2i sour, const Vec2i dest, const int roomIdx)
     {
         // wall - top, bottom, left, right, edge
         for (int x = sour.x + 1; x <= dest.x; x++)
         {
-            SetTileSpecificDir(tileState, imgDir, Int2(x, dest.y), DirState::dirT, roomIdx);
-            SetTileSpecificDir(tileState, imgDir, Int2(x, sour.y), DirState::dirB, roomIdx);
+            SetTileSpecificDir(tileState, imgDir, Vec2i(x, dest.y), DirState::dirT, roomIdx);
+            SetTileSpecificDir(tileState, imgDir, Vec2i(x, sour.y), DirState::dirB, roomIdx);
         }
         for (int y = sour.y + 1; y <= dest.y; y++)
         {
-            SetTileSpecificDir(tileState, imgDir, Int2(sour.x, y), DirState::dirL, roomIdx);
-            SetTileSpecificDir(tileState, imgDir, Int2(dest.x, y), DirState::dirR, roomIdx);
+            SetTileSpecificDir(tileState, imgDir, Vec2i(sour.x, y), DirState::dirL, roomIdx);
+            SetTileSpecificDir(tileState, imgDir, Vec2i(dest.x, y), DirState::dirR, roomIdx);
         }
-        SetTileSpecificDir(tileState, imgDir, Int2(sour.x, dest.y), DirState::dirLT, roomIdx);
-        SetTileSpecificDir(tileState, imgDir, Int2(dest.x, dest.y), DirState::dirRT, roomIdx);
-        SetTileSpecificDir(tileState, imgDir, Int2(sour.x, sour.y), DirState::dirLB, roomIdx);
-        SetTileSpecificDir(tileState, imgDir, Int2(dest.x, sour.y), DirState::dirRB, roomIdx);
+        SetTileSpecificDir(tileState, imgDir, Vec2i(sour.x, dest.y), DirState::dirLT, roomIdx);
+        SetTileSpecificDir(tileState, imgDir, Vec2i(dest.x, dest.y), DirState::dirRT, roomIdx);
+        SetTileSpecificDir(tileState, imgDir, Vec2i(sour.x, sour.y), DirState::dirLB, roomIdx);
+        SetTileSpecificDir(tileState, imgDir, Vec2i(dest.x, sour.y), DirState::dirRB, roomIdx);
     }
 
     void ProcedureMapGeneration::VisualizeSpawner()
@@ -731,22 +719,22 @@ namespace Gungeon
             float xHalf = MAPINFO.tilemap->scale.x / 2.0f;
             float yHalf = MAPINFO.tilemap->scale.y / 2.0f;
 
-            Int2 sour = Int2(elem->On().x - 1, elem->On().y - 1);
-            Int2 dest = Int2(elem->On().x + 1, elem->On().y + 1);
+            Vec2i sour = Vec2i(elem->On().x - 1, elem->On().y - 1);
+            Vec2i dest = Vec2i(elem->On().x + 1, elem->On().y + 1);
             int curGateIdx = 0;
 
             for (int y = sour.y; y <= dest.y; y++)
             {
                 for (int x = sour.x; x <= dest.x; x++)
                 {
-                    MAPINFO.tilemap->SetTile(Int2(x, y),
+                    MAPINFO.tilemap->SetTile(Vec2i(x, y),
                         spawnerImg,
                         MAPINFO.imgIdx,
                         (int)TileState::spawner,
                         Color(0.5f, 0.5f, 0.5f),
                         tileRoomIdx);
 
-                    Vector2 wpos = MAPINFO.tilemap->TileIdxToWorldPos(Int2(x, y));
+                    Vector2 wpos = MAPINFO.tilemap->TileIdxToWorldPos(Vec2i(x, y));
                     elem->gateSpawner[curGateIdx]->SetWorldPos(Vector2(wpos.x + xHalf, wpos.y + yHalf));
                     elem->gateSpawner[curGateIdx]->isVisible = true;
                     curGateIdx++;
@@ -770,7 +758,7 @@ namespace Gungeon
             {
                 for (auto& spawnPosElem : elem->enemySpawner)
                 {
-                    Int2 on;
+                    Vec2i on;
                     Vector2 spawnerPos = spawnPosElem->GetWorldPos();
 
                     if (spawnerPos.x == 0.0f &&
@@ -780,7 +768,7 @@ namespace Gungeon
                         {
                             int rx = RANDOM.Int(elem->TileLB().x + 1, elem->TileRB().x - 1);
                             int ry = RANDOM.Int(elem->TileLB().y + 1, elem->TileLT().y - 1);
-                            on = Int2(rx, ry);
+                            on = Vec2i(rx, ry);
                         }
                     }
                     else
@@ -809,9 +797,9 @@ namespace Gungeon
         treasure->roomType = RoomType::treasure;
         treasure->cleared = true;
 
-        Int2 on;
+        Vec2i on;
         MAPINFO.tilemap->WorldPosToTileIdx(treasure->Pos(), on);
-        Vector2 wpos = MAPINFO.tilemap->TileIdxToWorldPos(Int2(on.x, on.y));
+        Vector2 wpos = MAPINFO.tilemap->TileIdxToWorldPos(Vec2i(on.x, on.y));
         float tileXHalf = MAPINFO.tilemap->scale.x / 2.0f;
         float tileYHalf = MAPINFO.tilemap->scale.y / 2.0f;
         treasure->treasureSpawner->SetWorldPos(Vector2(wpos.x + tileXHalf, wpos.y + tileYHalf));
@@ -851,7 +839,7 @@ namespace Gungeon
             for (int x = 1; x <= w && false == flagLoopBreak; x++)
             {
                 int temp = dp[x];
-                Int2 on = Int2(xStart + x - 1, yStart + y - 1);
+                Vec2i on = Vec2i(xStart + x - 1, yStart + y - 1);
                 if (MAPINFO.tilemap->GetTileState(on) == TileState::floor)
                 {
                     dp[x] = min(min(dp[x - 1], prev), dp[x]) + 1;
@@ -863,9 +851,9 @@ namespace Gungeon
 
                 if (length >= size)
                 {
-                    Int2 sour, dest;
-                    sour = Int2(xStart + x - size + 1, yStart + y);
-                    dest = Int2(xStart + x, yStart + y + size - 1);
+                    Vec2i sour, dest;
+                    sour = Vec2i(xStart + x - size + 1, yStart + y);
+                    dest = Vec2i(xStart + x, yStart + y + size - 1);
 
                     SetTileAllDir(TileState::wall, wallImgDir, sour, dest, roomIdx);
 
@@ -880,7 +868,7 @@ namespace Gungeon
     }
     */
 
-    void ProcedureMapGeneration::Histogram(const shared_ptr<Room> elem)
+    void ProcedureMapGeneration::WrappingFuncHistogram(const shared_ptr<Room> elem)
     {
         int xStart = elem->TileLB().x + 2;
         int xEnd = elem->TileRB().x - 1;
@@ -888,41 +876,14 @@ namespace Gungeon
         int yEnd = elem->TileLT().y - 1;
         int xSize = elem->TileWidth() - 3;
         int ySize = elem->TileHeight() - 3;
-        vector<int> height(xSize + 1);
-        bool flagLoopBreak = false;
 
-        for (int y = 0; y < ySize && false == flagLoopBreak; y++)
-        {
-            stack<int> st;
-            for (int x = 0; x <= xSize; x++)
-            {
-                if (x < xSize)
-                {
-                    Int2 on = Int2(xStart + x, yStart + y);
-                    if (MAPINFO.tilemap->GetTileState(on) == TileState::floor)
-                        height[x]++;
-                    else 
-                        height[x] = 0;
-                }
+        propSour = Vec2i(0, 0);
+        propDest = Vec2i(0, 0);
+        xMax = 0;
+        yMax = 0;
 
-                while (!st.empty() && height[x] < height[st.top()])
-                {
-                    int h = height[st.top()];
-                    st.pop();
-                    int w = (st.empty()) ? x : x - 1 - st.top();
-
-                    if (areaMax <= w * h)
-                    {
-                        areaMax = w * h;
-                        xMax = w;
-                        yMax = h;
-                        propSour = Int2(xStart + x - w, yStart + y - h + 1);
-                        propDest = Int2(xStart + x - 1, yStart + y);
-                    }
-                }
-                st.push(x);
-            }
-        }
+        HISTOGRAM.FindMaximalRectangleForStack(xStart, xEnd, yStart, yEnd, xSize, ySize,
+            xMax, yMax, propSour, propDest);
     }
 
 
@@ -1065,7 +1026,7 @@ namespace Gungeon
                 {
                     float x, y;
                     fin >> temp >> x >> y;
-                    room->doorTileIdxs.emplace_back(Int2(static_cast<int>(x), static_cast<int>(y)));
+                    room->doorTileIdxs.emplace_back(Vec2i(static_cast<int>(x), static_cast<int>(y)));
                 }
 
                 selectedRooms.emplace_back(room);

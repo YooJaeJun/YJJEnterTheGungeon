@@ -15,8 +15,8 @@ public:
     bool    isBad = false;
 
 private:
-    ObNode v;
-    ObNode w;
+    Vec2f v;
+    Vec2f w;
 
 public:
     ObLine();
@@ -24,16 +24,16 @@ public:
     ObLine(ObLine&&) = default;
     ObLine(const Vector2& v1, const Vector2& v2);
     ObLine(const int index, const Vector2& v1, const Vector2& v2);
-    ObLine(const ObNode& v1, const ObNode& v2);
-    ObLine(const int index, const ObNode& v1, const ObNode& v2);
+    ObLine(const Vec2f& v1, const Vec2f& v2);
+    ObLine(const int index, const Vec2f& v1, const Vec2f& v2);
     void Init();
     void Init(const Vector2& v1, const Vector2& v2);
-    void SetV(const ObNode& other);
-    void SetW(const ObNode& other);
+    void SetV(const Vec2f& other);
+    void SetW(const Vec2f& other);
     void SetVIdx(const int other);
     void SetWIdx(const int other);
-    const ObNode& V() const { return v; }
-    const ObNode& W() const { return w; }
+    const Vec2f& V() const { return v; }
+    const Vec2f& W() const { return w; }
 
     bool operator<(const ObLine& other) const; // visited 판별용
     bool operator>(const ObLine& other) const;  // priority_queue 정렬용
@@ -42,7 +42,7 @@ public:
     bool operator==(const ObLine & other) const;
 
 public:
-    bool almostEqualLine(const ObLine& other);
+    bool NearlyEqualLine(const ObLine& other);
 };
 
 

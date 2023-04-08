@@ -31,14 +31,14 @@ namespace Gungeon
 
 		idle = make_shared<ObImage>(L"EnterTheGungeon/enemy_2/Idle.png");
 		idle->isVisible = false;
-		idle->maxFrame = Int2(2, 8);
+		idle->maxFrame = Vec2i(2, 8);
 		idle->scale = Vector2(24.0f / 2.0f, 240.0f / 8.0f) * scaleFactor;
 		idle->ChangeAnim(AnimState::loop, 0.2f);
 		idle->SetParentRT(*col);
 
 		walk = make_shared<ObImage>(L"EnterTheGungeon/enemy_2/Walk.png");
 		walk->isVisible = false;
-		walk->maxFrame = Int2(6, 8);
+		walk->maxFrame = Vec2i(6, 8);
 		walk->scale = Vector2(108.0f / 6.0f, 240.0f / 8.0f) * scaleFactor;
 		walk->ChangeAnim(AnimState::loop, 0.1f);
 		walk->SetParentRT(*col);

@@ -5,9 +5,6 @@
     <ClInclude Include="Window.h">
       <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="Types.h">
-      <Filter>System</Filter>
-    </ClInclude>
     <ClInclude Include="Direct3D11.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -77,9 +74,6 @@
     <ClInclude Include="ObTileMap.h">
       <Filter>GameObject</Filter>
     </ClInclude>
-    <ClInclude Include="ObNode.h">
-      <Filter>GameObject</Filter>
-    </ClInclude>
     <ClInclude Include="DWrite.h">
       <Filter>System</Filter>
     </ClInclude>
@@ -100,6 +94,15 @@
     </ClInclude>
     <ClInclude Include="Tile.h">
       <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Histogram.h">
+      <Filter>Algorithm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -189,9 +192,6 @@
     <ClCompile Include="ObTileMap.cpp">
       <Filter>GameObject</Filter>
     </ClCompile>
-    <ClCompile Include="ObNode.cpp">
-      <Filter>GameObject</Filter>
-    </ClCompile>
     <ClCompile Include="DWrite.cpp">
       <Filter>System</Filter>
     </ClCompile>
@@ -209,6 +209,9 @@
     </ClCompile>
     <ClCompile Include="Tile.cpp">
       <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="Histogram.cpp">
+      <Filter>Algorithm</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

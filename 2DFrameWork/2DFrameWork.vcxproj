@@ -170,6 +170,7 @@
     <ClInclude Include="framework.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Gui.h" />
+    <ClInclude Include="Histogram.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="MapInfo.h" />
@@ -179,7 +180,6 @@
     <ClInclude Include="ObImage.h" />
     <ClInclude Include="ObIso.h" />
     <ClInclude Include="ObLine.h" />
-    <ClInclude Include="ObNode.h" />
     <ClInclude Include="ObRect.h" />
     <ClInclude Include="ObStar.h" />
     <ClInclude Include="ObStarPointed.h" />
@@ -191,11 +191,12 @@
     <ClInclude Include="Sound.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
-    <ClInclude Include="Types.h" />
     <ClInclude Include="Utility.h" />
     <ClInclude Include="VertexType.h" />
     <ClInclude Include="Window.h" />
     <ClInclude Include="Tile.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="Application.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AStar.cpp" />
@@ -205,6 +206,7 @@
     <ClCompile Include="DWrite.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Gui.cpp" />
+    <ClCompile Include="Histogram.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="MapInfo.cpp" />
@@ -213,7 +215,6 @@
     <ClCompile Include="ObImage.cpp" />
     <ClCompile Include="ObIso.cpp" />
     <ClCompile Include="ObLine.cpp" />
-    <ClCompile Include="ObNode.cpp" />
     <ClCompile Include="ObRect.cpp" />
     <ClCompile Include="ObStar.cpp" />
     <ClCompile Include="ObStarPointed.cpp" />

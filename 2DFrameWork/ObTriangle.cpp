@@ -117,7 +117,7 @@ ObTriangle::ObTriangle(const Vector2& v1, const Vector2& v2, const Vector2& v3)
     : a(v1), b(v2), c(v3), isBad(false)
 {}
 
-ObTriangle::ObTriangle(const ObNode& n1, const ObNode& n2, const ObNode& n3)
+ObTriangle::ObTriangle(const Vec2f& n1, const Vec2f& n2, const Vec2f& n3)
     : a(Vector2(n1.x, n1.y)), b(Vector2(n2.x, n2.y)), c(Vector2(n3.x, n3.y)), isBad(false)
 {
 }
@@ -129,14 +129,14 @@ bool ObTriangle::operator==(const ObTriangle& t) const
         (this->c == t.a || this->c == t.b || this->c == t.c);
 }
 
-bool ObTriangle::ContainsVertex(const ObNode& v)
+bool ObTriangle::ContainsVertex(const Vec2f& v)
 {
-    return a.almostEqualNode(v) ||
-        b.almostEqualNode(v) ||
-        c.almostEqualNode(v);
+    return a.NearlyEqualVector2Member(v) ||
+        b.NearlyEqualVector2Member(v) ||
+        c.NearlyEqualVector2Member(v);
 }
 
-bool ObTriangle::CircumCircleContains(const ObNode& n) const
+bool ObTriangle::CircumCircleContains(const Vec2f& n) const
 {
     Vector2 va = Vector2(a.x, a.y);
     Vector2 vb = Vector2(b.x, b.y);
@@ -164,7 +164,7 @@ bool ObTriangle::CircumCircleContains(const ObNode& n) const
 
 bool ObTriangle::almostEqualTriangle(const ObTriangle& other)
 {
-    return	(a.almostEqualNode(other.a) || a.almostEqualNode(other.b) || a.almostEqualNode(other.c)) &&
-        (b.almostEqualNode(other.a) || b.almostEqualNode(other.b) || b.almostEqualNode(other.c)) &&
-        (c.almostEqualNode(other.a) || c.almostEqualNode(other.b) || c.almostEqualNode(other.c));
+    return	(a.NearlyEqualVector2Member(other.a) || a.NearlyEqualVector2Member(other.b) || a.NearlyEqualVector2Member(other.c)) &&
+        (b.NearlyEqualVector2Member(other.a) || b.NearlyEqualVector2Member(other.b) || b.NearlyEqualVector2Member(other.c)) &&
+        (c.NearlyEqualVector2Member(other.a) || c.NearlyEqualVector2Member(other.b) || c.NearlyEqualVector2Member(other.c));
 }

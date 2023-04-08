@@ -62,7 +62,7 @@ void ObLine::Render()
 
 
 ObLine::ObLine()
-    : v(ObNode(0.0f, 0.0f)), w(ObNode(0.0f, 0.0f))
+    : v(Vec2f(0.0f, 0.0f)), w(Vec2f(0.0f, 0.0f))
 {
     pivot = OFFSET_L;
 }
@@ -79,13 +79,13 @@ ObLine::ObLine(const int index, const Vector2& v1, const Vector2& v2)
     Init(v1, v2);
 }
 
-ObLine::ObLine(const ObNode& v1, const ObNode& v2)
+ObLine::ObLine(const Vec2f& v1, const Vec2f& v2)
     : index(0), v(v1), w(v2)
 {
     Init();
 }
 
-ObLine::ObLine(const int index, const ObNode& v1, const ObNode& v2)
+ObLine::ObLine(const int index, const Vec2f& v1, const Vec2f& v2)
     : index(index), v(v1), w(v2)
 {
     Init();
@@ -106,13 +106,13 @@ void ObLine::Init(const Vector2& v1, const Vector2& v2)
     scale.x = v1.Distance(v1, v2);
 }
 
-void ObLine::SetV(const ObNode& other)
+void ObLine::SetV(const Vec2f& other)
 {
     v = other;
     Init();
 }
 
-void ObLine::SetW(const ObNode& other)
+void ObLine::SetW(const Vec2f& other)
 {
     w = other;
     Init();
@@ -130,8 +130,8 @@ void ObLine::SetWIdx(const int other)
 
 bool ObLine::operator<(const ObLine& other) const
 {
-    return ObNode(v) < ObNode(other.v) ||
-        (!(ObNode(other.v) < ObNode(v)) && ObNode(w) < ObNode(other.w));
+    return Vec2f(v) < Vec2f(other.v) ||
+        (!(Vec2f(other.v) < Vec2f(v)) && Vec2f(w) < Vec2f(other.w));
     // return (v.x < other.v.x || (!(other.v.x < v.x) && v.y < other.v.y)) ||
     //     (w.x < other.w.x || (!(other.w.x < w.x) && w.y < other.w.y));
 }
@@ -162,8 +162,8 @@ bool ObLine::operator==(const ObLine& ohter) const
         (v == ohter.w && w == ohter.v);
 }
 
-bool ObLine::almostEqualLine(const ObLine& other)
+bool ObLine::NearlyEqualLine(const ObLine& other)
 {
-    return	(v.almostEqualNode(other.v) && w.almostEqualNode(other.w)) ||
-        (v.almostEqualNode(other.w) && w.almostEqualNode(other.v));
+    return	(v.NearlyEqualVector2Member(other.v) && w.NearlyEqualVector2Member(other.w)) ||
+        (v.NearlyEqualVector2Member(other.w) && w.NearlyEqualVector2Member(other.v));
 }

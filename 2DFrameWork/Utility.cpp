@@ -30,9 +30,12 @@ int Utility::Ccw(const Vector2& v1, const Vector2& v2, const Vector2& v3)
 {
     float res = v1.x * v2.y + v2.x * v3.y + v3.x * v1.y
         - (v1.y * v2.x + v2.y * v3.x + v3.y * v1.x);
-    if (res > 0) return 1;
-    if (res < 0) return -1;
-    else return 0;
+    if (res > 0) 
+        return 1;
+    else if (res < 0) 
+        return -1;
+    else 
+        return 0;
 }
 
 ColPos Utility::IntersectLineLine(const LINE& line1, const LINE& line2)

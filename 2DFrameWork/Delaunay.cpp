@@ -1,6 +1,6 @@
 #include "framework.h"
 
-const std::vector<ObTriangle>& Delaunay::Triangulate(std::vector<ObNode>& nodes)
+const std::vector<ObTriangle>& Delaunay::Triangulate(std::vector<Vec2f>& nodes)
 {
 	// Determinate the super triangle
 	float minX = nodes[0].x;
@@ -24,9 +24,9 @@ const std::vector<ObTriangle>& Delaunay::Triangulate(std::vector<ObNode>& nodes)
 	const float midX = (minX + maxX) / 2;
 	const float midY = (minY + maxY) / 2;
 
-	const ObNode p1(midX - 20 * deltaMax, midY - deltaMax);
-	const ObNode p2(midX, midY + 20 * deltaMax);
-	const ObNode p3(midX + 20 * deltaMax, midY - deltaMax);
+	const Vec2f p1(midX - 20 * deltaMax, midY - deltaMax);
+	const Vec2f p2(midX, midY + 20 * deltaMax);
+	const Vec2f p3(midX + 20 * deltaMax, midY - deltaMax);
 
 	// Create a list of triangles, and add the supertriangle in it
 	triangles.push_back(ObTriangle(p1, p2, p3));
@@ -54,7 +54,7 @@ const std::vector<ObTriangle>& Delaunay::Triangulate(std::vector<ObNode>& nodes)
 		{
 			for (auto e2 = e1 + 1; e2 != end(polygon); e2++)
 			{
-				if (e1->almostEqualLine(*e2))
+				if (e1->NearlyEqualLine(*e2))
 				{
 					e1->isBad = true;
 					e2->isBad = true;
@@ -92,7 +92,7 @@ const std::vector<ObTriangle>& Delaunay::Triangulate(std::vector<ObNode>& nodes)
 	return triangles;
 }
 
-bool Delaunay::ValidChecker(const ObNode& n1, const ObNode& n2)
+bool Delaunay::ValidChecker(const Vec2f& n1, const Vec2f& n2)
 {
 	return find(nodesLinked[n1].begin(), nodesLinked[n1].end(), n2) == nodesLinked[n1].end();
 }

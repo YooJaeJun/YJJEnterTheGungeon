@@ -19,7 +19,7 @@ namespace Gungeon
         MAPINFO.tilemap->scale = Vector2(100.0f, 100.0f);
         MAPINFO.tilemap->SetWorldPos(Vector2(-app.GetHalfWidth() - 1000.0f, -app.GetHalfHeight() - 1000.0f));
         MAPINFO.imgIdx = 1;
-        MAPINFO.tileSize = Int2(30, 30);
+        MAPINFO.tileSize = Vec2i(30, 30);
         MAPINFO.tilemap->ResizeTile(MAPINFO.tileSize);
         MAPINFO.tileColor = Color(0.5f, 0.5f, 0.5f, 0.5f);
         MAPINFO.tileState = 0;
@@ -60,13 +60,13 @@ namespace Gungeon
 
         Vector2 start;
         Vector2 end;
-        Int2 sour;
-        Int2 dest;
+        Vec2i sour;
+        Vec2i dest;
 
-        auto SetTile2 = [&](Int2 on, int roomIdx)
+        auto SetTile2 = [&](Vec2i on, int roomIdx)
         {
             MAPINFO.tilemap->SetTile(on,
-                Int2(RANDOM.Int(floorImgMin.x, floorImgMax.x),
+                Vec2i(RANDOM.Int(floorImgMin.x, floorImgMax.x),
                     RANDOM.Int(floorImgMin.y, floorImgMax.y)),
                 MAPINFO.imgIdx,
                 (int)TileState::floor,
@@ -74,7 +74,7 @@ namespace Gungeon
                 roomIdx);
         };
 
-        auto SetWall2 = [&](Int2 on, int roomIdx, Int2 frameIdx)
+        auto SetWall2 = [&](Vec2i on, int roomIdx, Vec2i frameIdx)
         {
             MAPINFO.tilemap->SetTile(on,
                 frameIdx,
@@ -99,26 +99,26 @@ namespace Gungeon
 
             for (int y = sour.y + 1; y <= dest.y - 1; y++)
                 for (int x = sour.x + 1; x <= dest.x - 1; x++)
-                    SetTile2(Int2(x, y), roomIdx);
+                    SetTile2(Vec2i(x, y), roomIdx);
 
             // wall - top, bottom, left, right, edge
 
             for (int x = sour.x; x <= dest.x; x++)
             {
-                SetWall2(Int2(x, dest.y), roomIdx, wallImgDir[DirState::dirT]);
-                SetWall2(Int2(x, sour.y), roomIdx, wallImgDir[DirState::dirB]);
+                SetWall2(Vec2i(x, dest.y), roomIdx, wallImgDir[DirState::dirT]);
+                SetWall2(Vec2i(x, sour.y), roomIdx, wallImgDir[DirState::dirB]);
             }
 
             for (int y = sour.y; y <= dest.y; y++)
             {
-                SetWall2(Int2(sour.x, y), roomIdx, wallImgDir[DirState::dirL]);
-                SetWall2(Int2(dest.x, y), roomIdx, wallImgDir[DirState::dirR]);
+                SetWall2(Vec2i(sour.x, y), roomIdx, wallImgDir[DirState::dirL]);
+                SetWall2(Vec2i(dest.x, y), roomIdx, wallImgDir[DirState::dirR]);
             }
 
-            SetWall2(Int2(sour.x, sour.y), roomIdx, wallImgDir[DirState::dirLB]);
-            SetWall2(Int2(sour.x, dest.y), roomIdx, wallImgDir[DirState::dirLT]);
-            SetWall2(Int2(dest.x, sour.y), roomIdx, wallImgDir[DirState::dirRB]);
-            SetWall2(Int2(dest.x, dest.y), roomIdx, wallImgDir[DirState::dirRT]);
+            SetWall2(Vec2i(sour.x, sour.y), roomIdx, wallImgDir[DirState::dirLB]);
+            SetWall2(Vec2i(sour.x, dest.y), roomIdx, wallImgDir[DirState::dirLT]);
+            SetWall2(Vec2i(dest.x, sour.y), roomIdx, wallImgDir[DirState::dirRB]);
+            SetWall2(Vec2i(dest.x, dest.y), roomIdx, wallImgDir[DirState::dirRT]);
         };
 
         SetTile1(curRoom, 99);
@@ -294,7 +294,7 @@ namespace Gungeon
                     bulletElem->Hit(1);
                 }
 
-                Int2 on = bulletElem->On();
+                Vec2i on = bulletElem->On();
                 switch (boss->pattern)
                 {
                 case BossPattern::trail:

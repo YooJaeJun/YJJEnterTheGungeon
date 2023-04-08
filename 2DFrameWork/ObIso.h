@@ -9,8 +9,8 @@ public:
     ObIso();
     ~ObIso();
 
-    bool WorldPosToTileIdx(Vector2 WPos, Int2& TileIdx);
-    void ResizeTile(Int2 TileSize);
+    bool WorldPosToTileIdx(Vector2 WPos, Vec2i& TileIdx);
+    void ResizeTile(Vec2i TileSize);
     void CreateTileCost();
 };
 

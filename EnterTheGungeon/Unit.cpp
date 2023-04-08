@@ -229,7 +229,7 @@ namespace Gungeon
 	{
 		if (TIMER.GetTick(timeFindPath, 1.0f))
 		{
-			Int2 sour, dest;
+			Vec2i sour, dest;
 			bool isFind = map->WorldPosToTileIdx(Pos(), sour);
 			isFind &= map->WorldPosToTileIdx(targetPos, dest);
 

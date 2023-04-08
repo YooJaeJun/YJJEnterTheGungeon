@@ -33,8 +33,8 @@ private:
 
 public:
     Vector4                     uv;
-    Int2                        maxFrame;
-    Int2                        frame;
+    Vec2i                       maxFrame;
+    Vec2i                       frame;
     bool                        reverseLR;
     wstring                     file;
 

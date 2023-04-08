@@ -57,34 +57,34 @@ namespace Gungeon
             elem->Render();
     }
 
-    Int2 Room::TileLB() const
+    Vec2i Room::TileLB() const
     {
         shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
-        Int2 on;
+        Vec2i on;
         MAPINFO.tilemap->WorldPosToTileIdx(r->lb(), on);
         return on;
     }
 
-    Int2 Room::TileLT() const
+    Vec2i Room::TileLT() const
     {
         shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
-        Int2 on;
+        Vec2i on;
         MAPINFO.tilemap->WorldPosToTileIdx(r->lt(), on);
         return on;
     }
 
-    Int2 Room::TileRB() const
+    Vec2i Room::TileRB() const
     {
         shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
-        Int2 on;
+        Vec2i on;
         MAPINFO.tilemap->WorldPosToTileIdx(r->rb(), on);
         return on;
     }
 
-    Int2 Room::TileRT() const
+    Vec2i Room::TileRT() const
     {
         shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
-        Int2 on;
+        Vec2i on;
         MAPINFO.tilemap->WorldPosToTileIdx(r->rt(), on);
         return on;
     }

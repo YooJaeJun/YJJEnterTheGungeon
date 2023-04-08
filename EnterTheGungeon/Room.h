@@ -21,10 +21,10 @@ namespace Gungeon
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 
-		Int2 TileLB() const;
-		Int2 TileLT() const;
-		Int2 TileRB() const;
-		Int2 TileRT() const;
+		Vec2i TileLB() const;
+		Vec2i TileLT() const;
+		Vec2i TileRB() const;
+		Vec2i TileRT() const;
 		int TileWidth() const;
 		int TileHeight() const;
 
@@ -35,6 +35,6 @@ namespace Gungeon
 		std::shared_ptr<ObCircle>		gateSpawner[9];
 		bool				cleared = false;
 		RoomType			roomType = RoomType::enemy;
-		std::vector<Int2>	doorTileIdxs;
+		std::vector<Vec2i>	doorTileIdxs;
 	};
 }

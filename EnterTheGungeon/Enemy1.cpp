@@ -31,7 +31,7 @@ namespace Gungeon
 
 		idle = make_shared<ObImage>(L"EnterTheGungeon/enemy_1/Idle.png");
 		idle->isVisible = false;
-		idle->maxFrame = Int2(2, 8);
+		idle->maxFrame = Vec2i(2, 8);
 		idle->scale = Vector2(28.0f / 2.0f, 192.0f / 8.0f) * scaleFactor;
 		idle->ChangeAnim(AnimState::loop, 0.2f);
 		idle->SetParentRT(*col);
@@ -39,7 +39,7 @@ namespace Gungeon
 		walk = make_shared<ObImage>(L"EnterTheGungeon/enemy_1/Walk.png");
 		walk->isVisible = false;
 		walk->maxFrame.x = 6;
-		walk->maxFrame = Int2(6, 8);
+		walk->maxFrame = Vec2i(6, 8);
 		walk->scale = Vector2(96.0f / 6.0f, 192.0f / 8.0f) * scaleFactor;
 		walk->scale.y = 24.0f * scaleFactor;
 		walk->ChangeAnim(AnimState::loop, 0.1f);

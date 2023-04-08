@@ -118,7 +118,8 @@ const int dy[9] = { -1,0,0,-1,-1,1,1,1,0 };
 
 
 //2DFramework Header
-#include "Types.h"
+#include "Application.h"
+#include "Scene.h"
 #include "Window.h"
 extern Application app;//Extern Global
 #include "Direct3D11.h"
@@ -138,7 +139,6 @@ extern Application app;//Extern Global
 #include "VertexType.h"
 #include "Shader.h"
 #include "GameObject.h"
-#include "ObNode.h"
 #include "Utility.h"
 #include "ObLine.h"
 #include "ObTriangle.h"
@@ -150,9 +150,11 @@ extern Application app;//Extern Global
 #include "ObTileMap.h"
 #include "ObIso.h"
 #include "MapInfo.h"
+
 #include "Delaunay.h"
 #include "MSTPrim.h"
 #include "AStar.h"
+#include "Histogram.h"
 
 //Singleton Macro
 #define	D3D			Direct3D11::GetInstance()
@@ -171,3 +173,4 @@ extern Application app;//Extern Global
 #define MAPINFO     MapInfo::GetInstance()
 #define MSTPRIM     MSTPrim::GetInstance()
 #define ASTAR       AStar::GetInstance()
+#define HISTOGRAM   Histogram::GetInstance()

@@ -7,7 +7,7 @@ ObIso::ObIso()
     file = "map1.txt";
     scale = Vector2(50.0f, 50.0f);
     tileImages[0] = make_shared<ObImage>(L"Iso.png");
-    tileImages[0]->maxFrame = Int2(8, 7);
+    tileImages[0]->maxFrame = Vec2i(8, 7);
     tileImages[1] = nullptr;
     tileImages[2] = nullptr;
     tileImages[3] = nullptr;
@@ -19,7 +19,7 @@ ObIso::~ObIso()
 {
 }
 
-bool ObIso::WorldPosToTileIdx(Vector2 WPos, Int2& TileIdx)
+bool ObIso::WorldPosToTileIdx(Vector2 WPos, Vec2i& TileIdx)
 {
     WPos -= GetWorldPos();
 
@@ -52,13 +52,12 @@ bool ObIso::WorldPosToTileIdx(Vector2 WPos, Int2& TileIdx)
 
     if ((temp.x < 0) or (temp.y < 0) or
         (TileIdx.x >= tileSize.x) or (TileIdx.y >= tileSize.y))
-    {
         return false;
-    }
+
     return true;
 }
 
-void ObIso::ResizeTile(Int2 newTileSize)
+void ObIso::ResizeTile(Vec2i newTileSize)
 {
     shared_ptr<VertexTile[]> newVertices{ new VertexTile[newTileSize.x * newTileSize.y * 6] };
 
@@ -99,10 +98,10 @@ void ObIso::ResizeTile(Int2 newTileSize)
     // Copy
     if (vertices)
     {
-        Int2 Min = Int2(min(newTileSize.x, tileSize.x), min(newTileSize.y, tileSize.y));
-        for (int i = 0; i < Min.y; i++)
+        Vec2i minV = Vec2i(min(newTileSize.x, tileSize.x), min(newTileSize.y, tileSize.y));
+        for (int i = 0; i < minV.y; i++)
         {
-            for (int j = 0; j < Min.x; j++)
+            for (int j = 0; j < minV.x; j++)
             {
                 int SrcIdx = tileSize.x * i + j;
                 int DestIdx = newTileSize.x * i + j;
@@ -151,7 +150,7 @@ void ObIso::CreateTileCost()
     {
         for (int j = 0; j < tileSize.y; j++)
         {
-            Tiles[i][j].idx = Int2(i, j);
+            Tiles[i][j].idx = Vec2i(i, j);
             Tiles[i][j].state = GetTileState(Tiles[i][j].idx);
             Tiles[i][j].Pos.x = -(j - i) * 0.5f * scale.x + GetWorldPos().x;
             Tiles[i][j].Pos.y = -(j + i) * TWODIVROOT3QUARTER * scale.y + GetWorldPos().y - half;

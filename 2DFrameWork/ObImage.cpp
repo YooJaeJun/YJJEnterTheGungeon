@@ -180,8 +180,8 @@ ObImage::ObImage(wstring file)
     animTime = 0.0f;
     animInterval = 0.0f;
     animXAxis = true;
-    maxFrame = Int2(1, 1);
-    frame = Int2(0, 0);
+    maxFrame = Vec2i(1, 1);
+    frame = Vec2i(0, 0);
     reverseLR = false;
 }
 

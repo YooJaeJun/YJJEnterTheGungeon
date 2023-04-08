@@ -141,14 +141,14 @@ namespace Gungeon
 
         idle = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Idle.png");
         idle->isVisible = true;
-        idle->maxFrame = Int2(2, 8);
+        idle->maxFrame = Vec2i(2, 8);
         idle->scale = Vector2(80.0f / 2.0f, 352.0f / 8.0f) * scaleFactor;
         idle->ChangeAnim(AnimState::loop, intervalAnim[(int)State::idle]);
         idle->SetParentRT(*col);
 
         walk = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Walk.png");
         walk->isVisible = false;
-        walk->maxFrame = Int2(2, 8);
+        walk->maxFrame = Vec2i(2, 8);
         walk->scale = Vector2(80.0f / 2.0f, 352.0f / 8.0f) * scaleFactor;
         walk->ChangeAnim(AnimState::loop, intervalAnim[(int)State::walk]);
         walk->SetParentRT(*col);
@@ -197,14 +197,14 @@ namespace Gungeon
 
         chairIdle = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Chair_Idle.png");
         chairIdle->isVisible = true;
-        chairIdle->maxFrame = Int2(2, 8);
+        chairIdle->maxFrame = Vec2i(2, 8);
         chairIdle->scale = Vector2(168.0f / 2.0f, 616.0f / 8.0f) * scaleFactor;
         chairIdle->ChangeAnim(AnimState::stop, 0.5f);
         chairIdle->SetParentRT(*col);
 
         chairWalk = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Chair_Walk.png");
         chairWalk->isVisible = false;
-        chairWalk->maxFrame = Int2(2, 8);
+        chairWalk->maxFrame = Vec2i(2, 8);
         chairWalk->scale = Vector2(168.0f / 2.0f, 616.0f / 8.0f) * scaleFactor;
         chairWalk->ChangeAnim(AnimState::loop, 0.5f);
         chairWalk->SetParentRT(*col);

@@ -5,13 +5,13 @@ public:
 	Delaunay() = default;
 	Delaunay(const Delaunay&) = delete;
 
-	const std::vector<ObTriangle>& Triangulate(std::vector<ObNode>& vertices);
-	bool							ValidChecker(const ObNode& n1, const ObNode& n2);
+	const std::vector<ObTriangle>& Triangulate(std::vector<Vec2f>& vertices);
+	bool							ValidChecker(const Vec2f& n1, const Vec2f& n2);
 
 public:
 	vector<ObTriangle>			triangles;
 	vector<ObLine>				edges;
-	map<ObNode, int>			nodesForIndex;
-	map<ObNode, vector<ObNode>>	nodesLinked;
+	map<Vec2f, int>			nodesForIndex;
+	map<Vec2f, vector<Vec2f>>	nodesLinked;
 };
 

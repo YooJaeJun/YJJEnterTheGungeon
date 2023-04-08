@@ -58,21 +58,21 @@ namespace Gungeon
 		float scaleFactor = 3.0f;
 
 		idle = make_shared<ObImage>(L"EnterTheGungeon/player_1/Idle.png");
-		idle->maxFrame = Int2(4, 8);
+		idle->maxFrame = Vec2i(4, 8);
 		idle->scale = Vector2(72.0 / 4.0f, 160.0f / 8.0f) * scaleFactor;
 		idle->ChangeAnim(AnimState::loop, intervalAnim[(int)State::idle]);
 		idle->SetParentRT(*col);
 
 		walk = make_shared<ObImage>(L"EnterTheGungeon/player_1/Walk.png");
 		walk->isVisible = false;
-		walk->maxFrame = Int2(6, 8);
+		walk->maxFrame = Vec2i(6, 8);
 		walk->scale = Vector2(102.0f / 6.0f, 192.0f / 8.0f) * scaleFactor;
 		walk->ChangeAnim(AnimState::loop, intervalAnim[(int)State::walk]);
 		walk->SetParentRT(*col);
 
 		roll = make_shared<ObImage>(L"EnterTheGungeon/player_1/Roll.png");
 		roll->isVisible = false;
-		roll->maxFrame = Int2(9, 8);
+		roll->maxFrame = Vec2i(9, 8);
 		roll->scale = Vector2(180.0f / 9.0f, 192.0f / 8.0f) * scaleFactor;
 		roll->SetParentRT(*col);
 
@@ -525,13 +525,13 @@ namespace Gungeon
 				{
 					int nx = On().x + dx[j] * i;
 					int ny = On().y + dy[j] * i;
-					TileState nState = MAPINFO.tilemap->GetTileState(Int2(nx, ny));
+					TileState nState = MAPINFO.tilemap->GetTileState(Vec2i(nx, ny));
 					switch (nState)
 					{
 					case TileState::floor:
 					case TileState::prop:
 					case TileState::spawner:
-						Vector2 wpos = MAPINFO.tilemap->TileIdxToWorldPos(Int2(nx, ny));
+						Vector2 wpos = MAPINFO.tilemap->TileIdxToWorldPos(Vec2i(nx, ny));
 						wpos.x += MAPINFO.tilemap->scale.x / 2.0f;
 						wpos.y += MAPINFO.tilemap->scale.x / 2.0f;
 						SetPos(wpos);

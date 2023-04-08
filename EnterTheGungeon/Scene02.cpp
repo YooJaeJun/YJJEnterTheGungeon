@@ -215,7 +215,7 @@ namespace Gungeon
                 elem->dropItem->targetPos = player->Pos();
 
         // 다음 방 입장 판단
-        Int2 playerOn;
+        Vec2i playerOn;
         MAPINFO.tilemap->WorldPosToTileIdx(player->Pos(), playerOn);
         TileState tileState = MAPINFO.tilemap->GetTileState(playerOn);
 

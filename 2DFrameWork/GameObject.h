@@ -19,6 +19,7 @@ struct StaticVertexCount
 };
 
 class ObLine;
+
 enum class Space
 {
 	world,
