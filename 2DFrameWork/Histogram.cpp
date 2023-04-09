@@ -5,11 +5,10 @@ void Histogram::FindMaximalRectangleForStack(const int xStart, const int xEnd, c
     OUT int& xMax, OUT int& yMax, OUT Vec2i& propSour, OUT Vec2i& propDest)
 {
     vector<int> height(xSize + 1);
-    bool flagLoopBreak = false;
     int areaMax = 0;
 
     // 히스토그램에서 가장 큰 직사각형 Stack 방법
-    for (int y = 0; y < ySize && false == flagLoopBreak; y++)
+    for (int y = 0; y < ySize; y++)
     {
         stack<int> st;
         for (int x = 0; x <= xSize; x++)

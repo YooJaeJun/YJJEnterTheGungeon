@@ -61,6 +61,22 @@ void Timer::Chronometry(UINT lock)
     deltaScaleTime = deltaTime * app.deltaScale;
 }
 
+void Timer::CheckStartTimer()
+{
+    startTimer = currentTime;
+}
+
+float Timer::CheckEndTimer()
+{
+    std::chrono::duration<double> diff = chrono::steady_clock::now() - startTimer;
+    return (float)diff.count();
+}
+
+void Timer::DebugPrintTimer(const string& str)
+{
+    printf("%15s %15f \n", str.c_str(), TIMER.CheckEndTimer());
+}
+
 void Timer::Update()
 {
     ImGui::Text("FPS : %d", GetFramePerSecond());

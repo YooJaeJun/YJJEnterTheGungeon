@@ -144,7 +144,7 @@ namespace Gungeon
             flagCleared = false;
 
             boss->targetPos = player->Pos();
-            boss->firePosTargeting->rotation2 = Utility::DirToRadian(player->Pos() - boss->firePosTargeting->GetWorldPos());
+            boss->firePosTargeting->rotationRelative = Utility::DirToRadian(player->Pos() - boss->firePosTargeting->GetWorldPos());
 
             switch (boss->state)
             {

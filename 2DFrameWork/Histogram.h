@@ -11,7 +11,7 @@ public:
 		static std::unique_ptr<Histogram> inst;
 		if (!inst)
 			inst = std::unique_ptr<Histogram>(new Histogram());
-		return *inst; 
+		return *inst;
 	}
 
 public:

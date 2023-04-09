@@ -67,7 +67,7 @@ public:
 	Vector2		pivot;
 	Vector2		scale;
 	float		rotation;
-	float		rotation2;
+	float		rotationRelative;
 	Matrix		RX;
 	Matrix		RY;
 	float		rotationX;

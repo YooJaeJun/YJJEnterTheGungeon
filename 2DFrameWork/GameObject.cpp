@@ -59,7 +59,7 @@ GameObject::GameObject()
 	rotation = 0;
 	rotationX = 0;
 	rotationY = 0;
-	rotation2 = 0;
+	rotationRelative = 0;
 	color = Color(0.5, 0.5, 0.5, 0.5);
 	isAxis = false;
 	pivot = OFFSET_N;
@@ -75,7 +75,7 @@ void GameObject::Update()
 	// RX = Matrix::CreateRotationX(rotationX);
 	// RY = Matrix::CreateRotationY(rotationY);
 	T = Matrix::CreateTranslation(position.x, position.y, 0.0f);
-	R2 = Matrix::CreateRotationZ(rotation2);
+	R2 = Matrix::CreateRotationZ(rotationRelative);
 
 	// 최적화 이슈 때문에 빼놓고 reverseLR로 대체
 	// RT = R * RX * RY * T * R2;

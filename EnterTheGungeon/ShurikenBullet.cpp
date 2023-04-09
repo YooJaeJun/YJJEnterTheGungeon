@@ -46,7 +46,7 @@ namespace Gungeon
             {
             case Gungeon::ShurikenBulletState::rotate:
                 col->rotation += RANDOM.Float(0.008f, 0.02f);
-                col->rotation2 += RANDOM.Float(0.008f, 0.02f);
+                col->rotationRelative += RANDOM.Float(0.008f, 0.02f);
                 if (TIMER.GetTick(timeTargeting, intervalTargeting))
                     ShurikenBulletState = ShurikenBulletState::targeting;
                 break;
@@ -56,7 +56,7 @@ namespace Gungeon
                 {
                     wposBeforeRot = col->GetWorldPos();
                     col->rotation = 0.0f;
-                    col->rotation2 = 0.0f;
+                    col->rotationRelative = 0.0f;
                     col->Update();
                     col->SetWorldPos(wposBeforeRot);
                     ShurikenBulletState = ShurikenBulletState::attack;

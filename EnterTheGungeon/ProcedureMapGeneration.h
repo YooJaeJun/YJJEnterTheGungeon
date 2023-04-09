@@ -22,6 +22,26 @@ namespace Gungeon
 		finish,
 		max
 	};
+	const string debugStateText[]
+	{
+		"none",
+		"spray",
+		"spread",
+		"select",
+		"triangulate",
+		"span",
+		"loop",
+		"clean",
+		"roomTile",
+		"passageTile",
+		"passagePitTile",
+		"prop",
+		"spawner",
+		"propPit",
+		"propWall",
+		"finish",
+		"max"
+	};
 
 	// B, L, R, LB, RB, T, LT, RT
 	const Vec2i wallImgDir[8] = { {1, 3}, {0, 1}, {3, 1}, {0, 3}, {3, 3}, {1, 0}, {0, 0}, {3, 0} };

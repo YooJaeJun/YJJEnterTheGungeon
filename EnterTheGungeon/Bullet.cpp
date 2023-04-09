@@ -15,7 +15,7 @@ namespace Gungeon
         moveDir = Vector2(0.0f, 0.0f);
         scalar = 120.0f;
         col->rotation = 0.0f;
-        col->rotation2 = 0.0f;
+        col->rotationRelative = 0.0f;
         SetPos(DEFAULTSPAWN);
         timeLife = 0.0f;
         intervalLife = 10.0f;

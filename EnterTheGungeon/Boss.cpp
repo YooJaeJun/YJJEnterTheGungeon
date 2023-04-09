@@ -17,11 +17,12 @@ namespace Gungeon
 
     void Boss::InitVar()
     {
+        flagRandomPattern = true;   // ·£´ý ÆÐÅÏ ¿©ºÎ Á¶Àý (Å×½ºÆ®¿ë)
         pattern = BossPattern::none;
 
         name = L"ÃÑÅº Å·";
         desc = L"³³À¸·Î µÈ ¿ÕÁÂ¿¡ ¾É¾Æ";
-        curHp = maxHp = 150;
+        curHp = maxHp = 200;
         scalar = 120.0f;
 
         intervalAnim[(int)State::idle] = 0.5f;
@@ -109,8 +110,6 @@ namespace Gungeon
         spawnPlayerByForce->idle->isVisible = false;
         spawnPlayerByForce->idle->maxFrame.x = 4;
         spawnPlayerByForce->idle->scale = Vector2(188.0f / 4.0f, 44.0f) * scaleFactor;
-
-        flagRandomPattern = true;
     }
 
     void Boss::InitSelf()
@@ -661,7 +660,6 @@ namespace Gungeon
             }
         }
 
-
         hit->reverseLR = (pushedDir.x < 0.0f) ? true : false;
     }
 
@@ -907,6 +905,7 @@ namespace Gungeon
     void Boss::InitString()
     {
         stringBullet.inputString = candidateString[RANDOM.Int(0, candidateStringCount - 1)];
+
         stringBullet.SetStringBullet();
         bullet.resize(stringBullet.inputString.size() * 25);
         bulletSpawnPos = firePosTargeting->GetWorldPos();
@@ -1156,7 +1155,7 @@ namespace Gungeon
                 size = stringBullet.inputString.size();
             }
 
-            angleFactor = firePosTargeting->rotation2 - stringBullet.midForTargetFactor;
+            angleFactor = firePosTargeting->rotationRelative - stringBullet.midForTargetFactor;
 
             int idx = 0;
             for (int r = 0; r < 5; r++)
@@ -1199,7 +1198,7 @@ namespace Gungeon
 
             elem->col->SetLocalPos(Vector2(80.0f + idx * 2.0f, 80.0f + idx * 2.0f));
             elem->col->rotation += idx * 10.0f * ToRadian * DELTA;
-            elem->col->rotation2 += idx * 4.0f * ToRadian * DELTA;
+            elem->col->rotationRelative += idx * 4.0f * ToRadian * DELTA;
 
             idx++;
         }
