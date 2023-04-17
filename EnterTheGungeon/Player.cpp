@@ -606,6 +606,8 @@ namespace Gungeon
 
 					SOUND.Play("Reload");
 				}
+				else
+					EquipWeapon(weapons[0]);
 			}
 
 			if ((INPUT.KeyPress(VK_LBUTTON) || INPUT.KeyDown(VK_LBUTTON)))

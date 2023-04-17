@@ -247,6 +247,8 @@ namespace Gungeon
                         int idx = 0;
                         for (auto& on : curRoom->doorTileIdxs)
                         {
+                            if (idx >= door.size())
+                                break;
                             MAPINFO.tilemap->SetTileState(on, TileState::wall);
                             door[idx]->Spawn(MAPINFO.tilemap->TileIdxToWorldPos(on), MAPINFO.tilemap->GetTileDir(on));
                             idx++;
