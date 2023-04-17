@@ -4,6 +4,7 @@ void MSTPrim::FindPath(Delaunay& triangulation, const std::vector<ObLine>& lines
     OUT std::vector<ObLine>& linesMST)
 {
     edgePq.push(linesTriangulated[0]);
+    visited.clear();
 
     while (false == edgePq.empty())
     {

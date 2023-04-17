@@ -38,7 +38,10 @@ namespace Gungeon
                 state = (MapGenState)((int)finalState + 1);
             ImGui::SameLine();
             if (ImGui::Button("Auto"))
+            {
+                Init();
                 autoProcess = true;
+            }
         }
 
         switch (state)
