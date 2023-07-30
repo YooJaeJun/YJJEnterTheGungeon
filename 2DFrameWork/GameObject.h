@@ -41,12 +41,12 @@ class GameObject
 private:
 	static Microsoft::WRL::ComPtr<ID3D11Buffer>		WVPBuffer;
 	static Microsoft::WRL::ComPtr<ID3D11Buffer>		colorBuffer;
-	static unique_ptr<ObLine>	axisObject;
+	static std::unique_ptr<ObLine>	axisObject;
 
 protected:
-	static unique_ptr<Shader>	basicShader;
-	static unique_ptr<Shader>	imageShader;
-	static unique_ptr<Shader>	tileMapShader;
+	static std::unique_ptr<Shader>	basicShader;
+	static std::unique_ptr<Shader>	imageShader;
+	static std::unique_ptr<Shader>	tileMapShader;
 
 	//static member function
 public:
