@@ -1,5 +1,7 @@
 #pragma once
-class ObCircle : public GameObject, public StaticVertexCount<ObCircle>
+class ObCircle :
+	public GameObject,
+	public StaticVertexCount<ObCircle>
 {
 private:
     static Microsoft::WRL::ComPtr<ID3D11Buffer> fillVertexBuffer;

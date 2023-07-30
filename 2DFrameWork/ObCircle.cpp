@@ -11,7 +11,7 @@ void ObCircle::CreateStaticMember()
 
     shared_ptr<VertexPC[]> Vertex{ new VertexPC[StaticVertexCount::Trianglestrip()] };
 
-    size_t size = StaticVertexCount::Trianglestrip() / 3;
+    const size_t size = StaticVertexCount::Trianglestrip() / 3;
 
     for (size_t i = 0; i < size; i++)
     {
