@@ -6,23 +6,19 @@ namespace Gungeon
     {
     }
 
-    void UI::Update()
+    void UI::Update() const
     {
         if (img) 
             img->Update();
     }
 
-    void UI::LateUpdate()
-    {
-    }
-
-    void UI::Render()
+    void UI::Render() const
     {
         if (img) 
             img->Render();
     }
 
-    void UI::Spawn(const Vector2 factor)
+    void UI::Spawn(const Vector2 factor) const
     {
         switch (anchor)
         {
@@ -53,10 +49,12 @@ namespace Gungeon
         default:
             img->SetWorldPos(Vector2(factor.x, factor.y));
             break;
+        case dirNone: 
+            break;
         }
     }
 
-    bool UI::DownGauge()
+    bool UI::DownGauge() const
     {
         if (img->scale.x <= 0.0f)
         {

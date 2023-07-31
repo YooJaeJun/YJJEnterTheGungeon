@@ -4,18 +4,12 @@ namespace Gungeon
 {
 	Weapon2::Weapon2()
 	{
-		// 공통
-		float scaleFactor = 1.0f;
-		float effectScaleFactor = 1.0f;
-		float uiWeaponScaleFactor = 2.0f;
-		int uiBulletIdx = 0;
-
 		// 차이
 		type = WeaponType::shotgun;
 		intervalFire = 0.7f;
 		remainBulletCount = 150;
 
-		scaleFactor = 2.0f;
+		constexpr float scaleFactor = 2.0f;
 		col->scale = Vector2(84.0f / 2.0f, 23.0f) * scaleFactor;
 
 		idle = make_shared<ObImage>(L"EnterTheGungeon/Weapon/2/Weapon.png");
@@ -27,10 +21,11 @@ namespace Gungeon
 
 		firePos->SetLocalPos(Vector2(col->scale.x / 2.0f, 0.0f));
 
+		constexpr float effectScaleFactor = 1.0f;
 		fireEffect->idle = make_shared<ObImage>(L"EnterTheGungeon/Weapon/2/Effect_Fire.png");
 		fireEffect->idle->isVisible = false;
 		fireEffect->idle->maxFrame.x = 3;
-		fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * scaleFactor;
+		fireEffect->idle->scale = Vector2(45.0f / 3.0f, 11.0f) * effectScaleFactor;
 		fireEffect->idle->SetParentRT(*firePos);
 		fireEffect->intervalDie = 0.2f;
 
@@ -59,7 +54,7 @@ namespace Gungeon
 		bulletCount = 7;
 		uiBullet.resize(bulletCount);
 
-		uiBulletIdx = 0;
+		int uiBulletIdx = 0;
 		for (auto& elem : uiBullet)
 		{
 			elem = make_shared<UI>();
@@ -72,7 +67,7 @@ namespace Gungeon
 			uiBulletIdx++;
 		}
 
-		uiWeaponScaleFactor = 2.5f;
+		constexpr float uiWeaponScaleFactor = 2.5f;
 		uiWeapon->img = make_shared<ObImage>(L"EnterTheGungeon/Weapon/2/UI_Weapon.png");
 		uiWeapon->img->scale = Vector2(44.0f, 15.0f) * uiWeaponScaleFactor;
 		uiWeapon->img->pivot = OFFSET_RB;

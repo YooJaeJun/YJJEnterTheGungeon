@@ -4,7 +4,7 @@ namespace Gungeon
 {
 	Enemy::Enemy()
 	{
-		Init();
+		Enemy::Init();
 	}
 
 	void Enemy::Init()
@@ -15,9 +15,9 @@ namespace Gungeon
 
 	void Enemy::InitVar()
 	{
-		intervalAnim[(int)State::idle] = 0.2f;
-		intervalAnim[(int)State::walk] = 0.1f;
-		intervalAnim[(int)State::die] = 0.2f;
+		intervalAnim[static_cast<int>(State::idle)] = 0.2f;
+		intervalAnim[static_cast<int>(State::walk)] = 0.1f;
+		intervalAnim[static_cast<int>(State::die)] = 0.2f;
 		intervalHit = 0.2f;
 	}
 
@@ -45,7 +45,7 @@ namespace Gungeon
 
 	void Enemy::InitItem()
 	{
-		float scaleFactor = 0.5f;
+		constexpr float scaleFactor = 0.5f;
 		dropItem = make_shared<Item>();
 		dropItem->col = make_shared<ObCircle>();
 		dropItem->col->isVisible = false;
@@ -90,7 +90,7 @@ namespace Gungeon
 
 		if (weapon) 
 			weapon->Update();
-		for (auto& elem : bullet) 
+		for (const auto& elem : bullet) 
 			elem->Update();
 		dropItem->Update();
 	}
@@ -101,7 +101,7 @@ namespace Gungeon
 
 	void Enemy::Render()
 	{
-		for (auto& elem : bullet) 
+		for (const auto& elem : bullet) 
 			elem->Render();
 		Unit::Render();
 
@@ -166,7 +166,7 @@ namespace Gungeon
 
 		if (isHitAnim)
 		{
-			Color c = Color(RANDOM.Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM.Float(0.2f, 1.0f));
+			const Color c = Color(RANDOM.Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM.Float(0.2f, 1.0f));
 			idle->color = c;
 			walk->color = c;
 			hit->color = c;
@@ -181,11 +181,11 @@ namespace Gungeon
 			if (timeHitAnim > 0.63f)
 			{
 				way.clear();
-				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-				idle->color = c;
-				walk->color = c;
-				hit->color = c;
-				die->color = c;
+				constexpr Color color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+				idle->color = color;
+				walk->color = color;
+				hit->color = color;
+				die->color = color;
 
 				walk->isVisible = true;
 				hit->isVisible = false;
@@ -207,7 +207,7 @@ namespace Gungeon
 	{
 		Unit::StartDie();
 
-		die->ChangeAnim(AnimState::once, intervalAnim[(int)State::die]);
+		die->ChangeAnim(AnimState::once, intervalAnim[static_cast<int>(State::die)]);
 
 		way.clear();
 
@@ -238,7 +238,7 @@ namespace Gungeon
 		dropItem->state = State::die;
 	}
 
-	void Enemy::AttackAnimStart()
+	void Enemy::AttackAnimStart() const
 	{
 		idle->isVisible = false;
 		walk->isVisible = false;
@@ -246,14 +246,14 @@ namespace Gungeon
 		attack->ChangeAnim(AnimState::loop, 0.1f);
 	}
 
-	void Enemy::AttackAnimEnd()
+	void Enemy::AttackAnimEnd() const
 	{
 		attack->isVisible = false;
 		attackEnd->isVisible = true;
 		attackEnd->ChangeAnim(AnimState::once, 0.1f);
 	}
 
-	void Enemy::AttackToWalk()
+	void Enemy::AttackToWalk() const
 	{
 		attackEnd->isVisible = false;
 		walk->isVisible = true;
@@ -266,7 +266,7 @@ namespace Gungeon
 			weapon->col->isVisible ^= 1;
 		if (weapon) 
 			weapon->firePos->isVisible ^= 1;
-		for (auto& bulletElem : bullet)
+		for (const auto& bulletElem : bullet)
 			bulletElem->col->isVisible ^= 1;
 	}
 }

@@ -34,6 +34,7 @@ namespace Gungeon
         Obstacle::Update();
 
         int weaponIdx = 0;
+
         switch (treasureState)
         {
         case Gungeon::TreasureState::none:

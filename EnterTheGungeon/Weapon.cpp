@@ -91,14 +91,14 @@ namespace Gungeon
 			uiBulletCountInfinity->Spawn(uiBulletCountInfinityPos);
 
 		idx = 0;
-		for (auto& elem : uiBullet)
+		for (const auto& elem : uiBullet)
 		{
 			elem->Spawn(Vector2(-40.0f, 56.0f + idx * 12.0f));
 			idx++;
 		}
 	}
 
-	void Weapon::Equip()
+	void Weapon::Equip() const
 	{
 		col->SetLocalPos(localPosDefault);
 		col->pivot = pivotDefault;
@@ -109,18 +109,18 @@ namespace Gungeon
 			fireEffect->idle->pivot = pivotDefault;
 	}
 
-	void Weapon::SwapUvY()
+	void Weapon::SwapUvY() const
 	{
 		swap(idle->uv.y, idle->uv.w);
 	}
 
-	void Weapon::EquipRight()
+	void Weapon::EquipRight() const
 	{
 		SwapUvY();
 		Equip();
 	}
 
-	void Weapon::EquipLeft()
+	void Weapon::EquipLeft() const
 	{
 		SwapUvY();
 		col->SetLocalPosX(-col->GetLocalPos().x);

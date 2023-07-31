@@ -6,15 +6,15 @@ namespace Gungeon
 	{
 	public:
 		TrailBullet();
-		virtual void Init() override;
-		virtual void Update() override;
-		virtual void Render() override;
+		void Init() override;
+		void Update() override;
+		void Render() override;
 
 	private:
-		std::deque<std::shared_ptr<ObImage>>		trails;
-		float			timeTrail;
-		float			timeSpawnTrail;
-		float			trailDuration;
-		int				trailNum;
+		std::deque<std::shared_ptr<ObImage>>	trails;
+		float		timeTrail;
+		float		timeSpawnTrail;
+		float		trailDuration;
+		int			trailNum;
 	};
 }

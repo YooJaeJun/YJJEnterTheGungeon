@@ -2,14 +2,14 @@
 
 namespace Gungeon
 {
-	class Enemy2 : public Enemy
+	class Enemy2 final : public Enemy
 	{
 	public:
 		Enemy2();
-		virtual ~Enemy2() {}
+		~Enemy2() override = default;
 		virtual void Init() override;
-		void InitVar();
-		void InitSelf();
+		void InitVar() override;
+		void InitSelf() override;
 		void InitWeapon();
 		void InitBullet();
 		virtual void InitIntervalAttack() override;

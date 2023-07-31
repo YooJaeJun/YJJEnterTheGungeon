@@ -2,12 +2,12 @@
 
 namespace Gungeon
 {
-	class Weapon3 : public Weapon
+	class Weapon3 final : public Weapon
 	{
 	public:
 		Weapon3();
-		virtual void Update() override;
-		virtual void Render() override;
-		virtual void ResizeScreen() override;
+		void Update() override;
+		void Render() override;
+		void ResizeScreen() override;
 	};
 }

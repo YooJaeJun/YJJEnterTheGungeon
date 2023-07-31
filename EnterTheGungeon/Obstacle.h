@@ -6,9 +6,9 @@ namespace Gungeon
 	{
 	public:
 		Obstacle();
-		void Update();
-		void LateUpdate();
-		void Render();
+		void Update() override;
+		void LateUpdate() override;
+		void Render() override;
 
 	public:
 		std::shared_ptr<ObImage>	idle = nullptr;

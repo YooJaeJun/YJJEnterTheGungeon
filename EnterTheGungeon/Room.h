@@ -10,23 +10,23 @@ namespace Gungeon
 		boss,
 	};
 
-	const int enemySpawnPosMax = 4;
+	constexpr int enemySpawnPosMax = 4;
 
-	class Room : public Character
+	class Room final : public Character
 	{
 	public:
 		Room();
-		virtual void Init() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-		virtual void Render() override;
+		void Init() override;
+		void Update() override;
+		void LateUpdate() override;
+		void Render() override;
 
-		Vec2i TileLB() const;
-		Vec2i TileLT() const;
-		Vec2i TileRB() const;
-		Vec2i TileRT() const;
-		int TileWidth() const;
-		int TileHeight() const;
+		[[nodiscard]] Vec2i TileLB() const;
+		[[nodiscard]] Vec2i TileLT() const;
+		[[nodiscard]] Vec2i TileRB() const;
+		[[nodiscard]] Vec2i TileRT() const;
+		[[nodiscard]] int TileWidth() const;
+		[[nodiscard]] int TileHeight() const;
 
 	public:
 		bool				selected = false;
@@ -35,6 +35,6 @@ namespace Gungeon
 		std::shared_ptr<ObCircle>		gateSpawner[9];
 		bool				cleared = false;
 		RoomType			roomType = RoomType::enemy;
-		std::vector<Vec2i>	doorTileIdxs;
+		std::vector<Vec2i>	doorTileIdxs{};
 	};
 }

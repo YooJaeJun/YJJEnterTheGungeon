@@ -6,18 +6,18 @@ namespace Gungeon
 	{
 	public:
 		Enemy();
-		virtual ~Enemy() {}
+		~Enemy() override = default;
 		virtual void Init() override;
-		void InitVar();
-		void InitSelf();
+		virtual void InitVar();
+		virtual void InitSelf();
 		void InitItem();
 		virtual void InitIntervalAttack();
 		virtual void Update() override;
 		virtual void LateUpdate() override;
 		virtual void Render() override;
 
-		void Idle();
-		void Walk();
+		void Idle() override;
+		void Walk() override;
 		virtual void Attack() override;
 		virtual void Die() override;
 		virtual void Fire();
@@ -25,9 +25,9 @@ namespace Gungeon
 		void Hitting();
 		virtual void StartDie() override;
 		virtual void Spawn(const Vector2 wpos) override;
-		void AttackAnimStart();
-		void AttackAnimEnd();
-		void AttackToWalk();
+		void AttackAnimStart() const;
+		void AttackAnimEnd() const;
+		void AttackToWalk() const;
 		virtual void ColToggle() override;
 
 	public:

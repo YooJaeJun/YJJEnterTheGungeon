@@ -30,11 +30,11 @@ namespace Gungeon
         for (auto& elem : timeCinematic)
             elem = 0.0f;
 
-        intervalCinematic[(int)CinematicState::cinematicBox1] = 1.0f;
-        intervalCinematic[(int)CinematicState::cinematicBox2] = 1.0f;
-        intervalCinematic[(int)CinematicState::cutScene] = 3.0f;
-        intervalCinematic[(int)CinematicState::cinematicBox3] = 1.0f;
-        intervalCinematic[(int)CinematicState::cinematicBox4] = 1.0f;
+        intervalCinematic[static_cast<int>(CinematicState::cinematicBox1)] = 1.0f;
+        intervalCinematic[static_cast<int>(CinematicState::cinematicBox2)] = 1.0f;
+        intervalCinematic[static_cast<int>(CinematicState::cutScene)] = 3.0f;
+        intervalCinematic[static_cast<int>(CinematicState::cinematicBox3)] = 1.0f;
+        intervalCinematic[static_cast<int>(CinematicState::cinematicBox4)] = 1.0f;
     }
 
     void Cinematic::Update()
@@ -114,25 +114,28 @@ namespace Gungeon
 
         case Gungeon::CinematicState::clear:
             break;
+
+        default: 
+            break;
         }
 
-        for (auto& elem : box) 
+        for (const auto& elem : box) 
             elem->Update();
     }
 
     void Cinematic::Render()
     {
-        for (auto& elem : box) 
+        for (const auto& elem : box) 
             elem->Render();
     }
 
-    void Cinematic::ResizeScreen()
+    void Cinematic::ResizeScreen() const
     {
         box[0]->Spawn(Vector2(0.0f, 150.0f));
         box[1]->Spawn(Vector2(0.0f, 0.0f));
     }
 
-    void Cinematic::BoxUp(const bool isUp)
+    void Cinematic::BoxUp(const bool isUp) const
     {
         float factor = 75.0f;
         if (false == isUp) 

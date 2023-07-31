@@ -2,15 +2,15 @@
 
 namespace Gungeon
 {
-	const int weaponMax = 3;
-	const int dustMax = 2;
+	constexpr int weaponMax = 3;
+	constexpr int dustMax = 2;
 
 	class Player : public Unit
 	{
 	public:
 		Player();
-		virtual ~Player() {}
-		virtual void Init() override;
+		~Player() override = default;
+		void Init() override;
 		void InitVar();
 		void InitCol();
 		void InitAnim();
@@ -18,28 +18,28 @@ namespace Gungeon
 		void InitBullet();
 		void InitEffect();
 		void InitUI();
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-		virtual void Render() override;
-		virtual void ResizeScreen() override;
+		void Update() override;
+		void LateUpdate() override;
+		void Render() override;
+		void ResizeScreen() override;
 		void SetTargetAndCamera();
 		void Idle();
 		void Walk();
 		void Roll();
 		void Fall();
 		void Respawn();
-		virtual void Die() override;
+		void Die() override;
 		void Cinematic();
 		void Move();
 		void FireProcess();
 		void Fire();
 		void ShakeCam(float& time);
-		virtual void StartWalk() override;
-		virtual void StartIdle() override;
+		void StartWalk() override;
+		void StartIdle() override;
 		void StartRoll();
 		void StartFall();
 		void StartRespawn();
-		virtual void StartDie() override;
+		void StartDie() override;
 		void Reloading();
 		void Hitting();
 		void Dusting();
@@ -48,7 +48,7 @@ namespace Gungeon
 		void EquipWeapon(std::shared_ptr<Weapon> other);
 		void SetWeaponFrameToOrigin();
 		void UIOn(const bool on);
-		virtual void ColToggle() override;
+		void ColToggle() override;
 
 	public:
 		std::shared_ptr<ObImage>			roll = nullptr;

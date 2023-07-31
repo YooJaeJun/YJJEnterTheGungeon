@@ -18,6 +18,7 @@ namespace Gungeon
 	class Character
 	{
 	public:
+		virtual ~Character() = default;
 		Character();
 		virtual void Init();
 		virtual void Update();

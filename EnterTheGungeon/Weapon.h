@@ -18,13 +18,13 @@ namespace Gungeon
 		virtual void Render() override;
 		virtual void ResizeScreen() override;
 
-		void Equip();
-		void EquipRight();
-		void EquipLeft();
+		void Equip() const;
+		void EquipRight() const;
+		void EquipLeft() const;
 		void UIOn(const bool on);
 
 	private:
-		void SwapUvY();
+		void SwapUvY() const;
 
 	public:
 		WeaponType	type = WeaponType::pistol;
@@ -32,12 +32,12 @@ namespace Gungeon
 		std::shared_ptr<Effect>		fireEffect = nullptr;
 		std::shared_ptr<ObImage>	imgReloading = nullptr;
 		std::shared_ptr<UI>			uiBulletFrame = nullptr;
-		vector<std::shared_ptr<UI>>	uiBullet;
+		vector<std::shared_ptr<UI>>	uiBullet{};
 		std::shared_ptr<UI>			uiWeapon = nullptr;
 		int			bulletCount = 0;
 		std::shared_ptr<UI>			uiBulletCountInfinity = nullptr;
 		int			remainBulletCount = 0;
-		float		intervalFire;
+		float		intervalFire{};
 		Vector2		pivotDefault;
 		Vector2		localPosDefault;
 		Vector2		localFirePosDefault;

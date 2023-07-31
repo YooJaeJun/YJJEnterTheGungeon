@@ -7,7 +7,7 @@ namespace Gungeon
         col = make_shared<ObCircle>();
         col->isVisible = false;
         col->isFilled = false;
-        Init();
+        Bullet::Init();
     }
 
     void Bullet::Init()
@@ -77,7 +77,7 @@ namespace Gungeon
     void Bullet::Fire()
     {
         moveDir.Normalize();
-        Vector2 velocity = moveDir * scalar * DELTA;
+        const Vector2 velocity = moveDir * scalar * DELTA;
         col->MoveWorldPos(velocity);
     }
 

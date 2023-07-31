@@ -6,7 +6,7 @@ namespace Gungeon
     {
         Init();
 
-        float scaleFactor = 3.0f;
+        constexpr float scaleFactor = 3.0f;
         col->scale = Vector2(64.0f / 4.0f, 16.0f) * scaleFactor;
         col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         SetPos(DEFAULTSPAWN);
@@ -18,7 +18,7 @@ namespace Gungeon
         idle->ChangeAnim(AnimState::loop, 0.2f);
         idle->SetParentRT(*col);
 
-        float bombScaleFactor = 2.5f;
+        constexpr float bombScaleFactor = 2.5f;
         hitBomb = make_shared<Effect>();
         hitBomb->idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/HitBomb.png");
         hitBomb->idle->maxFrame.x = 4;
@@ -39,6 +39,7 @@ namespace Gungeon
     void ShurikenBullet::Update()
     {
         Bullet::Update();
+
         if (isFired)
         {
             Vector2 velocity;

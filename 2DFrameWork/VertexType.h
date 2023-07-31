@@ -7,7 +7,7 @@ struct VertexPC
 
     VertexPC() { position.z = 0.0f; }
 
-    VertexPC(Vector3 position, Color  color)
+    VertexPC(const Vector3& position, const Color& color)
         : position(position), color(color)
     {
         this->position.z = 0.0f;
@@ -23,7 +23,7 @@ struct VertexPT
 
     VertexPT() { position.z = 0.0f; }
 
-    VertexPT(Vector3 position, Vector2  uv)
+    VertexPT(const Vector3& position, const Vector2& uv)
         : position(position), uv(uv)
     {
         this->position.z = 0.0f;
@@ -52,7 +52,7 @@ struct VertexTile
         tileDir = -1;
     }
 
-    VertexTile(const Vector3 position, const Vector2 uv, const Color color, const int tileMapIdx, const int tileState)
+    VertexTile(const Vector3& position, const Vector2& uv, const Color& color, const int tileMapIdx, const int tileState)
         : position(position), uv(uv), color(color), tileMapIdx(tileMapIdx), tileState(tileState), tileRoomIdx(-1), tileDir(-1)
     {
         this->position.z = 0.0f;

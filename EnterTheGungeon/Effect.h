@@ -11,7 +11,6 @@ namespace Gungeon
 		virtual void Render() override;
 		virtual void Spawn(const Vector2 wpos) override;
 		void Idle();
-		void Die();
 
 	public:
 		std::shared_ptr<ObImage>	idle = nullptr;

@@ -6,10 +6,10 @@ namespace Gungeon
 	{
 	public:
 		Enemy1();
-		virtual ~Enemy1() {}
+		~Enemy1() override = default;
 		virtual void Init() override;
-		void InitVar();
-		void InitSelf();
+		void InitVar() override;
+		void InitSelf() override;
 		void InitWeapon();
 		void InitBullet();
 		virtual void InitIntervalAttack() override;

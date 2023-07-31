@@ -36,10 +36,10 @@ namespace Gungeon
     void Room::Update()
     {
         Character::Update();
-        for (auto& elem : enemySpawner) 
+        for (const auto& elem : enemySpawner) 
             elem->Update();
         treasureSpawner->Update();
-        for (auto& elem : gateSpawner) 
+        for (const auto& elem : gateSpawner) 
             elem->Update();
     }
 
@@ -50,16 +50,16 @@ namespace Gungeon
     void Room::Render()
     {
         Character::Render();
-        for (auto& elem : enemySpawner) 
+        for (const auto& elem : enemySpawner) 
             elem->Render();
         treasureSpawner->Render();
-        for (auto& elem : gateSpawner) 
+        for (const auto& elem : gateSpawner) 
             elem->Render();
     }
 
     Vec2i Room::TileLB() const
     {
-        shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
+	    const shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
         Vec2i on;
         MAPINFO.tilemap->WorldPosToTileIdx(r->lb(), on);
         return on;
@@ -67,7 +67,7 @@ namespace Gungeon
 
     Vec2i Room::TileLT() const
     {
-        shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
+	    const shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
         Vec2i on;
         MAPINFO.tilemap->WorldPosToTileIdx(r->lt(), on);
         return on;
@@ -75,7 +75,7 @@ namespace Gungeon
 
     Vec2i Room::TileRB() const
     {
-        shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
+	    const shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
         Vec2i on;
         MAPINFO.tilemap->WorldPosToTileIdx(r->rb(), on);
         return on;
@@ -83,7 +83,7 @@ namespace Gungeon
 
     Vec2i Room::TileRT() const
     {
-        shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
+	    const shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(col);
         Vec2i on;
         MAPINFO.tilemap->WorldPosToTileIdx(r->rt(), on);
         return on;

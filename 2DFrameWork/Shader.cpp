@@ -5,9 +5,9 @@ Shader::Shader(wstring file)
     Microsoft::WRL::ComPtr<ID3D10Blob> VsBlob;
     Microsoft::WRL::ComPtr<ID3D10Blob> PsBlob;
 
-    wstring path = L"../Shaders/" + file + L".hlsl";
+    const wstring path = L"../Shaders/" + file + L".hlsl";
 
-    DWORD flags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG;
+    constexpr DWORD flags = D3DCOMPILE_ENABLE_STRICTNESS | D3DCOMPILE_DEBUG;
 
     D3DCompileFromFile(path.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
         "VS", "vs_5_0", flags, 0, VsBlob.GetAddressOf(), nullptr);
@@ -37,7 +37,7 @@ Shader::Shader(wstring file)
         D3D11_INPUT_PER_VERTEX_DATA,//넘어가기
         0 };
 
-        UINT NumElements = 2;
+        constexpr UINT NumElements = 2;
         // 받는 역할은 Input Layout인데, vertext Layout에 담아 쓰기
         D3D.GetDevice()->CreateInputLayout
         (
@@ -61,7 +61,7 @@ Shader::Shader(wstring file)
         D3D11_INPUT_PER_VERTEX_DATA,//넘어가기
         0 };
 
-        UINT NumElements = 2;
+        constexpr UINT NumElements = 2;
         // 받는 역할은 Input Layout인데, vertext Layout에 담아 쓰기
         D3D.GetDevice()->CreateInputLayout
         (
@@ -84,7 +84,7 @@ Shader::Shader(wstring file)
         LayoutDesc[5] = { "ROOMIDX", 0,DXGI_FORMAT_R32_UINT, 0, 40,D3D11_INPUT_PER_VERTEX_DATA, 0 };
         LayoutDesc[6] = { "DIR", 0,DXGI_FORMAT_R32_UINT, 0, 40,D3D11_INPUT_PER_VERTEX_DATA, 0 };
 
-        UINT NumElements = 7;
+        constexpr UINT NumElements = 7;
         // 받는 역할은 Input Layout인데, vertext Layout에 담아 쓰기
         D3D.GetDevice()->CreateInputLayout
         (

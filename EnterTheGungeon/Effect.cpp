@@ -17,6 +17,8 @@ namespace Gungeon
 			Idle();
 			idle->Update();
 			break;
+		default: 
+			break;
 		}
 	}
 
@@ -31,6 +33,8 @@ namespace Gungeon
 		{
 		case Gungeon::State::idle:
 			idle->Render();	// RENDER->push(idle);
+			break;
+		default:
 			break;
 		}
 	}
@@ -51,9 +55,5 @@ namespace Gungeon
 			idle->SetWorldPos(DEFAULTSPAWN);
 			idle->isVisible = false;
 		}
-	}
-
-	void Effect::Die()
-	{
 	}
 }

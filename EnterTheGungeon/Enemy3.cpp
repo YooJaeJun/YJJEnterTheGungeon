@@ -26,7 +26,7 @@ namespace Gungeon
 	{
 		int idx = 0;
 
-		float scaleFactor = 3.0f;
+		constexpr float scaleFactor = 3.0f;
 		col->scale = Vector2(16.0f, 16.0f) * scaleFactor;
 
 		idle = make_shared<ObImage>(L"EnterTheGungeon/enemy_3/Idle.png");
@@ -189,7 +189,7 @@ namespace Gungeon
 
 		case Gungeon::Enemy3FireState::target:
 
-			for (auto& elem : bullet)
+			for (const auto& elem : bullet)
 			{
 				elem->scalar = 700.0f;
 				elem->moveDir = targetDir;
@@ -204,7 +204,7 @@ namespace Gungeon
 
 		case Gungeon::Enemy3FireState::toWalk:
 
-			for (auto& elem : bullet)
+			for (const auto& elem : bullet)
 				elem->moveFactor = cos(timeAttackToWalk / 1.5f * DIV2PI);
 
 			if (TIMER.GetTick(timeAttackToWalk, 1.5f))

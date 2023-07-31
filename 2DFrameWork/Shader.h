@@ -6,7 +6,7 @@ class Shader
     Microsoft::WRL::ComPtr<ID3D11InputLayout>	vertexLayout;
 
 public:
-    Shader(wstring file);
+    explicit Shader(wstring file);
     ~Shader();
     void Set();
 };

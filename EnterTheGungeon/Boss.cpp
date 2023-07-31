@@ -25,39 +25,39 @@ namespace Gungeon
         curHp = maxHp = 200;
         scalar = 120.0f;
 
-        intervalAnim[(int)State::idle] = 0.5f;
-        intervalAnim[(int)State::walk] = 0.5f;
-        intervalAnim[(int)State::attack] = 0.2f;
-        intervalAnim[(int)State::die] = 0.2f;
-        intervalAnim[(int)State::cinematic] = 0.3f;
+        intervalAnim[static_cast<int>(State::idle)] = 0.5f;
+        intervalAnim[static_cast<int>(State::walk)] = 0.5f;
+        intervalAnim[static_cast<int>(State::attack)] = 0.2f;
+        intervalAnim[static_cast<int>(State::die)] = 0.2f;
+        intervalAnim[static_cast<int>(State::cinematic)] = 0.3f;
 
         intervalHit = 0.2f;
         timeAttackStart = 0.0f;
         intervalAttackStart = 0.5f;
 
-        intervalFire[(int)BossPattern::none] = 0.0f;
-        intervalFire[(int)BossPattern::circular] = 1.5f;
-        intervalFire[(int)BossPattern::string] = 2.0f;
-        intervalFire[(int)BossPattern::tornado] = 0.0f;
-        intervalFire[(int)BossPattern::spiral] = 0.05f;
-        intervalFire[(int)BossPattern::trail] = 0.6f;
-        intervalFire[(int)BossPattern::miro] = 0.3f;
-        intervalFire[(int)BossPattern::brute] = 0.2f;
-        intervalFire[(int)BossPattern::shuriken] = 0.2f;
-        intervalFire[(int)BossPattern::gravity] = 0.3f;
-        intervalFire[(int)BossPattern::wave] = 0.5f;
+        intervalFire[static_cast<int>(BossPattern::none)] = 0.0f;
+        intervalFire[static_cast<int>(BossPattern::circular)] = 1.5f;
+        intervalFire[static_cast<int>(BossPattern::string)] = 2.0f;
+        intervalFire[static_cast<int>(BossPattern::tornado)] = 0.0f;
+        intervalFire[static_cast<int>(BossPattern::spiral)] = 0.05f;
+        intervalFire[static_cast<int>(BossPattern::trail)] = 0.6f;
+        intervalFire[static_cast<int>(BossPattern::miro)] = 0.3f;
+        intervalFire[static_cast<int>(BossPattern::brute)] = 0.2f;
+        intervalFire[static_cast<int>(BossPattern::shuriken)] = 0.2f;
+        intervalFire[static_cast<int>(BossPattern::gravity)] = 0.3f;
+        intervalFire[static_cast<int>(BossPattern::wave)] = 0.5f;
 
-        intervalEnd[(int)BossPattern::none] = 0.0f;
-        intervalEnd[(int)BossPattern::circular] = 5.8f;
-        intervalEnd[(int)BossPattern::string] = 11.5f;
-        intervalEnd[(int)BossPattern::tornado] = 12.0f;
-        intervalEnd[(int)BossPattern::spiral] = 6.0f;
-        intervalEnd[(int)BossPattern::trail] = 8.0f;
-        intervalEnd[(int)BossPattern::miro] = 13.0f;
-        intervalEnd[(int)BossPattern::brute] = 4.0f;
-        intervalEnd[(int)BossPattern::shuriken] = 6.0f;
-        intervalEnd[(int)BossPattern::gravity] = 12.0f;
-        intervalEnd[(int)BossPattern::wave] = 10.0f;
+        intervalEnd[static_cast<int>(BossPattern::none)] = 0.0f;
+        intervalEnd[static_cast<int>(BossPattern::circular)] = 5.8f;
+        intervalEnd[static_cast<int>(BossPattern::string)] = 11.5f;
+        intervalEnd[static_cast<int>(BossPattern::tornado)] = 12.0f;
+        intervalEnd[static_cast<int>(BossPattern::spiral)] = 6.0f;
+        intervalEnd[static_cast<int>(BossPattern::trail)] = 8.0f;
+        intervalEnd[static_cast<int>(BossPattern::miro)] = 13.0f;
+        intervalEnd[static_cast<int>(BossPattern::brute)] = 4.0f;
+        intervalEnd[static_cast<int>(BossPattern::shuriken)] = 6.0f;
+        intervalEnd[static_cast<int>(BossPattern::gravity)] = 12.0f;
+        intervalEnd[static_cast<int>(BossPattern::wave)] = 10.0f;
 
         candidateStringCount = 4;
         candidateString = {
@@ -104,7 +104,7 @@ namespace Gungeon
             "11111111110000000000000000111111111",
             "11111111110000000000000000111111111",
         };
-        float scaleFactor = 4.0f;
+        constexpr float scaleFactor = 4.0f;
         spawnPlayerByForce = make_shared<Effect>();
         spawnPlayerByForce->idle = make_shared<ObImage>(L"EnterTheGungeon/Level/Spawn_Player_By_Force.png");
         spawnPlayerByForce->idle->isVisible = false;
@@ -116,7 +116,7 @@ namespace Gungeon
     {
         state = State::die;
 
-        float scaleFactor = 3.0f;
+        constexpr float scaleFactor = 3.0f;
         col = make_shared<ObCircle>();
         col->isVisible = false;
         col->isFilled = false;
@@ -149,35 +149,35 @@ namespace Gungeon
         walk->isVisible = false;
         walk->maxFrame = Vec2i(2, 8);
         walk->scale = Vector2(80.0f / 2.0f, 352.0f / 8.0f) * scaleFactor;
-        walk->ChangeAnim(AnimState::loop, intervalAnim[(int)State::walk]);
+        walk->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::walk)]);
         walk->SetParentRT(*col);
 
         attack1Start = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Attack_1_Start.png");
         attack1Start->isVisible = false;
         attack1Start->maxFrame.x = 1;
         attack1Start->scale = Vector2(40.0f, 44.0f) * scaleFactor;
-        attack1Start->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
+        attack1Start->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::attack)]);
         attack1Start->SetParentRT(*col);
 
         attack1 = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Attack_1.png");
         attack1->isVisible = false;
         attack1->maxFrame.x = 2;
         attack1->scale = Vector2(80.0f / 2.0f, 44.0f) * scaleFactor;
-        attack1->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
+        attack1->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::attack)]);
         attack1->SetParentRT(*col);
 
         attack2 = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Attack_2.png");
         attack2->isVisible = false;
         attack2->maxFrame.x = 6;
         attack2->scale = Vector2(240.0f / 6.0f, 44.0f) * scaleFactor;
-        attack2->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
+        attack2->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::attack)]);
         attack2->SetParentRT(*col);
 
         attack3 = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Attack_3.png");
         attack3->isVisible = false;
         attack3->maxFrame.x = 5;
         attack3->scale = Vector2(200.0f / 5.0f, 44.0f) * scaleFactor;
-        attack3->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
+        attack3->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::attack)]);
         attack3->SetParentRT(*col);
 
         hit = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Hit.png");
@@ -191,7 +191,7 @@ namespace Gungeon
         die->isVisible = false;
         die->maxFrame.x = 2;
         die->scale = Vector2(72.0f / 2.0f, 40.0f) * scaleFactor;
-        die->ChangeAnim(AnimState::loop, intervalAnim[(int)State::die]);
+        die->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::die)]);
         die->SetParentRT(*col);
 
         chairIdle = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Chair_Idle.png");
@@ -212,7 +212,7 @@ namespace Gungeon
         chairAttack1Start->isVisible = false;
         chairAttack1Start->maxFrame.x = 1;
         chairAttack1Start->scale = Vector2(64.0f, 78.0f) * scaleFactor;
-        chairAttack1Start->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
+        chairAttack1Start->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::attack)]);
         chairAttack1Start->SetParentRT(*col);
 
         chairAttack1 = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Chair_Attack_1.png");
@@ -226,27 +226,27 @@ namespace Gungeon
         chairAttack2->isVisible = false;
         chairAttack2->maxFrame.x = 3;
         chairAttack2->scale = Vector2(204.0f / 3.0f, 79.0f) * scaleFactor;
-        chairAttack2->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
+        chairAttack2->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::attack)]);
         chairAttack2->SetParentRT(*col);
 
         chairAttack3 = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Chair_Attack_3.png");
         chairAttack3->isVisible = false;
         chairAttack3->maxFrame.x = 3;
         chairAttack3->scale = Vector2(204.0f / 3.0f, 79.0f) * scaleFactor;
-        chairAttack3->ChangeAnim(AnimState::loop, intervalAnim[(int)State::attack]);
+        chairAttack3->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::attack)]);
         chairAttack3->SetParentRT(*col);
 
         chairDie = make_shared<ObImage>(L"EnterTheGungeon/Boss_1/Chair_Die.png");
         chairDie->isVisible = false;
         chairDie->maxFrame.x = 1;
         chairDie->scale = Vector2(73.0f, 75.0f) * scaleFactor;
-        chairDie->ChangeAnim(AnimState::once, intervalAnim[(int)State::die]);
+        chairDie->ChangeAnim(AnimState::once, intervalAnim[static_cast<int>(State::die)]);
         chairDie->SetParentRT(*col);
 
-        float bombScaleFactor = 2.5f;
+        constexpr float bombScaleFactor = 2.5f;
         for (auto& elem : dieBomb)
         {
-            elem = make_shared<Effect>();
+	        elem = make_shared<Effect>();
             elem->idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/HitBomb.png");
             elem->idle->isVisible = false;
             elem->idle->maxFrame.x = 4;
@@ -271,13 +271,13 @@ namespace Gungeon
         firePosCannon->SetParentRT(*col);
         firePosCannon->SetLocalPos(Vector2(0.0f, 100.0f));
 
-        float shadowScaleFactor = scaleFactor * 2.0f;
+        constexpr float shadowScaleFactor = scaleFactor * 2.0f;
         shadow = make_shared<ObImage>(L"EnterTheGungeon/boss_1/Shadow_1.png");
         shadow->scale = Vector2(12.0f, 4.0f) * shadowScaleFactor;
         shadow->SetParentRT(*col);
         shadow->SetWorldPosY(-55.0f);
 
-        float hpGuageFactor = 1.5f;
+        constexpr float hpGuageFactor = 1.5f;
 
         hpGuageBar = make_shared<UI>();
         hpGuageBar->img = make_shared<ObImage>(L"EnterTheGungeon/boss_1/Hp_GuageBar.png");
@@ -341,12 +341,14 @@ namespace Gungeon
         case Gungeon::BossPattern::wave:
             InitWave();
             break;
+        default: 
+            break;
         }//switch
     }
 
     void Boss::InitItem()
     {
-        float scaleFactor = 0.5f;
+	    constexpr float scaleFactor = 0.5f;
         dropItem = make_shared<Item>();
         dropItem->col = make_shared<ObCircle>();
         dropItem->col->scale = Vector2(40.0f, 40.0f) * scaleFactor;
@@ -393,6 +395,8 @@ namespace Gungeon
         case Gungeon::State::die:
             Die();
             break;
+        default: 
+            break;
         }
 
         for (auto& elem : bullet)
@@ -419,7 +423,7 @@ namespace Gungeon
         dropItem->Update();
         spawnPlayerByForce->Update();
 
-        for (auto& elem : dieBomb)
+        for (const auto& elem : dieBomb)
             elem->Update();
 
         cutScene->Update();
@@ -445,7 +449,7 @@ namespace Gungeon
         attack2->Render();
         attack3->Render();
 
-        for (auto& elem : bullet)
+        for (const auto& elem : bullet)
             elem->Render();
 
         firePosTargeting->Render();
@@ -463,9 +467,12 @@ namespace Gungeon
                 hpGuageBar->Render();
                 hpGuage->Render();
 
-                DWRITE.RenderText(name,
-                    RECT{ (long)app.GetHalfWidth() - 280, (long)app.GetHeight() - 100,
-                    (long)app.GetWidth(), (long)app.GetHeight() },
+                DWRITE.RenderText(
+                    name,
+                    RECT{ static_cast<long>(app.GetHalfWidth()) - 280,
+                    static_cast<long>(app.GetHeight()) - 100,
+                    static_cast<long>(app.GetWidth()),
+                    static_cast<long>(app.GetHeight()) },
                     35.0f,
                     L"PF스타더스트");
             }
@@ -530,6 +537,8 @@ namespace Gungeon
                 attack3->isVisible = true;
                 chairAttack3->isVisible = true;
                 break;
+            default: 
+                break;
             }
 
             attackState = BossAttackState::loop;
@@ -564,9 +573,11 @@ namespace Gungeon
                 if (attack3->frame.x == attack3->maxFrame.x - 1)
                     SOUND.Play("BulletKingChairDown");
                 break;
+            default: 
+                break;
             }
 
-            if (TIMER.GetTick(timeAttackEnd, intervalEnd[(int)pattern]))
+            if (TIMER.GetTick(timeAttackEnd, intervalEnd[static_cast<int>(pattern)]))
                 attackState = BossAttackState::reload;
             break;
         case Gungeon::BossAttackState::reload:
@@ -602,7 +613,7 @@ namespace Gungeon
 
     void Boss::Die()
     {
-        for (auto& elem : dieBomb)
+        for (const auto& elem : dieBomb)
         {
             if (false == realDie && 
                 TIMER.GetTick(timeBombBetween, intervalBombBetween))
@@ -616,7 +627,7 @@ namespace Gungeon
         if (false == realDie && 
             TIMER.GetTick(timeRealDie, 3.5f))
         {
-            for (auto& elem : dieBomb)
+            for (const auto& elem : dieBomb)
             {
                 elem->idle->isVisible = false;
                 elem->idle->ChangeAnim(AnimState::stop, 0.1f);
@@ -647,8 +658,7 @@ namespace Gungeon
         {
             hit->ChangeAnim(AnimState::once, 0.1f);
 
-            int r = RANDOM.Int(0, 1);
-            if (r)
+            if (int r = RANDOM.Int(0, 1))
             {
                 SOUND.Stop("Voice_Boss_Hit1");
                 SOUND.Play("Voice_Boss_Hit1");
@@ -676,7 +686,7 @@ namespace Gungeon
             }
             else
             {
-                hpGuage->img->scale.x = (float)curHp / maxHp * hpGuage->imgSize.x;
+                hpGuage->img->scale.x = static_cast<float>(curHp) / maxHp * hpGuage->imgSize.x;
                 hpGuage->img->uv.z = hpGuage->img->scale.x / hpGuage->imgSize.x;
             }
 
@@ -686,7 +696,7 @@ namespace Gungeon
 
         if (isHitAnim)
         {
-            Color c = Color(RANDOM.Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM.Float(0.2f, 1.0f));
+	        const Color c = Color(RANDOM.Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM.Float(0.2f, 1.0f));
             idle->color = c;
             walk->color = c;
             hit->color = c;
@@ -734,7 +744,9 @@ namespace Gungeon
 
                 BossPattern randomPattern;
                 do {
-                    randomPattern = (BossPattern)RANDOM.Int(1, (int)BossPattern::max - 1);
+                    randomPattern = 
+                        static_cast<BossPattern>(
+                            RANDOM.Int(1, static_cast<int>(BossPattern::max) - 1));
                 } while (pattern == randomPattern);
 
                 ChangePattern(randomPattern);
@@ -754,7 +766,7 @@ namespace Gungeon
             int curPattern = static_cast<int>(pattern);
             if (ImGui::SliderInt("Boss Pattern", &curPattern, 0, patternMax))
             {
-                ChangePattern((BossPattern)curPattern);
+                ChangePattern(static_cast<BossPattern>(curPattern));
                 InitBullet();
 
                 state = State::attack;
@@ -769,7 +781,7 @@ namespace Gungeon
 
         Unit::StartDie();
 
-        die->ChangeAnim(AnimState::loop, intervalAnim[(int)State::die]);
+        die->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::die)]);
 
         attack1Start->isVisible = false;
         attack1->isVisible = false;
@@ -810,7 +822,7 @@ namespace Gungeon
         dropItem->state = State::die;
     }
 
-    void Boss::HitBullet()
+    void Boss::HitBullet() const
     {
         for (auto& elem : bullet)
             if (elem->isFired)
@@ -826,29 +838,29 @@ namespace Gungeon
         SOUND.Play("SpawnByForce");
     }
 
-    void Boss::SpawnAnim()
+    void Boss::SpawnAnim() const
     {
         idle->isVisible = false;
         chairIdle->ChangeAnim(AnimState::stop, 0.2f);
         respawn->isVisible = true;
-        respawn->ChangeAnim(AnimState::once, intervalAnim[(int)State::cinematic]);
+        respawn->ChangeAnim(AnimState::once, intervalAnim[static_cast<int>(State::cinematic)]);
     }
 
-    void Boss::SpawnAnimEnd()
+    void Boss::SpawnAnimEnd() const
     {
         respawn->isVisible = false;
         idle->isVisible = true;
         chairIdle->isVisible = true;
     }
 
-    void Boss::CutSceneOn()
+    void Boss::CutSceneOn() const
     {
         cutScene->img->isVisible = true;
         cutScene->img->ChangeAnim(AnimState::loop, 0.2f);
         SOUND.Play("BossIntro");
     }
 
-    void Boss::CutSceneOff()
+    void Boss::CutSceneOff() const
     {
         cutScene->img->isVisible = false;
         cutScene->img->ChangeAnim(AnimState::stop, 0.1f);
@@ -864,7 +876,7 @@ namespace Gungeon
         Character::ColToggle();
         firePosTargeting->isVisible ^= 1;
         firePosCannon->isVisible ^= 1;
-        for (auto& bulletElem : bullet)
+        for (const auto& bulletElem : bullet)
             bulletElem->col->isVisible ^= 1;
     }
 
@@ -910,9 +922,9 @@ namespace Gungeon
         bullet.resize(stringBullet.inputString.size() * 25);
         bulletSpawnPos = firePosTargeting->GetWorldPos();
 
-        size_t size = stringBullet.inputString.size();
-
+        const size_t size = stringBullet.inputString.size();
         int idx = 0;
+
         for (int r = 0; r < 5; r++)
         {
             for (int c = 0; c < 5; c++)
@@ -1111,12 +1123,14 @@ namespace Gungeon
         case Gungeon::BossPattern::wave:
             UpdateWave();
             break;
+        default: 
+            break;
         }
     }
 
     void Boss::UpdateCircular()
     {
-        if (TIMER.GetTick(timeFire, intervalFire[(int)BossPattern::circular]))
+        if (TIMER.GetTick(timeFire, intervalFire[static_cast<int>(BossPattern::circular)]))
         {
             int t = 60;
             while (t--)
@@ -1134,20 +1148,21 @@ namespace Gungeon
     void Boss::UpdateString()
     {
         size_t size = stringBullet.inputString.size();
-        char* s = const_cast<char*>(stringBullet.inputString.c_str());
+        // [주의] const_cast: Set 용도가 아니라, Get 용도로 받을 것
+        char* inputString = const_cast<char*>(stringBullet.inputString.c_str());
         bool flagChangeStringDirect = false;
 
 
-        if (ImGui::InputText("String Danmaku", s, 27) ||
+        if (ImGui::InputText("String Danmaku", inputString, 27) ||
             bullet.size() != size * 25)
         {
-            stringBullet.inputString = s;
+            stringBullet.inputString = inputString;
             InitBullet();
             size = stringBullet.inputString.size();
             flagChangeStringDirect = true;
         }
 
-        if (TIMER.GetTick(timeFire, intervalFire[(int)BossPattern::string]))
+        if (TIMER.GetTick(timeFire, intervalFire[static_cast<int>(BossPattern::string)]))
         {
             if (false == flagChangeStringDirect)
             {
@@ -1175,7 +1190,7 @@ namespace Gungeon
                 }
             }
 
-            for (auto& elem : bullet)
+            for (const auto& elem : bullet)
             {
                 if (elem->moveDir.x == 0.0f && elem->moveDir.y == 0.0f) 
                     continue;
@@ -1191,7 +1206,7 @@ namespace Gungeon
     void Boss::UpdateTornado()
     {
         int idx = 0;
-        for (auto& elem : bullet)
+        for (const auto& elem : bullet)
         {
             elem->isFired = true;
             elem->idle->isVisible = true;
@@ -1228,7 +1243,7 @@ namespace Gungeon
 
     void Boss::UpdateTrail()
     {
-        if (TIMER.GetTick(timeFire, intervalFire[(int)BossPattern::trail]))
+        if (TIMER.GetTick(timeFire, intervalFire[static_cast<int>(BossPattern::trail)]))
         {
             bulletSpawnPos = firePosTargeting->GetWorldPos();
 
@@ -1246,7 +1261,7 @@ namespace Gungeon
     void Boss::UpdateMiro()
     {
         if (miroStart &&
-            TIMER.GetTick(timeFire, intervalFire[(int)BossPattern::miro]))
+            TIMER.GetTick(timeFire, intervalFire[static_cast<int>(BossPattern::miro)]))
         {
             bullet.clear();
             bulletSpawnPos = firePosCannon->GetWorldPos();
@@ -1288,7 +1303,7 @@ namespace Gungeon
 
     void Boss::UpdateBrute()
     {
-        if (TIMER.GetTick(timeFire, intervalFire[(int)BossPattern::brute]))
+        if (TIMER.GetTick(timeFire, intervalFire[static_cast<int>(BossPattern::brute)]))
         {
             int t = 12;
             while (t--)
@@ -1304,7 +1319,7 @@ namespace Gungeon
 
     void Boss::UpdateShuriken()
     {
-        if (TIMER.GetTick(timeFire, intervalFire[(int)BossPattern::shuriken]))
+        if (TIMER.GetTick(timeFire, intervalFire[static_cast<int>(BossPattern::shuriken)]))
         {
             bullet[curBulletIdx]->Spawn(Vector2(0.0f, 0.0f));
             bullet[curBulletIdx]->col->SetLocalPos(Vector2((curBulletIdx + 1) * 20.0f, (curBulletIdx + 1) * 20.0f));
@@ -1328,7 +1343,7 @@ namespace Gungeon
 
     void Boss::UpdateGravity()
     {
-        if (TIMER.GetTick(timeFire, intervalFire[(int)BossPattern::gravity]))
+        if (TIMER.GetTick(timeFire, intervalFire[static_cast<int>(BossPattern::gravity)]))
         {
             bullet[curBulletIdx]->Spawn(bulletSpawnPos, 
                 Vector2(RANDOM.Float(-1.0f, 1.0f), RANDOM.Float(0.0f, 1.0f)));
@@ -1343,9 +1358,9 @@ namespace Gungeon
 
     void Boss::UpdateWave()
     {
-        if (TIMER.GetTick(timeFire, intervalFire[(int)BossPattern::wave]))
+        if (TIMER.GetTick(timeFire, intervalFire[static_cast<int>(BossPattern::wave)]))
         {
-            Vector2 fialSpawnPos = bulletSpawnPos;
+	        const Vector2 fialSpawnPos = bulletSpawnPos;
             bullet[curBulletIdx]->Spawn(fialSpawnPos, Vector2(-0.8f, -1.0f));
             curBulletIdx++;
             if (curBulletIdx >= waveMax) 
@@ -1356,7 +1371,7 @@ namespace Gungeon
         }
 
         int idx = 0;
-        for (auto& elem : bullet)
+        for (const auto& elem : bullet)
         {
             if (elem->isFired)
             {

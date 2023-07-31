@@ -73,7 +73,8 @@ namespace Gungeon
             case '8':  copy(&num8[0][0], &num8[0][0] + 25, &outputAlphbets[i][0][0]);     break;
             case '9':  copy(&num9[0][0], &num9[0][0] + 25, &outputAlphbets[i][0][0]);     break;
             case ' ':  copy(&space[0][0], &space[0][0] + 25, &outputAlphbets[i][0][0]);   break;
-                // case '¤»': copy(&kik[0][0], &kik[0][0] + 25, &outputAlphbets[i][0][0]);       break;
+            default:                                                                                     break;
+            // case '¤»': copy(&kik[0][0], &kik[0][0] + 25, &outputAlphbets[i][0][0]);       break;
                 // case '¤¾': copy(&hih[0][0], &hih[0][0] + 25, &outputAlphbets[i][0][0]);       break;
             }
         }

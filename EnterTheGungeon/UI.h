@@ -14,12 +14,11 @@ namespace Gungeon
 	{
 	public:
 		UI();
-		void Update();
-		void LateUpdate();
-		void Render();
+		void Update() const;
+		void Render() const;
 
-		void Spawn(const Vector2 factor);
-		bool DownGauge();
+		void Spawn(const Vector2 factor) const;
+		bool DownGauge() const;
 
 	public:
 		std::shared_ptr<ObImage>	img = nullptr;

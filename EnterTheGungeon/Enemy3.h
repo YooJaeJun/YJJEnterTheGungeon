@@ -11,22 +11,22 @@ namespace Gungeon
 		toWalk
 	};
 
-	class Enemy3 : public Enemy
+	class Enemy3 final : public Enemy
 	{
 	public:
 		Enemy3();
-		virtual ~Enemy3() {}
-		virtual void Init() override;
-		void InitVar();
-		void InitSelf();
+		~Enemy3() override = default;
+		void Init() override;
+		void InitVar() override;
+		void InitSelf() override;
 		void InitWeapon();
 		void InitBullet();
-		virtual void InitIntervalAttack() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-		virtual void Render() override;
-		virtual void Fire() override;
-		virtual void StartDie() override;
+		void InitIntervalAttack() override;
+		void Update() override;
+		void LateUpdate() override;
+		void Render() override;
+		void Fire() override;
+		void StartDie() override;
 
 	private:
 		Enemy3FireState		fireState = Enemy3FireState::none;

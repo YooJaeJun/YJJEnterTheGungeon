@@ -31,16 +31,16 @@ namespace Gungeon
 		void Init();
 		void Update();
 		void Render();
-		void ResizeScreen();
+		void ResizeScreen() const;
 
-		void BoxUp(const bool isUp);
+		void BoxUp(const bool isUp) const;
 
 	public:
 		CinematicState cinematicState = CinematicState::none;
 		std::shared_ptr<UI> box[2];
 
 	private:
-		float timeCinematic[(int)CinematicState::max];
-		float intervalCinematic[(int)CinematicState::max];
+		float timeCinematic[static_cast<int>(CinematicState::max)];
+		float intervalCinematic[static_cast<int>(CinematicState::max)];
 	};
 }

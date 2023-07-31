@@ -26,7 +26,7 @@ namespace Gungeon
 	{
 		int idx = 0;
 
-		float scaleFactor = 3.0f;
+		constexpr float scaleFactor = 3.0f;
 		col->scale = Vector2(16.0f, 16.0f) * scaleFactor;
 
 		idle = make_shared<ObImage>(L"EnterTheGungeon/enemy_1/Idle.png");

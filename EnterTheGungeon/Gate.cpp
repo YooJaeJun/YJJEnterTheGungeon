@@ -9,7 +9,7 @@ namespace Gungeon
 
     void Gate::Init()
     {
-        float scaleFactor = 2.0f;
+	    constexpr float scaleFactor = 2.0f;
 
         col->scale = Vector2(70.0f, 70.0f) * scaleFactor;
         col->pivot = OFFSET_B;
@@ -93,7 +93,6 @@ namespace Gungeon
         case Gungeon::GateState::closed:
             break;
         }
-
 
         Obstacle::Update();
         col->Update();

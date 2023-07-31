@@ -13,9 +13,9 @@ namespace Gungeon
 	{
 	public:
 		Item();
-		void Update();
-		void LateUpdate();
-		void Render();
+		void Update() override;
+		void LateUpdate() override;
+		void Render() override;
 		void Hit();
 
 	public:

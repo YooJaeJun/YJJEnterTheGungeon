@@ -11,16 +11,16 @@ namespace Gungeon
 		finish
 	};
 
-	const int treasureWeaponNum = 2;
+	constexpr int treasureWeaponNum = 2;
 
-	class TreasureBox : public Obstacle
+	class TreasureBox final : public Obstacle
 	{
 	public:
 		TreasureBox();
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void Render() override;
-		void Spawn(const Vector2 wpos);
+		void Spawn(const Vector2 wpos) override;
 
 	public:
 		TreasureState	treasureState = TreasureState::none;

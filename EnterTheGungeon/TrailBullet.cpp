@@ -2,43 +2,44 @@
 
 namespace Gungeon
 {
-    TrailBullet::TrailBullet()
+    TrailBullet::TrailBullet(): trailNum(0)
     {
-        Init();
+	    TrailBullet::Init();
 
-        float scaleFactor = 3.0f;
-        col->scale = Vector2(80.0f / 4.0f, 17.0f) * scaleFactor;
-        col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
-        SetPos(DEFAULTSPAWN);
+	    constexpr float scaleFactor = 3.0f;
+	    col->scale = Vector2(80.0f / 4.0f, 17.0f) * scaleFactor;
+	    col->color = Color(1.0f, 1.0f, 1.0f, 1.0f);
+	    SetPos(DEFAULTSPAWN);
 
-        idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/Bullet_1.png");
-        idle->isVisible = false;
-        idle->scale = col->scale;
-        idle->maxFrame.x = 4;
-        idle->ChangeAnim(AnimState::loop, 0.2f);
-        idle->SetParentRT(*col);
+	    idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/Bullet_1.png");
+	    idle->isVisible = false;
+	    idle->scale = col->scale;
+	    idle->maxFrame.x = 4;
+	    idle->ChangeAnim(AnimState::loop, 0.2f);
+	    idle->SetParentRT(*col);
 
-        float bombScaleFactor = 2.5f;
-        hitBomb = make_shared<Effect>();
-        hitBomb->idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/HitBomb.png");
-        hitBomb->idle->maxFrame.x = 4;
-        hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * bombScaleFactor;
-        hitBomb->idle->isVisible = false;
+	    constexpr float bombScaleFactor = 2.5f;
+	    hitBomb = make_shared<Effect>();
+	    hitBomb->idle = make_shared<ObImage>(L"EnterTheGungeon/boss_1/HitBomb.png");
+	    hitBomb->idle->maxFrame.x = 4;
+	    hitBomb->idle->scale = Vector2(88.0f / 4.0f, 22.0f) * bombScaleFactor;
+	    hitBomb->idle->isVisible = false;
 
 
-        trails.resize(trailNum);
+	    trails.resize(trailNum);
 
-        for (auto& trail : trails)
-        {
-            trail = make_shared<ObImage>(L"EnterTheGungeon/boss_1/Bullet_2.png");
-            trail->isVisible = false;
-            trail->scale = col->scale;
-        }
+	    for (auto& trail : trails)
+	    {
+		    trail = make_shared<ObImage>(L"EnterTheGungeon/boss_1/Bullet_2.png");
+		    trail->isVisible = false;
+		    trail->scale = col->scale;
+	    }
     }
 
     void TrailBullet::Init()
     {
         Bullet::Init();
+
         scalar = 400.0f;
         damage = 1;
         angle = 0.0f;
@@ -64,7 +65,7 @@ namespace Gungeon
         }
 
         int idx = 0;
-        for (auto& elem : trails)
+        for (const auto& elem : trails)
         {
             if (idx == trails.size() - 1) elem->color = Color(1.0f, 0.6f, 0.5f);
             else elem->color = Color(0.7f, 0.5f, 0.3f); 
@@ -76,7 +77,7 @@ namespace Gungeon
     void TrailBullet::Render()
     {
         if (isFired)
-            for (auto& elem : trails)
+            for (const auto& elem : trails)
                 elem->Render();
         Bullet::Render();
     }

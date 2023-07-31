@@ -9,7 +9,7 @@ namespace Gungeon
 		attack
 	};
 
-	class ShurikenBullet : public Bullet
+	class ShurikenBullet final : public Bullet
 	{
 	public:
 		ShurikenBullet();

@@ -2,7 +2,7 @@
 
 namespace Gungeon
 {
-	class EnemyBullet : public Bullet
+	class EnemyBullet final : public Bullet
 	{
 	public:
 		EnemyBullet();

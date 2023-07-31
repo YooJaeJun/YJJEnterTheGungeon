@@ -6,16 +6,16 @@ namespace Gungeon
 	{
 	public:
 		Bullet();
-		virtual void Init() override;
-		virtual void Update() override;
-		virtual void Update(const bool notRotation) override;
-		virtual void LateUpdate() override;
-		virtual void Render() override;
+		void Init() override;
+		void Update() override;
+		void Update(const bool notRotation) override;
+		void LateUpdate() override;
+		void Render() override;
 
 		virtual void Spawn(const Vector2& coord);
 		virtual void Spawn(const Vector2& coord, const Vector2& fireDir);
-		void Fire();
-		void Hit(const float damage);
+		void		 Fire();
+		void		 Hit(const float damage);
 		virtual void Reload();
 
 	public:
