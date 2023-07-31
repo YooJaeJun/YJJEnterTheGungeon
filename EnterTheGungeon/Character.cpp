@@ -54,7 +54,7 @@ namespace Gungeon
 		isHit = false;
 	}
 
-	void Character::StepBack()
+	void Character::StepBack() const
 	{
 		SetPos(lastPos);
 	}

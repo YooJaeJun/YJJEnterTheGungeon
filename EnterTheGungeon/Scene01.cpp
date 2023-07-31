@@ -2,27 +2,19 @@
 
 namespace Gungeon
 {
-    Scene01::Scene01()
-    {
-    }
-
-    Scene01::~Scene01()
-    {
-    }
-
     void Scene01::Init()
     {
         CAM.position = Vector2(0.0f, 0.0f);
         CAM.zoomFactor = Vector3(0.08f, 0.08f, 0.08f);
 
-        int idx = 0;
         if (mapGen && mapGen->selectedRooms.size() > 0)
         {
-            for (auto& elem : mapGen->selectedRooms)
+	        int idx = 0;
+	        for (const auto& elem : mapGen->selectedRooms)
             {
                 if (idx == 1)
                     elem->treasureSpawner->isVisible = true;
-                for (auto& enemySpawerElem : elem->enemySpawner)
+                for (const auto& enemySpawerElem : elem->enemySpawner)
                     enemySpawerElem->isVisible = true;
                 idx++;
             }
@@ -58,25 +50,13 @@ namespace Gungeon
         SOUND.SetVolume("BGM_MapGen", 0.6f);
     }
 
-    void Scene01::LateUpdate()
-    {
-        if (mapGen) 
-            mapGen->LateUpdate();
-    }
-
     void Scene01::Render()
     {
         if (mapGen) 
             mapGen->Render();
     }
 
-    void Scene01::ResizeScreen()
-    {
-        if (mapGen) 
-            mapGen->ResizeScreen();
-    }
-
-    void Scene01::ChangeScene1()
+    void Scene01::ChangeScene1() const
     {
         MAPINFO.Init();
         mapGen->Init();
@@ -86,7 +66,7 @@ namespace Gungeon
     {
         isChangingScene = true;
         {
-            shared_ptr<Scene02> tempScene = make_shared<Scene02>();
+	        const shared_ptr<Scene02> tempScene = make_shared<Scene02>();
             tempScene->mapGen = mapGen;
             tempScene->player = player;
             SCENE.AddScene("Scene02", tempScene);

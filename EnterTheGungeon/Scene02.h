@@ -2,8 +2,8 @@
 
 namespace Gungeon
 {
-	const int enemyMax = 4;
-	const int doorMax = 10;
+	constexpr int enemyMax = 4;
+	constexpr int doorMax = 10;
 
 	enum class GameState
 	{
@@ -20,14 +20,14 @@ namespace Gungeon
 	{
 	public:
 		Scene02();
-		~Scene02();
+		~Scene02() override = default;
 
 	protected:
-		virtual void Init() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-		virtual void Render() override;
-		virtual void ResizeScreen() override;
+		void Init() override;
+		void Update() override;
+		void LateUpdate() override;
+		void Render() override;
+		void ResizeScreen() override;
 
 	private:
 		void Start();
@@ -35,9 +35,9 @@ namespace Gungeon
 		void EnteringRoom();
 		void WaitingSpawn();
 		void Fight();
-		void SetCamera();
-		void SpawnPlayer();
-		void SpawnEffect();
+		void SetCamera() const;
+		void SpawnPlayer() const;
+		void SpawnEffect() const;
 		void SpawnEnemy();
 		void SpawnTreasureBox();
 		void IntersectPlayer();

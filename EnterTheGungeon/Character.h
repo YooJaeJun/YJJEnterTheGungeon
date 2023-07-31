@@ -27,13 +27,13 @@ namespace Gungeon
 		virtual void Render();
 		virtual void ResizeScreen();
 
-		inline Vec2i On() const { return on; }
-		inline Vector2 Pos() const { return col->GetWorldPos(); }
-		inline void SetPos(const Vector2 pos) { col->SetWorldPos(pos); }
-		inline void SetPosX(const float x) { col->SetWorldPosX(x); }
-		inline void SetPosY(const float y) { col->SetWorldPosY(y); }
+		Vec2i On() const { return on; }
+		Vector2 Pos() const { return col->GetWorldPos(); }
+		void SetPos(const Vector2 pos) const { col->SetWorldPos(pos); }
+		void SetPosX(const float x) const { col->SetWorldPosX(x); }
+		void SetPosY(const float y) const { col->SetWorldPosY(y); }
 		virtual void Spawn(const Vector2 wpos);
-		void StepBack();
+		void StepBack() const;
 		void SetLastPos();
 		virtual void ColToggle();
 

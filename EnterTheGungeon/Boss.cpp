@@ -57,7 +57,7 @@ namespace Gungeon
         intervalEnd[static_cast<int>(BossPattern::brute)] = 4.0f;
         intervalEnd[static_cast<int>(BossPattern::shuriken)] = 6.0f;
         intervalEnd[static_cast<int>(BossPattern::gravity)] = 12.0f;
-        intervalEnd[static_cast<int>(BossPattern::wave)] = 10.0f;
+        intervalEnd[static_cast<int>(BossPattern::wave)] = 5.0f;
 
         candidateStringCount = 4;
         candidateString = {
@@ -1375,14 +1375,14 @@ namespace Gungeon
         {
             if (elem->isFired)
             {
-                if (elem->increaseState) 
-                    elem->moveDir.x += 6.0f * DELTA;
-                else 
-                    elem->moveDir.x -= 6.0f * DELTA;
+                if (elem->increaseState)
+                    elem->moveDir.x += 20.0f * DELTA;
+                else
+                    elem->moveDir.x -= 20.0f * DELTA;
 
-                if (elem->moveDir.x > 0.8f)
+                if (elem->moveDir.x > 10.0f)
                     elem->increaseState = false;
-                else if (elem->moveDir.x < -0.8f)
+                else if (elem->moveDir.x < -10.0f)
                     elem->increaseState = true;
             }
 

@@ -13,7 +13,7 @@ void Main::Init()
     player = make_shared<Player>();
 
     {
-        shared_ptr<Scene01> tempScene = make_shared<Scene01>();
+	    const shared_ptr<Scene01> tempScene = make_shared<Scene01>();
         tempScene->mapGen = mapGen;
         tempScene->player = player;
         SCENE.AddScene("Scene01", tempScene);
@@ -95,7 +95,8 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE prevInstance, LPWSTR param, in
     app.SetInstance(instance);
     app.InitWidthHeight(1400.0f, 740.0f);
     app.background = Color(0.0f, 0.0f, 0.0f, 1.0f);
-    shared_ptr<Main> main = make_shared<Main>();
-    int wParam = (int)WIN.Run(main);
+
+    const shared_ptr<Main> main = make_shared<Main>();
+    const int wParam = static_cast<int>(WIN.Run(main));
     return wParam;
 }

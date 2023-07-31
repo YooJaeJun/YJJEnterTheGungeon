@@ -67,27 +67,27 @@ using namespace SimpleMath;
 
 //Macro(Pascal)
 inline void Check(HRESULT hr) { assert(SUCCEEDED(hr)); }
-const float ToRadian = 0.0174532f;
+constexpr float ToRadian = 0.0174532f;
 
 //Macro(WINAPI Style) -> const 변경
-const float PI = 3.1415926f;	//180
-const float DIV2PI = 1.5707963f;	//90
-const float DIV4PI = 0.7853981f;	//45
-const float DIV8PI = 0.3926991f;	//22.5
-const Vector2 UP    = Vector2(0.0f, 1.0f);
-const Vector2 DOWN  = Vector2(0.0f, -1.0f);
-const Vector2 LEFT  = Vector2(-1.0f, 0.0f);
-const Vector2 RIGHT = Vector2(1.0f, 0.0f);
-const Vector2 OFFSET_N      = Vector2(0.0f, 0.0f);
-const Vector2 OFFSET_L      = Vector2(0.5f, 0.0f);
-const Vector2 OFFSET_R      = Vector2(-0.5f, 0.0f);
-const Vector2 OFFSET_B      = Vector2(0.0f, 0.5f);
-const Vector2 OFFSET_T      = Vector2(0.0f, -0.5f);
-const Vector2 OFFSET_LB     = Vector2(0.5f, 0.5f);
-const Vector2 OFFSET_RB     = Vector2(-0.5f, 0.5f);
-const Vector2 OFFSET_LT     = Vector2(0.5f, -0.5f);
-const Vector2 OFFSET_RT     = Vector2(-0.5f, -0.5f);
-const Vector2 DEFAULTSPAWN  = Vector2(5000.0f, 5000.0f);
+constexpr float PI = 3.1415926f;	//180
+constexpr float DIV2PI = 1.5707963f;	//90
+constexpr float DIV4PI = 0.7853981f;	//45
+constexpr float DIV8PI = 0.3926991f;	//22.5
+constexpr Vector2 UP    = Vector2(0.0f, 1.0f);
+constexpr Vector2 DOWN  = Vector2(0.0f, -1.0f);
+constexpr Vector2 LEFT  = Vector2(-1.0f, 0.0f);
+constexpr Vector2 RIGHT = Vector2(1.0f, 0.0f);
+constexpr Vector2 OFFSET_N      = Vector2(0.0f, 0.0f);
+constexpr Vector2 OFFSET_L      = Vector2(0.5f, 0.0f);
+constexpr Vector2 OFFSET_R      = Vector2(-0.5f, 0.0f);
+constexpr Vector2 OFFSET_B      = Vector2(0.0f, 0.5f);
+constexpr Vector2 OFFSET_T      = Vector2(0.0f, -0.5f);
+constexpr Vector2 OFFSET_LB     = Vector2(0.5f, 0.5f);
+constexpr Vector2 OFFSET_RB     = Vector2(-0.5f, 0.5f);
+constexpr Vector2 OFFSET_LT     = Vector2(0.5f, -0.5f);
+constexpr Vector2 OFFSET_RT     = Vector2(-0.5f, -0.5f);
+constexpr Vector2 DEFAULTSPAWN  = Vector2(5000.0f, 5000.0f);
 
 // enum
 enum ColPos
@@ -113,8 +113,8 @@ enum DirState
     dirRT,
     dirNone
 };
-const int dx[9] = { 0,-1,1,-1,1,0,-1,1,0 };
-const int dy[9] = { -1,0,0,-1,-1,1,1,1,0 };
+constexpr int dx[9] = { 0,-1,1,-1,1,0,-1,1,0 };
+constexpr int dy[9] = { -1,0,0,-1,-1,1,1,1,0 };
 
 
 //2DFramework Header

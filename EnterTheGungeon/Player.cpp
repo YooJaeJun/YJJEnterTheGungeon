@@ -24,19 +24,19 @@ namespace Gungeon
 		curHp = maxHp = 6;
 		for (auto& elem : canFireOnce) elem = true;
 
-		intervalAnim[(int)State::idle] = 0.2f;
-		intervalAnim[(int)State::walk] = 0.1f;
-		intervalAnim[(int)State::roll] = 0.07f;
-		intervalAnim[(int)State::attack] = 0.0f;
-		intervalAnim[(int)State::die] = 0.2f;
-		intervalAnim[(int)State::fall] = 0.3f;
-		intervalAnim[(int)State::respawn] = 0.3f;
-		intervalAnim[(int)State::cinematic] = 0.0f;
+		intervalAnim[static_cast<int>(State::idle)] = 0.2f;
+		intervalAnim[static_cast<int>(State::walk)] = 0.1f;
+		intervalAnim[static_cast<int>(State::roll)] = 0.07f;
+		intervalAnim[static_cast<int>(State::attack)] = 0.0f;
+		intervalAnim[static_cast<int>(State::die)] = 0.2f;
+		intervalAnim[static_cast<int>(State::fall)] = 0.3f;
+		intervalAnim[static_cast<int>(State::respawn)] = 0.3f;
+		intervalAnim[static_cast<int>(State::cinematic)] = 0.0f;
 	}
 
 	void Player::InitCol()
 	{
-		float scaleFactor = 3.0f;
+		constexpr float scaleFactor = 3.0f;
 		col = make_shared<ObCircle>();
 		col->isVisible = false;
 		col->isFilled = false;
@@ -55,19 +55,19 @@ namespace Gungeon
 	void Player::InitAnim()
 	{
 		int idx = 0;
-		float scaleFactor = 3.0f;
+		constexpr float scaleFactor = 3.0f;
 
 		idle = make_shared<ObImage>(L"EnterTheGungeon/player_1/Idle.png");
 		idle->maxFrame = Vec2i(4, 8);
 		idle->scale = Vector2(72.0 / 4.0f, 160.0f / 8.0f) * scaleFactor;
-		idle->ChangeAnim(AnimState::loop, intervalAnim[(int)State::idle]);
+		idle->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::idle)]);
 		idle->SetParentRT(*col);
 
 		walk = make_shared<ObImage>(L"EnterTheGungeon/player_1/Walk.png");
 		walk->isVisible = false;
 		walk->maxFrame = Vec2i(6, 8);
 		walk->scale = Vector2(102.0f / 6.0f, 192.0f / 8.0f) * scaleFactor;
-		walk->ChangeAnim(AnimState::loop, intervalAnim[(int)State::walk]);
+		walk->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::walk)]);
 		walk->SetParentRT(*col);
 
 		roll = make_shared<ObImage>(L"EnterTheGungeon/player_1/Roll.png");
@@ -105,7 +105,7 @@ namespace Gungeon
 		weapons[curWeaponIdx]->idle->isVisible = true;
 		weapons[curWeaponIdx]->Equip();
 
-		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
+		for (const auto& elem : weapons[curWeaponIdx]->uiBullet)
 			elem->img->isVisible = true;
 
 		weapons[curWeaponIdx]->uiBulletFrame->img->isVisible = true;
@@ -122,14 +122,14 @@ namespace Gungeon
 
 	void Player::InitEffect()
 	{
-		float scaleFactor = 2.0f;
+		constexpr float scaleFactor = 2.0f;
 		shadow = make_shared<ObImage>(L"EnterTheGungeon/player_1/Shadow.png");
 		shadow->scale.x = 16.0f * scaleFactor;
 		shadow->scale.y = 5.0f * scaleFactor;
 		shadow->SetParentRT(*col);
 		shadow->SetWorldPosY(-30.0f);
 
-		float dustScaleFactor = 1.0f;
+		constexpr float dustScaleFactor = 1.0f;
 		for (auto& elem : dust)
 		{
 			elem = make_shared<Effect>();
@@ -171,14 +171,14 @@ namespace Gungeon
 		uiWeaponFrame->img->space = Space::screen;
 		uiWeaponFrame->img->isVisible = true;
 
-		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
+		for (const auto& elem : weapons[curWeaponIdx]->uiBullet)
 			elem->img->isVisible = true;
 
 		uiHeartNone.resize(maxHp / 2);
 		uiHeartHalf.resize(maxHp / 2);
 		uiHeartFull.resize(maxHp / 2);
 
-		float heartScaleFactor = 1.0f;
+		constexpr float heartScaleFactor = 1.0f;
 		idx = 0;
 		for (auto& elem : uiHeartNone)
 		{
@@ -281,6 +281,8 @@ namespace Gungeon
 		case State::die:
 			Die();
 			break;
+		default: 
+			break;
 		}
 
 		SetWeaponFrameToOrigin();
@@ -290,7 +292,7 @@ namespace Gungeon
 		if (godModeByForce)
 			godMode = true;
 
-		for (auto& elem : dust) 
+		for (const auto& elem : dust) 
 			elem->Update();
 		roll->Update();
 		respawn->Update();
@@ -298,19 +300,19 @@ namespace Gungeon
 		respawn->Update();
 
 		weapons[curWeaponIdx]->Update();
-		for (auto& elem : bullet) 
+		for (const auto& elem : bullet) 
 			elem->Update();
 		uiReload->Update();
 		uiReloadBar->Update();
 		if (uiWeaponFrame) 
 			uiWeaponFrame->Update();
-		for (auto& elem : uiHeartNone) 
+		for (const auto& elem : uiHeartNone) 
 			elem->Update();
-		for (auto& elem : uiHeartHalf) 
+		for (const auto& elem : uiHeartHalf)
 			elem->Update();
-		for (auto& elem : uiHeartFull) 
+		for (const auto& elem : uiHeartFull)
 			elem->Update();
-		for (auto& elem : uiBlank) 
+		for (const auto& elem : uiBlank)
 			elem->Update();
 		uiKey->Update();
 		uiGold->Update();
@@ -322,7 +324,7 @@ namespace Gungeon
 
 	void Player::Render()
 	{
-		for (auto& elem : dust) 
+		for (const auto& elem : dust)
 			elem->Render();
 
 		Unit::Render();
@@ -331,7 +333,7 @@ namespace Gungeon
 		respawn->Render();
 		fall->Render();
 		respawn->Render();
-		for (auto& elem : bullet) 
+		for (const auto& elem : bullet)
 			elem->Render();
 
 		weapons[curWeaponIdx]->Render();
@@ -342,13 +344,13 @@ namespace Gungeon
 			uiReloadBar->Render();
 			if (uiWeaponFrame) 
 				uiWeaponFrame->Render();
-			for (auto& elem : uiHeartNone) 
+			for (const auto& elem : uiHeartNone)
 				elem->Render();
-			for (auto& elem : uiHeartHalf) 
+			for (const auto& elem : uiHeartHalf)
 				elem->Render();
-			for (auto& elem : uiHeartFull) 
+			for (const auto& elem : uiHeartFull)
 				elem->Render();
-			for (auto& elem : uiBlank) 
+			for (const auto& elem : uiBlank)
 				elem->Render();
 			uiKey->Render();
 			uiGold->Render();
@@ -357,12 +359,16 @@ namespace Gungeon
 		if (state != State::cinematic)
 		{
 			DWRITE.RenderText(to_wstring(money),
-				RECT{ 170, 140, (long)app.GetWidth(), (long)app.GetHeight() },
+				RECT{ 170, 140,
+					static_cast<long>(app.GetWidth()),
+					static_cast<long>(app.GetHeight()) },
 				40.0f,
 				L"Alagard");
 
 			DWRITE.RenderText(to_wstring(key),
-				RECT{ 80, 140, (long)app.GetWidth(), (long)app.GetHeight() },
+				RECT{ 80, 140,
+					static_cast<long>(app.GetWidth()),
+					static_cast<long>(app.GetHeight()) },
 				40.0f,
 				L"Alagard");
 
@@ -370,9 +376,12 @@ namespace Gungeon
 				weapons[curWeaponIdx]->uiBulletCountInfinity->img->isVisible = true;
 			else
 			{
-				DWRITE.RenderText(to_wstring(weapons[curWeaponIdx]->remainBulletCount),
-					RECT{ (long)app.GetWidth() - 140, (long)app.GetHeight() - 190,
-					(long)app.GetWidth(), (long)app.GetHeight() },
+				DWRITE.RenderText(
+					to_wstring(weapons[curWeaponIdx]->remainBulletCount),
+					RECT{ static_cast<long>(app.GetWidth()) - 140,
+					static_cast<long>(app.GetHeight()) - 190,
+					static_cast<long>(app.GetWidth()),
+					static_cast<long>(app.GetHeight()) },
 					45.0f,
 					L"Alagard");
 			}
@@ -380,9 +389,12 @@ namespace Gungeon
 
 		if (flagInteractionUI)
 		{
-			DWRITE.RenderText(L"E키 입력",
-				RECT{ (long)app.GetHalfWidth() + 30, (long)app.GetHalfHeight() + 10,
-				(long)app.GetWidth(), (long)app.GetHeight() },
+			DWRITE.RenderText(
+				L"E키 입력",
+				RECT{ static_cast<long>(app.GetHalfWidth()) + 30,
+				static_cast<long>(app.GetHalfHeight()) + 10,
+				static_cast<long>(app.GetWidth()),
+				static_cast<long>(app.GetHeight()) },
 				30.0f,
 				L"PF스타더스트");
 		}
@@ -394,26 +406,26 @@ namespace Gungeon
 		uiWeaponFrame->Spawn(Vector2(-70.0f, 30.0f));
 
 		int idx = 0;
-		for (auto& elem : uiHeartNone)
+		for (const auto& elem : uiHeartNone)
 		{
 			elem->Spawn(Vector2(10.0f + idx * 60.0f, -40.0f));
 			idx++;
 		}
 		idx = 0;
-		for (auto& elem : uiHeartHalf)
+		for (const auto& elem : uiHeartHalf)
 		{
 			elem->Spawn(Vector2(10.0f + idx * 60.0f, -40.0f));
 			idx++;
 		}
 		idx = 0;
-		for (auto& elem : uiHeartFull)
+		for (const auto& elem : uiHeartFull)
 		{
 			elem->Spawn(Vector2(10.0f + idx * 60.0f, -40.0f));
 			idx++;
 		}
 
 		idx = 0;
-		for (auto& elem : uiBlank)
+		for (const auto& elem : uiBlank)
 		{
 			elem->Spawn(Vector2(10.0f + idx * 50.0f, -100.0f));
 			idx++;
@@ -428,8 +440,8 @@ namespace Gungeon
 		{
 			targetPos = INPUT.GetWorldMousePos();
 
-			Vector2 camTargetPos = (targetPos + Pos()) / 2.0f;
-			Vector2 velocity = camTargetPos - CAM.position;
+			const Vector2 camTargetPos = (targetPos + Pos()) / 2.0f;
+			const Vector2 velocity = camTargetPos - CAM.position;
 			CAM.position += velocity * 4.0f * DELTA;
 
 			CAM.position.x = Utility::Saturate(CAM.position.x,
@@ -505,7 +517,7 @@ namespace Gungeon
 	void Player::Die()
 	{
 		Unit::Die();
-		for (auto& elem : dust) 
+		for (const auto& elem : dust) 
 			elem->idle->isVisible = false;
 		weapons[curWeaponIdx]->idle->isVisible = false;
 		weapons[curWeaponIdx]->imgReloading->isVisible = false;
@@ -523,20 +535,24 @@ namespace Gungeon
 			{
 				for (int j = 0; j < 8 && false == flagLoopBreak; j++)
 				{
-					int nx = On().x + dx[j] * i;
-					int ny = On().y + dy[j] * i;
-					TileState nState = MAPINFO.tilemap->GetTileState(Vec2i(nx, ny));
-					switch (nState)
+					const int nx = On().x + dx[j] * i;
+					const int ny = On().y + dy[j] * i;
+
+					switch (TileState nState = MAPINFO.tilemap->GetTileState(Vec2i(nx, ny)))
 					{
 					case TileState::floor:
 					case TileState::prop:
 					case TileState::spawner:
+					{
 						Vector2 wpos = MAPINFO.tilemap->TileIdxToWorldPos(Vec2i(nx, ny));
 						wpos.x += MAPINFO.tilemap->scale.x / 2.0f;
 						wpos.y += MAPINFO.tilemap->scale.x / 2.0f;
 						SetPos(wpos);
 						Update();
 						flagLoopBreak = true;
+						break;
+					}
+					default: 
 						break;
 					}
 				}
@@ -557,10 +573,6 @@ namespace Gungeon
 			else
 				StartIdle();
 		}
-	}
-
-	void Player::Cinematic()
-	{
 	}
 
 	void Player::Move()
@@ -588,7 +600,7 @@ namespace Gungeon
 
 	void Player::FireProcess()
 	{
-		int firstFire = weapons[curWeaponIdx]->bulletCount - 1;
+		const int firstFire = weapons[curWeaponIdx]->bulletCount - 1;
 
 		if (curBulletIdx == firstFire ||
 			TIMER.GetTick(timeFire, weapons[curWeaponIdx]->intervalFire))
@@ -619,7 +631,7 @@ namespace Gungeon
 	{
 		if (false == isReloading)
 		{
-			canFireOnce[(int)weapons[curWeaponIdx]->type] = true;
+			canFireOnce[static_cast<int>(weapons[curWeaponIdx]->type)] = true;
 			flagFireCamShake = true;
 		}
 
@@ -634,7 +646,7 @@ namespace Gungeon
 			{
 			case WeaponType::pistol:
 
-				if (canFireOnce[(int)WeaponType::pistol])
+				if (canFireOnce[static_cast<int>(WeaponType::pistol)])
 				{
 					weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
 					weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
@@ -648,7 +660,7 @@ namespace Gungeon
 					SOUND.Stop("Pistol");
 					SOUND.Play("Pistol");
 
-					canFireOnce[(int)WeaponType::pistol] = false;
+					canFireOnce[static_cast<int>(WeaponType::pistol)] = false;
 
 					curBulletIdx--;
 				}
@@ -656,7 +668,7 @@ namespace Gungeon
 
 			case WeaponType::shotgun:
 
-				if (canFireOnce[(int)WeaponType::shotgun])
+				if (canFireOnce[static_cast<int>(WeaponType::shotgun)])
 				{
 					weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
 					weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
@@ -675,7 +687,7 @@ namespace Gungeon
 					SOUND.Stop("Shotgun");
 					SOUND.Play("Shotgun");
 
-					canFireOnce[(int)WeaponType::shotgun] = false;
+					canFireOnce[static_cast<int>(WeaponType::shotgun)] = false;
 
 					curBulletIdx--;
 				}
@@ -683,7 +695,7 @@ namespace Gungeon
 
 			case WeaponType::machineGun:
 
-				if (canFireOnce[(int)WeaponType::machineGun])
+				if (canFireOnce[static_cast<int>(WeaponType::machineGun)])
 				{
 					weapons[curWeaponIdx]->fireEffect->Spawn(weapons[curWeaponIdx]->firePos->GetWorldPos());
 					weapons[curWeaponIdx]->uiBullet[curBulletIdx]->img->isVisible = false;
@@ -697,10 +709,12 @@ namespace Gungeon
 					SOUND.Stop("MachineGun");
 					SOUND.Play("MachineGun");
 
-					canFireOnce[(int)WeaponType::machineGun] = false;
+					canFireOnce[static_cast<int>(WeaponType::machineGun)] = false;
 
 					curBulletIdx--;
 				}
+				break;
+			default: 
 				break;
 			}
 		}
@@ -745,7 +759,7 @@ namespace Gungeon
 			SetDirState(moveDir, curMoveDirState);
 			roll->frame.y = curMoveDirState;
 			roll->isVisible = true;
-			roll->ChangeAnim(AnimState::once, intervalAnim[(int)State::roll]);
+			roll->ChangeAnim(AnimState::once, intervalAnim[static_cast<int>(State::roll)]);
 
 			timeRoll = 0.0f;
 
@@ -763,7 +777,7 @@ namespace Gungeon
 		shadow->isVisible = false;
 
 		fall->isVisible = true;
-		fall->ChangeAnim(AnimState::once, intervalAnim[(int)State::fall]);
+		fall->ChangeAnim(AnimState::once, intervalAnim[static_cast<int>(State::fall)]);
 
 		StartHit(1);
 
@@ -795,7 +809,7 @@ namespace Gungeon
 		roll->isVisible = false;
 		weapons[curWeaponIdx]->idle->isVisible = false;
 		
-		die->ChangeAnim(AnimState::once, intervalAnim[(int)State::die]);
+		die->ChangeAnim(AnimState::once, intervalAnim[static_cast<int>(State::die)]);
 
 		DecreaseHeart();
 
@@ -816,7 +830,7 @@ namespace Gungeon
 					curBulletIdx = weapons[curWeaponIdx]->bulletCount - 1;
 				else
 				{
-					int tempRemain = weapons[curWeaponIdx]->remainBulletCount;
+					const int tempRemain = weapons[curWeaponIdx]->remainBulletCount;
 					weapons[curWeaponIdx]->remainBulletCount -=
 						min(weapons[curWeaponIdx]->bulletCount - curBulletIdx - 1,
 							weapons[curWeaponIdx]->remainBulletCount);
@@ -824,7 +838,7 @@ namespace Gungeon
 				}
 
 				int idx = 0;
-				for (auto& elem : weapons[curWeaponIdx]->uiBullet)
+				for (const auto& elem : weapons[curWeaponIdx]->uiBullet)
 				{
 					if (idx > curBulletIdx) break;
 					elem->img->isVisible = true;
@@ -853,19 +867,19 @@ namespace Gungeon
 
 		if (isHitAnim)
 		{
-			Color c = Color(RANDOM.Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM.Float(0.2f, 1.0f));
-			idle->color = c;
-			walk->color = c;
-			roll->color = c;
+			const Color color = Color(RANDOM.Float(0.6f, 1.0f), 0.5f, 0.5f, RANDOM.Float(0.2f, 1.0f));
+			idle->color = color;
+			walk->color = color;
+			roll->color = color;
 
 			ShakeCam(timeHitCamShake);
 
 			if (TIMER.GetTick(timeHitAnim, 1.0f))
 			{
-				Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-				idle->color = c;
-				walk->color = c;
-				roll->color = c;
+				const Color color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+				idle->color = color;
+				walk->color = color;
+				roll->color = color;
 
 				isHitAnim = false;
 			}
@@ -888,7 +902,7 @@ namespace Gungeon
 		}
 	}
 
-	void Player::DecreaseHeart()
+	void Player::DecreaseHeart() const
 	{
 		if (curHp & 1)
 			uiHeartFull[curHp / 2]->img->isVisible = false;
@@ -902,14 +916,14 @@ namespace Gungeon
 		SOUND.Play("Coin");
 	}
 
-	void Player::EquipWeapon(shared_ptr<Weapon> other)
+	void Player::EquipWeapon(const shared_ptr<Weapon> other)
 	{
 		// 이전 무기 끄기
-		shared_ptr<Weapon>& beforeWeapon = weapons[curWeaponIdx];
+		const shared_ptr<Weapon>& beforeWeapon = weapons[curWeaponIdx];
 		beforeWeapon->idle->isVisible = false;
 		beforeWeapon->firePos->isVisible = false;
 		beforeWeapon->imgReloading->isVisible = false;
-		for (auto& elem : beforeWeapon->uiBullet)
+		for (const auto& elem : beforeWeapon->uiBullet)
 			elem->img->isVisible = false;
 		if (beforeWeapon->uiWeapon)
 			beforeWeapon->uiWeapon->img->isVisible = false;
@@ -948,7 +962,7 @@ namespace Gungeon
 				elem = make_shared<PlayerBullet>();
 
 		// UI
-		for (auto& elem : weapons[curWeaponIdx]->uiBullet)
+		for (const auto& elem : weapons[curWeaponIdx]->uiBullet)
 			elem->img->isVisible = true;
 		weapons[curWeaponIdx]->uiBulletFrame->img->isVisible = true;
 		weapons[curWeaponIdx]->uiWeapon->img->isVisible = true;
@@ -977,7 +991,7 @@ namespace Gungeon
 		Character::ColToggle();
 		weapons[curWeaponIdx]->col->isVisible ^= 1;
 		weapons[curWeaponIdx]->firePos->isVisible ^= 1;
-		for (auto& bulletElem : bullet)
+		for (const auto& bulletElem : bullet)
 			bulletElem->col->isVisible ^= 1;
 	}
 }

@@ -2,15 +2,15 @@
 
 namespace Gungeon
 {
-	class Main : public Scene
+	class Main final : public Scene
 	{
 	public:
-		virtual void Init() override;
-		void InitSound();
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-		virtual void Render() override;
-		virtual void ResizeScreen() override;
+		void Init() override;
+		static void InitSound();
+		void Update() override;
+		void LateUpdate() override;
+		void Render() override;
+		void ResizeScreen() override;
 
 	private:
 		std::shared_ptr<ProcedureMapGeneration> mapGen = nullptr;

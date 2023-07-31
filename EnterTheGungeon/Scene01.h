@@ -2,19 +2,19 @@
 
 namespace Gungeon
 {
-	class Scene01 : public Scene
+	class Scene01 final : public Scene
 	{
 	public:
-		Scene01();
-		~Scene01();
+		Scene01() = default;
+		~Scene01() override = default;
 
-		virtual void Init() override;
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-		virtual void Render() override;
-		virtual void ResizeScreen() override;
+		void Init() override;
+		void Update() override;
+		void LateUpdate() override {}
+		void Render() override;
+		void ResizeScreen() override {}
 
-		void ChangeScene1();
+		void ChangeScene1() const;
 		void ChangeScene2();
 		void ChangeUpdateScene();
 
@@ -23,7 +23,7 @@ namespace Gungeon
 		std::shared_ptr<Player>					player = nullptr;
 
 	private:
-		bool					isChangingScene = false;
-		float					timeFade = 0.0f;
+		bool	isChangingScene = false;
+		float	timeFade = 0.0f;
 	};
 }

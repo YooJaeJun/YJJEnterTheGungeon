@@ -6,7 +6,7 @@ namespace Gungeon
 	{
 	public:
 		Unit();
-		virtual ~Unit() {}
+		~Unit() override = default;
 		virtual void Init() override;
 		virtual void Update() override;
 		virtual void LateUpdate() override;
@@ -25,8 +25,8 @@ namespace Gungeon
 		virtual void StartDie();
 		virtual void Spawn(const Vector2 wpos) override;
 		void SetLastDir();
-		void SetDirState(const Vector2 dir, DirState& dirState);
-		void FindPath(std::shared_ptr<ObTileMap> map);
+		static void SetDirState(const Vector2 dir, DirState& dirState);
+		void FindPath(const std::shared_ptr<ObTileMap> map);
 		void Stop();
 
 	public:
@@ -54,7 +54,7 @@ namespace Gungeon
 		Vector2				targetDir;
 		Vector2				targetDirBefore;
 		Vector2				originCamPos;
-		float				intervalAnim[(int)State::max];
+		float				intervalAnim[static_cast<int>(State::max)];
 		float				intervalHit = 0.0f;
 		float				timeFire = 0.0f;
 		float				timeReload = 0.0f;

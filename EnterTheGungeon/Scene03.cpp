@@ -2,14 +2,6 @@
 
 namespace Gungeon
 {
-    Scene03::Scene03()
-    {
-    }
-
-    Scene03::~Scene03()
-    {
-    }
-
     void Scene03::Init()
     {
         // tilemap
@@ -56,7 +48,7 @@ namespace Gungeon
         curRoom->SetPos(Vector2(0.0f, 0.0f));
         curRoom->col->isVisible = false;
 
-        float tileScale = MAPINFO.tilemap->scale.x;
+        //float tileScale = MAPINFO.tilemap->scale.x;
 
         Vector2 start;
         Vector2 end;
@@ -69,7 +61,7 @@ namespace Gungeon
                 Vec2i(RANDOM.Int(floorImgMin.x, floorImgMax.x),
                     RANDOM.Int(floorImgMin.y, floorImgMax.y)),
                 MAPINFO.imgIdx,
-                (int)TileState::floor,
+                static_cast<int>(TileState::floor),
                 Color(0.5f, 0.5f, 0.5f, 1.0f),
                 roomIdx);
         };
@@ -79,14 +71,14 @@ namespace Gungeon
             MAPINFO.tilemap->SetTile(on,
                 frameIdx,
                 MAPINFO.imgIdx,
-                (int)TileState::wall,
+                static_cast<int>(TileState::wall),
                 Color(0.5f, 0.5f, 0.5f, 1.0f),
                 roomIdx);
         };
 
         auto SetTile1 = [&](shared_ptr<Room> elem, int roomIdx)
         {
-            shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(elem->col);
+	        const shared_ptr<ObRect> r = dynamic_pointer_cast<ObRect>(elem->col);
 
             start.x = r->lb().x;
             start.y = r->lb().y;
@@ -137,7 +129,10 @@ namespace Gungeon
         if (!boss) 
             return;
         
-        bool flagCleared = true;
+        
+        // 플레이어 - 보스와의 통신
+
+    	bool flagCleared = true;
 
         if (boss->state != State::die)
         {
@@ -158,6 +153,8 @@ namespace Gungeon
                 case BossPattern::trail:
                     boss->FindPath(MAPINFO.tilemap);
                     break;
+                default: 
+                    break;
                 }
             default:
                 boss->Stop();
@@ -169,11 +166,13 @@ namespace Gungeon
             case BossPattern::miro:
                 if (boss->pushingPlayer)
                 {
-                    Vector2 dest = Vector2(0.0f, -500.0f);
+	                constexpr Vector2 dest = Vector2(0.0f, -500.0f);
                     boss->SpawnByForceInMiro(dest);
                     player->col->SetWorldPos(dest);
                     player->Update();
                 }
+            default: 
+                break;
             }
         }
 
@@ -224,11 +223,15 @@ namespace Gungeon
         {
             boss->cutScene->Render();
             DWRITE.RenderText(boss->desc,
-                RECT{ 30, 50, (long)app.GetWidth(), (long)app.GetHeight() },
+                RECT{ 30, 50,
+                	static_cast<long>(app.GetWidth()),
+                	static_cast<long>(app.GetHeight()) },
                 50.0f,
                 L"PF스타더스트");
             DWRITE.RenderText(boss->name,
-                RECT{ 60, 110, (long)app.GetWidth(), (long)app.GetHeight() },
+                RECT{ 60, 110,
+                	static_cast<long>(app.GetWidth()),
+                	static_cast<long>(app.GetHeight()) },
                 70.0f,
                 L"PF스타더스트");
         }
@@ -244,13 +247,13 @@ namespace Gungeon
             cinematic->ResizeScreen();
     }
 
-    void Scene03::IntersectPlayer()
+    void Scene03::IntersectPlayer() const
     {
         if (MAPINFO.tilemap->isFootOnWall(player->colTile))
             player->StepBack();
 
         // 플레이어 총알
-        for (auto& bulletElem : player->bullet)
+        for (const auto& bulletElem : player->bullet)
         {
             if (bulletElem->isFired)
             {
@@ -269,7 +272,7 @@ namespace Gungeon
         }
     }
 
-    void Scene03::IntersectBoss()
+    void Scene03::IntersectBoss() const
     {
         if (player->godMode == false &&
             player->state != State::die &&
@@ -281,7 +284,7 @@ namespace Gungeon
             boss->StepBack();
 
         // 보스 총알
-        for (auto& bulletElem : boss->bullet)
+        for (const auto& bulletElem : boss->bullet)
         {
             if (bulletElem->isFired)
             {
@@ -294,7 +297,7 @@ namespace Gungeon
                     bulletElem->Hit(1);
                 }
 
-                Vec2i on = bulletElem->On();
+                const Vec2i on = bulletElem->On();
                 switch (boss->pattern)
                 {
                 case BossPattern::trail:
@@ -348,7 +351,7 @@ namespace Gungeon
     void Scene03::CinematicProcess()
     {
         Vector2 camVelocity;
-        const float camDiff = 30.0f;
+        constexpr float camDiff = 30.0f;
 
         switch (cinematic->cinematicState)
         {
@@ -447,7 +450,7 @@ namespace Gungeon
         }
     }
 
-    void Scene03::UIOn(const bool on)
+    void Scene03::UIOn(const bool on) const
     {
         player->UIOn(on);
         boss->UIOn(on);
@@ -482,7 +485,7 @@ namespace Gungeon
     }
 
     // 치트
-    void Scene03::ColToggle()
+    void Scene03::ColToggle() const
     {
         player->ColToggle();
         boss->ColToggle();

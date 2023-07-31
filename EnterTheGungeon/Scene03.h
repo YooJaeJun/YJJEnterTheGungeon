@@ -5,22 +5,24 @@ namespace Gungeon
 	class Scene03 : public Scene
 	{
 	public:
-		Scene03();
-		~Scene03();
+		Scene03() = default;
+		~Scene03() override = default;
 
-		virtual void Init() override;
+		void Init() override;
 		void InitRoom();
-		virtual void Update() override;
-		virtual void LateUpdate() override;
-		virtual void Render() override;
-		virtual void ResizeScreen() override;
-		void IntersectPlayer();
-		void IntersectBoss();
+
+		void Update() override;
+		void LateUpdate() override;
+		void Render() override;
+		void ResizeScreen() override;
+
+		void IntersectPlayer() const;
+		void IntersectBoss() const;
 		void CinematicProcess();
-		void UIOn(const bool on);
+		void UIOn(const bool on) const;
 		void ChangeUpdateScene();
 		void ChangeScene3();
-		void ColToggle();
+		void ColToggle() const;
 
 	public:
 		std::shared_ptr<Player>		player = nullptr;

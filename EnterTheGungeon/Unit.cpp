@@ -4,17 +4,17 @@ namespace Gungeon
 {
 	Unit::Unit()
 	{
-		Init();
+		Unit::Init();
 	}
 
 	void Unit::Init()
 	{
-		intervalAnim[(int)State::idle] = 0.0f;
-		intervalAnim[(int)State::walk] = 0.0f;
-		intervalAnim[(int)State::roll] = 0.0f;
-		intervalAnim[(int)State::attack] = 0.0f;
-		intervalAnim[(int)State::die] = 2.0f;
-		intervalAnim[(int)State::cinematic] = 0.0f;
+		intervalAnim[static_cast<int>(State::idle)] = 0.0f;
+		intervalAnim[static_cast<int>(State::walk)] = 0.0f;
+		intervalAnim[static_cast<int>(State::roll)] = 0.0f;
+		intervalAnim[static_cast<int>(State::attack)] = 0.0f;
+		intervalAnim[static_cast<int>(State::die)] = 2.0f;
+		intervalAnim[static_cast<int>(State::cinematic)] = 0.0f;
 	}
 
 	void Unit::Update()
@@ -31,6 +31,8 @@ namespace Gungeon
 		case Gungeon::State::walk:
 			if (moveDir.x == 0.0f && moveDir.y == 0.0f)
 				StartIdle();
+			break;
+		default: 
 			break;
 		}
 
@@ -157,7 +159,7 @@ namespace Gungeon
 		shadow->isVisible = false;
 		die->isVisible = true;
 
-		for (auto& elem : bullet)
+		for (const auto& elem : bullet)
 		{
 			elem->idle->isVisible = false;
 			elem->SetPos(DEFAULTSPAWN);
@@ -182,7 +184,7 @@ namespace Gungeon
 		state = State::walk;
 		idle->isVisible = false;
 		walk->isVisible = true;
-		walk->ChangeAnim(AnimState::loop, intervalAnim[(int)State::walk]);
+		walk->ChangeAnim(AnimState::loop, intervalAnim[static_cast<int>(State::walk)]);
 	}
 
 	void Unit::StartIdle()
@@ -203,7 +205,7 @@ namespace Gungeon
 	// targetDir: 타겟 좌표(플레이어는 마우스)에 따라 다른 방향 애니메이션(공통 Idle, Walk) 설정
 	void Unit::SetDirState(const Vector2 dir, DirState& dirState)
 	{
-		float rotation = Utility::DirToRadian(dir);
+		const float rotation = Utility::DirToRadian(dir);
 
 		if (rotation >= 30.0f * ToRadian && rotation < 60.0f * ToRadian)
 			dirState = dirRT;
@@ -225,7 +227,7 @@ namespace Gungeon
 			dirState = dirB;
 	}
 
-	void Unit::FindPath(std::shared_ptr<ObTileMap> map)
+	void Unit::FindPath(const std::shared_ptr<ObTileMap> map)
 	{
 		if (TIMER.GetTick(timeFindPath, 1.0f))
 		{
@@ -273,13 +275,13 @@ namespace Gungeon
 		idle->isVisible = true;
 		shadow->isVisible = true;
 
-		Color c = Color(0.5f, 0.5f, 0.5f, 1.0f);
-		idle->color = c;
-		walk->color = c;
+		constexpr Color color = Color(0.5f, 0.5f, 0.5f, 1.0f);
+		idle->color = color;
+		walk->color = color;
 		if (hit) 
-			hit->color = c;
+			hit->color = color;
 		if (die) 
-			die->color = c;
+			die->color = color;
 	}
 
 	void Unit::Stop()

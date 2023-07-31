@@ -56,12 +56,10 @@ namespace Gungeon
 		void Init();
 		void Clear();
 		void Update();
-		void LateUpdate();
 		void Render();
-		void ResizeScreen();
 
 		void Spray();
-		void Spread();
+		void Spread() const;
 		void Select();
 		void Triangulate();
 		void Spanning();
@@ -70,25 +68,25 @@ namespace Gungeon
 		void RoomTile();
 		void PassageTile();
 		void PassagePitTile();
-		void Prop();
+		void Prop() const;
 		void Spawner();
 		void PropPit();
 		void PropWall();
 		void Finish();
 
-		void SetTileRange(const TileState tileState, const Vec2i imgMin, const Vec2i imgMax,
-			const Vec2i sour, const Vec2i dest, const int roomIdx);
-		void SetTileSpecificDir(const TileState tileState, const Vec2i imgDir[],
-			const Vec2i on, const DirState dir, const int roomIdx);
-		void SetTileAllDir(const TileState tileState, const Vec2i imgDir[], 
-			const Vec2i sour, const Vec2i dest, const int roomIdx);
-		void VisualizeSpawner();
+		static void SetTileRange(const TileState tileState, const Vec2i imgMin, const Vec2i imgMax,
+		                         const Vec2i sour, const Vec2i dest, const int roomIdx);
+		static void SetTileSpecificDir(const TileState tileState, const Vec2i imgDir[],
+		                               const Vec2i on, const DirState dir, const int roomIdx);
+		static void SetTileAllDir(const TileState tileState, const Vec2i imgDir[], 
+		                          const Vec2i sour, const Vec2i dest, const int roomIdx);
+		void VisualizeSpawner() const;
 		void SetGateSpawner();
 		void SetEnemySpawner();
-		void SetTreasureSpawner();
+		void SetTreasureSpawner() const;
 		// void MaximalSquare(const Room* elem);
 		void WrappingFuncHistogram(const shared_ptr<Room> elem);
-		void Save();
+		void Save() const;
 		void Load();
 
 	private:
