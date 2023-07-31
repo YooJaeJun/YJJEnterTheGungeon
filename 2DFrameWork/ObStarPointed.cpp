@@ -104,7 +104,7 @@ void ObStarPointed::CreateStaticMember()
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
@@ -148,7 +148,7 @@ void ObStarPointed::CreateStaticMember()
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 }
@@ -165,8 +165,8 @@ void ObStarPointed::Render()
 
     basicShader->Set();
 
-    UINT stride = sizeof(VertexPC);
-    UINT offset = 0;
+    constexpr UINT stride = sizeof(VertexPC);
+    constexpr UINT offset = 0;
 
     if (isFilled)
     {
@@ -189,4 +189,3 @@ void ObStarPointed::Render()
         D3D.GetDC()->Draw(StaticVertexCount::Linestrip(), 0);
     }
 }
-

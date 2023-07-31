@@ -17,8 +17,8 @@ public:
     void                Set();
     void                Zoom(const float zDelta);
     void                ResizeScreen();
-    const Matrix&       GetP() { return P; };
-    const Matrix&       GetVP() { return VP; };
+    const Matrix&       GetP() const { return P; };
+    const Matrix&       GetVP() const { return VP; };
 
 private:
     Viewport            viewport;       // ºäÆ÷Æ®

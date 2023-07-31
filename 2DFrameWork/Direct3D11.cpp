@@ -7,7 +7,7 @@ void Direct3D11::Create()
 	{
 		//IDXGIFactory1 DXGI 객체를 생성하기 위한 메소드를 구현
 		ComPtr<IDXGIFactory1> factory;
-		FAILED(CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)factory.GetAddressOf()));
+		FAILED(CreateDXGIFactory1(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(factory.GetAddressOf())));
 
 		UINT index = 0;
 		while (true)
@@ -30,7 +30,7 @@ void Direct3D11::Create()
 			adapter->GetDesc1(&adapterInfo->adapterDesc);
 			adapterInfo->adapter = adapter;
 
-			ComPtr<IDXGIOutput> output = NULL;
+			ComPtr<IDXGIOutput> output = nullptr;
 
 			hr = adapterInfo->adapter->EnumOutputs(0, output.GetAddressOf());
 			if (DXGI_ERROR_NOT_FOUND == hr)
@@ -128,7 +128,7 @@ void Direct3D11::Create()
 			if (adapterInfos[i]->adapterDesc.DedicatedVideoMemory > maxVideoMemory)
 			{
 				selectedAdapterIndex = i;
-				maxVideoMemory = (UINT)adapterInfos[i]->adapterDesc.DedicatedVideoMemory;
+				maxVideoMemory = static_cast<UINT>(adapterInfos[i]->adapterDesc.DedicatedVideoMemory);
 			}
 		}
 
@@ -139,7 +139,7 @@ void Direct3D11::Create()
 		(
 			adapterInfos[selectedAdapterIndex]->adapter.Get()
 			, D3D_DRIVER_TYPE_UNKNOWN
-			, NULL
+			, nullptr
 			, creationFlags
 			, featureLevels
 			, 1
@@ -147,7 +147,7 @@ void Direct3D11::Create()
 			, &swapChainDesc
 			, swapChain.GetAddressOf()
 			, device.GetAddressOf()
-			, NULL
+			, nullptr
 			, deviceContext.GetAddressOf()
 		);
 		assert(SUCCEEDED(hr));
@@ -199,7 +199,7 @@ void Direct3D11::Create()
 		desc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO; // 0
 		desc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD; // 0 + 1
 		device->CreateBlendState(&desc, blendState.GetAddressOf());
-		deviceContext->OMSetBlendState(blendState.Get(), NULL, 0xFF);
+		deviceContext->OMSetBlendState(blendState.Get(), nullptr, 0xFF);
 	}
 	isCreated = true;
 }
@@ -217,7 +217,7 @@ Direct3D11::~Direct3D11()
 		swapChain->SetFullscreenState(false, NULL);
 }
 
-void Direct3D11::SetRenderTarget(ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv)
+void Direct3D11::SetRenderTarget(ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv) const
 {
 	if (rtv == nullptr)
 		rtv = renderTargetView;
@@ -228,7 +228,7 @@ void Direct3D11::SetRenderTarget(ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D
 	deviceContext->OMSetRenderTargets(1, rtv.GetAddressOf(), nullptr);
 }
 
-void Direct3D11::Clear(Color color, ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv)
+void Direct3D11::Clear(Color color, ComPtr<ID3D11RenderTargetView> rtv, ComPtr<ID3D11DepthStencilView> dsv) const
 {
 	if (rtv == nullptr)
 		rtv = renderTargetView;
@@ -240,12 +240,12 @@ void Direct3D11::Clear(Color color, ComPtr<ID3D11RenderTargetView> rtv, ComPtr<I
 	//deviceContext->ClearDepthStencilView(dsv, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1, 0);
 }
 
-void Direct3D11::Present()
+void Direct3D11::Present() const
 {
 	swapChain->Present(app.vSync == true ? 1 : 0, 0);
 }
 
-void Direct3D11::ResizeScreen(float width, float height)
+void Direct3D11::ResizeScreen(const float width, const float height)
 {
 	if (width < 1 || height < 1)
 		return;
@@ -255,7 +255,13 @@ void Direct3D11::ResizeScreen(float width, float height)
 
 	DWRITE.DeleteBackBuffer();
 	{
-		HRESULT hr = swapChain->ResizeBuffers(0, (UINT)width, (UINT)height, DXGI_FORMAT_UNKNOWN, 0);
+		const HRESULT hr = 
+			swapChain->ResizeBuffers(
+				0, 
+				static_cast<UINT>(width), 
+				static_cast<UINT>(height), 
+				DXGI_FORMAT_UNKNOWN, 
+				0);
 		assert(SUCCEEDED(hr));
 	}
 	CreateBackBuffer(width, height);
@@ -264,15 +270,14 @@ void Direct3D11::ResizeScreen(float width, float height)
 
 void Direct3D11::CreateBackBuffer(float width, float height)
 {
-	HRESULT hr;
-
 	//Create RTV - System BackBuffer
 	{
+		HRESULT hr;
 		ComPtr<ID3D11Texture2D> backbufferPointer;
-		hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)backbufferPointer.GetAddressOf());
+		hr = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(backbufferPointer.GetAddressOf()));
 		Check(hr);
 
-		hr = device->CreateRenderTargetView(backbufferPointer.Get(), NULL, renderTargetView.GetAddressOf());
+		hr = device->CreateRenderTargetView(backbufferPointer.Get(), nullptr, renderTargetView.GetAddressOf());
 		Check(hr);
 	}
 }
@@ -282,16 +287,7 @@ D3DEnumAdapterInfo::D3DEnumAdapterInfo()
 {
 }
 
-D3DEnumAdapterInfo::~D3DEnumAdapterInfo()
-{
-}
-
-
 D3DEnumOutputInfo::D3DEnumOutputInfo()
 	: output(nullptr), outputDesc(DXGI_OUTPUT_DESC()), numerator(0), denominator(1)
-{
-}
-
-D3DEnumOutputInfo::~D3DEnumOutputInfo()
 {
 }

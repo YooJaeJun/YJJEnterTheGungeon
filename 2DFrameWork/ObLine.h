@@ -1,17 +1,17 @@
 #pragma once
 // 선
-class ObLine : public GameObject, public StaticVertexCount<ObLine>
+class ObLine final : public GameObject, public StaticVertexCount<ObLine>
 {
 private:
     static Microsoft::WRL::ComPtr<ID3D11Buffer> vertexBuffer;
 
 public:
     static void CreateStaticMember();
-    void Render();
+    void Render() override;
 
 
 public:
-    int     index;
+    int     index{};
     bool    isBad = false;
 
 private:
@@ -32,8 +32,8 @@ public:
     void SetW(const Vec2f& other);
     void SetVIdx(const int other);
     void SetWIdx(const int other);
-    const Vec2f& V() const { return v; }
-    const Vec2f& W() const { return w; }
+    [[nodiscard]] const Vec2f& V() const { return v; }
+    [[nodiscard]] const Vec2f& W() const { return w; }
 
     bool operator<(const ObLine& other) const; // visited 판별용
     bool operator>(const ObLine& other) const;  // priority_queue 정렬용
@@ -44,5 +44,3 @@ public:
 public:
     bool NearlyEqualLine(const ObLine& other);
 };
-
-

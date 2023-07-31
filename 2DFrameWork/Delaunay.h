@@ -14,4 +14,3 @@ public:
 	map<Vec2f, int>			nodesForIndex;
 	map<Vec2f, vector<Vec2f>>	nodesLinked;
 };
-

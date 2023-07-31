@@ -3,7 +3,7 @@
 class MSTPrim
 {
 private:
-	MSTPrim() {};
+	MSTPrim() = default;;
 
 public:
 	static MSTPrim& GetInstance()
@@ -23,6 +23,5 @@ public:
 
 private:
 	std::priority_queue<ObLine, vector<ObLine>, greater<ObLine>>	edgePq;
-	std::unordered_map<int, bool>		visited;
+	std::unordered_map<int, bool>	visited{};
 };
-

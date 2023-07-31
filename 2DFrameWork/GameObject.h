@@ -81,21 +81,21 @@ public:
 	//member function
 public:
 	GameObject();
-	virtual ~GameObject() {};
+	virtual ~GameObject() = default;;
 
 	virtual void Update();
 	virtual void Update(const bool notRotation);
 	virtual void Render();
-	ColPos Intersect(Vector2 coord);
+	[[nodiscard]] ColPos Intersect(Vector2 coord) const;
 	ColPos Intersect(std::shared_ptr<GameObject> ob);
-	ColPos IntersectScreenMouse(Vector2 coord);
+	[[nodiscard]] ColPos IntersectScreenMouse(Vector2 coord) const;
 
 	//getter setter
 public:
 	//위치 받아오기
-	Vector2 GetLocalPos() const	{ return position;}
-	Vector2 GetWorldPos() const	{ 
-		return Vector2(RT._41, RT._42); 
+	[[nodiscard]] Vector2 GetLocalPos() const	{ return position;}
+	[[nodiscard]] Vector2 GetWorldPos() const	{ 
+		return {RT._41, RT._42}; 
 	}
 	Vector2 GetWorldPivot() const { return Vector2(W._41, W._42); }
 	//위치를 고정할때 =
@@ -109,11 +109,11 @@ public:
 	void	MoveLocalPos(Vector2 velocity)	{ position += velocity; }
 	void	MoveWorldPos(Vector2 velocity);
 	//월드기준 방향
-	Vector2 GetRight()	{ return Vector2(RT._11, RT._12); }
-	Vector2 GetUp()		{ return Vector2(RT._21, RT._22); }
+	[[nodiscard]] Vector2 GetRight() const { return {RT._11, RT._12}; }
+	[[nodiscard]] Vector2 GetUp() const { return {RT._21, RT._22}; }
 	//부모행렬 만들기
 	void	SetParentRT(GameObject& src)	{ P = &src.RT; }
 	void	SetParentT(GameObject& src)	{ P = &src.T; }
-	Matrix* GetParent() { return P; }
+	[[nodiscard]] Matrix* GetParent() const { return P; }
 };
 

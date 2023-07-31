@@ -1,6 +1,7 @@
 #include "framework.h"
 
-void Histogram::FindMaximalRectangleForStack(const int xStart, const int xEnd, const int yStart, const int yEnd,
+void Histogram::FindMaximalRectangleForStack(
+    const int xStart, const int xEnd, const int yStart, const int yEnd,
     const int xSize, const int ySize, 
     OUT int& xMax, OUT int& yMax, OUT Vec2i& propSour, OUT Vec2i& propDest)
 {
@@ -26,9 +27,9 @@ void Histogram::FindMaximalRectangleForStack(const int xStart, const int xEnd, c
             // st.top() == x index
             while (!st.empty() && height[x] < height[st.top()])
             {
-                int h = height[st.top()];
+	            const int h = height[st.top()];
                 st.pop();
-                int w = (st.empty()) ? x : x - 1 - st.top();
+	            const int w = (st.empty()) ? x : x - 1 - st.top();
 
                 if (areaMax <= w * h)
                 {

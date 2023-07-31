@@ -7,7 +7,7 @@ void ObLine::CreateStaticMember()
 {
     StaticVertexCount::Linestrip() = 2;
 
-    shared_ptr<VertexPC[]> Vertex{ new VertexPC[StaticVertexCount::Linestrip()] };
+    const shared_ptr<VertexPC[]> Vertex{ new VertexPC[StaticVertexCount::Linestrip()] };
 
     Vertex[0].position.x = -0.5f;
     Vertex[0].position.y = 0.0f;
@@ -31,7 +31,7 @@ void ObLine::CreateStaticMember()
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 }
@@ -44,8 +44,8 @@ void ObLine::Render()
 
     basicShader->Set();
 
-    UINT stride = sizeof(VertexPC);
-    UINT offset = 0;
+    constexpr UINT stride = sizeof(VertexPC);
+    constexpr UINT offset = 0;
     //정점의 도형서술
     D3D.GetDC()->IASetPrimitiveTopology
         //(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -93,8 +93,8 @@ ObLine::ObLine(const int index, const Vec2f& v1, const Vec2f& v2)
 
 void ObLine::Init()
 {
-    Vector2 vv = Vector2(v.x, v.y);
-    Vector2 vw = Vector2(w.x, w.y);
+	const Vector2 vv = Vector2(v.x, v.y);
+	const Vector2 vw = Vector2(w.x, w.y);
     Init(vv, vw);
 }
 
@@ -148,18 +148,18 @@ ObLine& ObLine::operator=(const ObLine& other)
     v.y = other.v.y;
     w.x = other.w.x;
     w.y = other.w.y;
-    Vector2 vv = Vector2(v.x, v.y);
-    Vector2 vw = Vector2(w.x, w.y);
+    const Vector2 vv = Vector2(v.x, v.y);
+    const Vector2 vw = Vector2(w.x, w.y);
     SetWorldPos(vv);
     rotation = Utility::DirToRadian(vw - vv);
     scale.x = vv.Distance(vv, vw);
     return *this;
 }
 
-bool ObLine::operator==(const ObLine& ohter) const
+bool ObLine::operator==(const ObLine& other) const
 {
-    return (v == ohter.v && w == ohter.w) ||
-        (v == ohter.w && w == ohter.v);
+    return (v == other.v && w == other.w) ||
+        (v == other.w && w == other.v);
 }
 
 bool ObLine::NearlyEqualLine(const ObLine& other)

@@ -75,7 +75,7 @@ void ObCircle::CreateStaticMember()
 
         //버퍼 만들기
         //                                           서술    원본       복사대상   
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
 
     }
@@ -83,7 +83,9 @@ void ObCircle::CreateStaticMember()
     Vertex.reset(new VertexPC[StaticVertexCount::Linestrip()]);
 
     //두가지 랜덤한 색 만들기
-    for (size_t i = 0; i < (size_t)StaticVertexCount::Linestrip(); i++)
+    const size_t lineStrip = static_cast<size_t>(StaticVertexCount::Linestrip());
+
+    for (size_t i = 0; i < lineStrip; i++)
     {
         Vertex[i].color = Color(1.0f, 1.0f, 1.0f, 1.0f);
         Vertex[i].position.x = cosf(i * ToRadian) * 0.5f;
@@ -104,7 +106,7 @@ void ObCircle::CreateStaticMember()
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 }
@@ -121,8 +123,8 @@ void ObCircle::Render()
 
     basicShader->Set();
 
-    UINT stride = sizeof(VertexPC);
-    UINT offset = 0;
+    const UINT stride = sizeof(VertexPC);
+    const UINT offset = 0;
 
     if (isFilled)
     {

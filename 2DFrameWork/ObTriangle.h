@@ -1,6 +1,6 @@
 #pragma once
 // »ï°¢Çü
-class ObTriangle : public GameObject, public StaticVertexCount<ObTriangle>
+class ObTriangle final : public GameObject, public StaticVertexCount<ObTriangle>
 {
 private:
     static Microsoft::WRL::ComPtr<ID3D11Buffer> fillVertexBuffer;
@@ -8,7 +8,7 @@ private:
 
 public:
     static void CreateStaticMember();
-    void Render();
+    void Render() override;
 
 
 public:
@@ -34,6 +34,6 @@ public:
     bool ContainsVertex(const Vec2f& v);
     bool CircumCircleContains(const Vec2f& v) const;
 
-    bool almostEqualTriangle(const ObTriangle& ohter);
+    bool AlmostEqualTriangle(const ObTriangle& ohter);
 };
 

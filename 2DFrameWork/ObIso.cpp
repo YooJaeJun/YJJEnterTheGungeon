@@ -68,7 +68,7 @@ void ObIso::ResizeTile(Vec2i newTileSize)
         {
             // Å¸ÀÏÁÂÇ¥ ( tileSize.x * yÁÂÇ¥ + xÁÂÇ¥ )
             // ²ÀÁöÁ¡ ÁÂÇ¥ ( tileSize.x * yÁÂÇ¥ + xÁÂÇ¥ ) * 6
-            int tileIdx = newTileSize.x * i + j;
+            const int tileIdx = newTileSize.x * i + j;
             newVertices[tileIdx * 6].position.x = -0.5f + (j - i) * 0.5f;
             newVertices[tileIdx * 6].position.y = -TWODIVROOT3 - (j + i) * TWODIVROOT3QUARTER;
             newVertices[tileIdx * 6].uv = Vector2(0.0f, 1.0f);
@@ -103,8 +103,8 @@ void ObIso::ResizeTile(Vec2i newTileSize)
         {
             for (int j = 0; j < minV.x; j++)
             {
-                int SrcIdx = tileSize.x * i + j;
-                int DestIdx = newTileSize.x * i + j;
+	            const int SrcIdx = tileSize.x * i + j;
+	            const int DestIdx = newTileSize.x * i + j;
                 for (int k = 0; k < 6; k++)
                 {
                     newVertices[DestIdx * 6 + k] = vertices[SrcIdx * 6 + k];
@@ -126,7 +126,7 @@ void ObIso::ResizeTile(Vec2i newTileSize)
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
         D3D11_SUBRESOURCE_DATA data = { 0 };
         data.pSysMem = vertices.get();
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         Check(hr);
     }
 }
@@ -142,7 +142,7 @@ void ObIso::CreateTileCost()
     for (int i = 0; i < Tiles.size(); i++)
         Tiles[i].resize(tileSize.y);
 
-    float half = scale.y * TWODIVROOT3QUARTER;
+    const float half = scale.y * TWODIVROOT3QUARTER;
 
     Update();
 

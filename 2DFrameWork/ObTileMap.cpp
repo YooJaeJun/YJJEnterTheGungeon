@@ -25,11 +25,7 @@ ObTileMap::ObTileMap()
     tileImages[3] = make_shared<ObImage>(L"Tile2.png");
     tileImages[3]->maxFrame = Vec2i(11, 7);
 
-    ResizeTile(tileSize);
-}
-
-ObTileMap::~ObTileMap()
-{
+    ObTileMap::ResizeTile(tileSize);
 }
 
 void ObTileMap::CreateTileCost()
@@ -46,7 +42,7 @@ void ObTileMap::CreateTileCost()
         Tiles[i].resize(tileSize.y);
     }
 
-    Vector2 half = scale * 0.5f;
+    const Vector2 half = scale * 0.5f;
     Update();
     for (int i = 0; i < tileSize.x; i++)
     {
@@ -66,7 +62,7 @@ void ObTileMap::CreateTileCost()
 //사이즈 재조정, 정정 재조정
 void ObTileMap::ResizeTile(Vec2i newTileSize)
 {
-    shared_ptr<VertexTile[]> newVertices { new VertexTile[newTileSize.x * newTileSize.y * 6] };
+	const shared_ptr<VertexTile[]> newVertices { new VertexTile[newTileSize.x * newTileSize.y * 6] };
 
     //세로
     for (int i = 0; i < newTileSize.y; i++)
@@ -74,7 +70,7 @@ void ObTileMap::ResizeTile(Vec2i newTileSize)
         //가로
         for (int j = 0; j < newTileSize.x; j++)
         {
-            int tileIdx = newTileSize.x * i + j;
+	        const int tileIdx = newTileSize.x * i + j;
             //0
             newVertices[tileIdx * 6].position.x = 0.0f + j;
             newVertices[tileIdx * 6].position.y = 0.0f + i;
@@ -105,13 +101,13 @@ void ObTileMap::ResizeTile(Vec2i newTileSize)
     //Copy
     if (vertices)
     {
-        Vec2i minV = Vec2i(min(newTileSize.x, tileSize.x), min(newTileSize.y, tileSize.y));
+	    const Vec2i minV = Vec2i(min(newTileSize.x, tileSize.x), min(newTileSize.y, tileSize.y));
         for (int i = 0; i < minV.y; i++)
         {
             for (int j = 0; j < minV.x; j++)
             {
-                int SrcIdx = tileSize.x * i + j;
-                int DestIdx = newTileSize.x * i + j;
+	            const int SrcIdx = tileSize.x * i + j;
+	            const int DestIdx = newTileSize.x * i + j;
 
                 for (int k = 0; k < 6; k++)
                     newVertices[DestIdx * 6 + k] = vertices[SrcIdx * 6 + k];
@@ -132,12 +128,12 @@ void ObTileMap::ResizeTile(Vec2i newTileSize)
         desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
         D3D11_SUBRESOURCE_DATA data = { 0 };
         data.pSysMem = vertices.get();
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         Check(hr);
     }
 }
 
-void ObTileMap::RenderGui(Vec2i& guiPickingIdx, int& imgIdx)
+void ObTileMap::RenderGui(Vec2i& guiPickingIdx, int& imgIdx) const
 {
     if (ImGui::InputInt("ImgIdx", &imgIdx))
     {
@@ -147,20 +143,21 @@ void ObTileMap::RenderGui(Vec2i& guiPickingIdx, int& imgIdx)
             imgIdx = tileImageCount - 1;
     }
 
-    Vec2i MF = tileImages[imgIdx]->maxFrame;
+    const Vec2i MF = tileImages[imgIdx]->maxFrame;
     ImVec2 size;
-    size.x = 200.0f / (float)MF.x;
-    size.y = 200.0f / (float)MF.y;
+    size.x = 200.0f / static_cast<float>(MF.x);
+    size.y = 200.0f / static_cast<float>(MF.y);
 
     //텍스쳐 좌표
-    ImVec2 LT, RB;
     int index = 0;
 
-    for (UINT i = 0; i < (UINT)MF.y; i++)
+    for (UINT i = 0; i < static_cast<UINT>(MF.y); i++)
     {
-        for (UINT j = 0; j < (UINT)MF.x; j++)
+        for (UINT j = 0; j < static_cast<UINT>(MF.x); j++)
         {
-            if (j != 0)
+	        ImVec2 LT, RB;
+
+	        if (j != 0)
                 ImGui::SameLine();
 
             //텍스쳐 좌표
@@ -197,8 +194,8 @@ void ObTileMap::Render()
 
     tileMapShader->Set();
 
-    UINT stride = sizeof(VertexTile);
-    UINT offset = 0;
+    constexpr UINT stride = sizeof(VertexTile);
+    constexpr UINT offset = 0;
 
     //버텍스버퍼 바인딩
     D3D.GetDC()->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), &stride, &offset);
@@ -206,25 +203,32 @@ void ObTileMap::Render()
     D3D.GetDC()->Draw(tileSize.x * tileSize.y * 6, 0);
 }
 
-void ObTileMap::SetTile(Vec2i tileIdx, Vec2i frameIdx, int imgIdx, int tileState, Color color, int roomIdx, DirState dir)
+void ObTileMap::SetTile(
+    const Vec2i tileIdx, 
+    const Vec2i frameIdx, 
+    const int imgIdx, 
+    const int tileState,
+    const Color color,
+    const int roomIdx,
+    const DirState dir) const
 {
     int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
 
-    vertices[verticeIdx * 6 + 0].uv.x = frameIdx.x / (float)tileImages[imgIdx]->maxFrame.x;
-    vertices[verticeIdx * 6 + 1].uv.x = frameIdx.x / (float)tileImages[imgIdx]->maxFrame.x;
-    vertices[verticeIdx * 6 + 5].uv.x = frameIdx.x / (float)tileImages[imgIdx]->maxFrame.x;
+    vertices[verticeIdx * 6 + 0].uv.x = frameIdx.x / static_cast<float>(tileImages[imgIdx]->maxFrame.x);
+    vertices[verticeIdx * 6 + 1].uv.x = frameIdx.x / static_cast<float>(tileImages[imgIdx]->maxFrame.x);
+    vertices[verticeIdx * 6 + 5].uv.x = frameIdx.x / static_cast<float>(tileImages[imgIdx]->maxFrame.x);
 
-    vertices[verticeIdx * 6 + 2].uv.x = (frameIdx.x + 1.0f) / (float)tileImages[imgIdx]->maxFrame.x;
-    vertices[verticeIdx * 6 + 3].uv.x = (frameIdx.x + 1.0f) / (float)tileImages[imgIdx]->maxFrame.x;
-    vertices[verticeIdx * 6 + 4].uv.x = (frameIdx.x + 1.0f) / (float)tileImages[imgIdx]->maxFrame.x;
+    vertices[verticeIdx * 6 + 2].uv.x = (frameIdx.x + 1.0f) / static_cast<float>(tileImages[imgIdx]->maxFrame.x);
+    vertices[verticeIdx * 6 + 3].uv.x = (frameIdx.x + 1.0f) / static_cast<float>(tileImages[imgIdx]->maxFrame.x);
+    vertices[verticeIdx * 6 + 4].uv.x = (frameIdx.x + 1.0f) / static_cast<float>(tileImages[imgIdx]->maxFrame.x);
 
-    vertices[verticeIdx * 6 + 3].uv.y = frameIdx.y / (float)tileImages[imgIdx]->maxFrame.y;
-    vertices[verticeIdx * 6 + 1].uv.y = frameIdx.y / (float)tileImages[imgIdx]->maxFrame.y;
-    vertices[verticeIdx * 6 + 5].uv.y = frameIdx.y / (float)tileImages[imgIdx]->maxFrame.y;
+    vertices[verticeIdx * 6 + 3].uv.y = frameIdx.y / static_cast<float>(tileImages[imgIdx]->maxFrame.y);
+    vertices[verticeIdx * 6 + 1].uv.y = frameIdx.y / static_cast<float>(tileImages[imgIdx]->maxFrame.y);
+    vertices[verticeIdx * 6 + 5].uv.y = frameIdx.y / static_cast<float>(tileImages[imgIdx]->maxFrame.y);
 
-    vertices[verticeIdx * 6 + 2].uv.y = (frameIdx.y + 1.0f) / (float)tileImages[imgIdx]->maxFrame.y;
-    vertices[verticeIdx * 6 + 0].uv.y = (frameIdx.y + 1.0f) / (float)tileImages[imgIdx]->maxFrame.y;
-    vertices[verticeIdx * 6 + 4].uv.y = (frameIdx.y + 1.0f) / (float)tileImages[imgIdx]->maxFrame.y;
+    vertices[verticeIdx * 6 + 2].uv.y = (frameIdx.y + 1.0f) / static_cast<float>(tileImages[imgIdx]->maxFrame.y);
+    vertices[verticeIdx * 6 + 0].uv.y = (frameIdx.y + 1.0f) / static_cast<float>(tileImages[imgIdx]->maxFrame.y);
+    vertices[verticeIdx * 6 + 4].uv.y = (frameIdx.y + 1.0f) / static_cast<float>(tileImages[imgIdx]->maxFrame.y);
 
     for (int i = 0; i < 6; i++)
     {
@@ -236,7 +240,12 @@ void ObTileMap::SetTile(Vec2i tileIdx, Vec2i frameIdx, int imgIdx, int tileState
     }
 
     // SubResource - CPU와 GPU의 중간다리 역할
-    D3D.GetDC()->UpdateSubresource(vertexBuffer.Get(), 0, NULL, vertices.get(), 0, 0);
+    D3D.GetDC()->UpdateSubresource(
+        vertexBuffer.Get(), 
+        0, 
+        nullptr, 
+        vertices.get(), 
+        0, 0);
 }
 
 bool ObTileMap::WorldPosToTileIdx(Vector2 wpos, Vec2i& tileIdx)
@@ -260,7 +269,7 @@ bool ObTileMap::WorldPosToTileIdx(Vector2 wpos, Vec2i& tileIdx)
     return true;
 }
 
-Vector2 ObTileMap::TileIdxToWorldPos(Vec2i tileIdx)
+Vector2 ObTileMap::TileIdxToWorldPos(const Vec2i tileIdx) const
 {
     Vector2 Wpos;
     Wpos.x = tileIdx.x * scale.x;
@@ -269,52 +278,52 @@ Vector2 ObTileMap::TileIdxToWorldPos(Vec2i tileIdx)
     return Wpos;
 }
 
-TileState ObTileMap::GetTileState(Vec2i tileIdx)
+TileState ObTileMap::GetTileState(const Vec2i tileIdx) const
 {
-    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+    const int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
     return static_cast<TileState>(vertices[verticeIdx * 6].tileState);
 }
 
-void ObTileMap::SetTileState(Vec2i tileIdx, TileState tileState)
+void ObTileMap::SetTileState(const Vec2i tileIdx, TileState tileState) const
 {
-    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+	const int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
     vertices[verticeIdx * 6].tileState = static_cast<int>(tileState);
 }
 
-Vector2 ObTileMap::GetTilePosition(Vec2i tileIdx)
+Vector2 ObTileMap::GetTilePosition(const Vec2i tileIdx) const
 {
-    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+	const int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
     return Vector2(vertices[verticeIdx * 6].position.x, vertices[verticeIdx * 6].position.y);
 }
 
-int ObTileMap::GetTileRoomIndex(Vec2i tileIdx)
+int ObTileMap::GetTileRoomIndex(const Vec2i tileIdx) const
 {
-    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+	const int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
     return vertices[verticeIdx * 6].tileRoomIdx;
 }
 
-void ObTileMap::SetTileRoomIndex(Vec2i tileIdx, const int tileRoomIndex)
+void ObTileMap::SetTileRoomIndex(const Vec2i tileIdx, const int tileRoomIndex) const
 {
-    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+	const int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
     vertices[verticeIdx * 6].tileRoomIdx = tileRoomIndex;
 }
 
-DirState ObTileMap::GetTileDir(Vec2i tileIdx)
+DirState ObTileMap::GetTileDir(const Vec2i tileIdx) const
 {
-    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
-    return (DirState)vertices[verticeIdx * 6].tileDir;
+	const int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+    return static_cast<DirState>(vertices[verticeIdx * 6].tileDir);
 }
 
-void ObTileMap::SetTileDir(Vec2i tileIdx, const DirState dir)
+void ObTileMap::SetTileDir(Vec2i tileIdx, const DirState dir) const
 {
-    int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
+	const int verticeIdx = tileSize.x * tileIdx.y + tileIdx.x;
     vertices[verticeIdx * 6].tileDir = dir;
 }
 
-void ObTileMap::Save()
+void ObTileMap::Save() const
 {
+    const string path = "../Contents/TileMap/" + file;
     ofstream fout;
-    string path = "../Contents/TileMap/" + file;
 
     //ios::out 쓰기 용으로 열겟다
     fout.open(path.c_str(), ios::out);
@@ -349,7 +358,7 @@ void ObTileMap::Save()
         //가로
         for (int j = 0; j < tileSize.x; j++)
         {
-            int verticeIdx = tileSize.x * i + j;
+	        const int verticeIdx = tileSize.x * i + j;
             fout << j << " " << i << " "
                 << vertices[verticeIdx * 6 + 1].uv.x << " " << vertices[verticeIdx * 6 + 1].uv.y << " "
                 << vertices[verticeIdx * 6 + 2].uv.x << " " << vertices[verticeIdx * 6 + 2].uv.y << " "
@@ -375,7 +384,8 @@ void ObTileMap::Load()
     {
         for (int i = 0; i < tileImageCount; i++)
         {
-            int idx; string Imgfile;
+            int idx;
+        	string Imgfile;
             fin >> idx;
             fin >> Imgfile;
 
@@ -438,12 +448,17 @@ void ObTileMap::Load()
         CreateTileCost();
     }
 
-    D3D.GetDC()->UpdateSubresource(vertexBuffer.Get(), 0, NULL, vertices.get(), 0, 0);
+    D3D.GetDC()->UpdateSubresource(
+        vertexBuffer.Get(), 
+        0, 
+        nullptr, 
+        vertices.get(), 
+        0, 0);
 
     fin.close();
 }
 
-bool ObTileMap::isOnWall(const Vec2i on)
+bool ObTileMap::isOnWall(const Vec2i on) const
 {
     return GetTileState(on) == TileState::wall;
 }

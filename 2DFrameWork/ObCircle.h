@@ -1,5 +1,5 @@
 #pragma once
-class ObCircle :
+class ObCircle final :
 	public GameObject,
 	public StaticVertexCount<ObCircle>
 {
@@ -14,4 +14,3 @@ public:
     ObCircle();
     void Render()override;
 };
-

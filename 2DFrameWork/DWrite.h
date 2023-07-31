@@ -18,7 +18,8 @@ public:
     }
 
 public:
-    ~DWrite();
+    ~DWrite() = default;
+
     Microsoft::WRL::ComPtr<ID2D1DeviceContext> GetDC() { return deviceContext; }
     //창사이즈 조절
     void CreateBackBuffer(float width, float height);
@@ -28,14 +29,14 @@ public:
     //UI안에서 그릴때
     void RenderText
     (
-        wstring text
-        , RECT rect
-        , float size = 20.0f
-        , wstring font = L"돋움체"
-        , Color color = Color(1, 1, 1, 1)
-        , DWRITE_FONT_WEIGHT weight = DWRITE_FONT_WEIGHT_NORMAL
-        , DWRITE_FONT_STYLE style = DWRITE_FONT_STYLE_NORMAL
-        , DWRITE_FONT_STRETCH stretch = DWRITE_FONT_STRETCH_NORMAL
+        const wstring text
+        , const RECT rect
+        , const float size = 20.0f
+        , const wstring font = L"돋움체"
+        , const Color color = Color(1, 1, 1, 1)
+        , const DWRITE_FONT_WEIGHT weight = DWRITE_FONT_WEIGHT_NORMAL
+        , const DWRITE_FONT_STYLE style = DWRITE_FONT_STYLE_NORMAL
+        , const DWRITE_FONT_STRETCH stretch = DWRITE_FONT_STRETCH_NORMAL
     );
 
 private:
@@ -52,10 +53,10 @@ private:
 struct FontBrushDesc
 {
     Color color;
-    Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = NULL;
+    Microsoft::WRL::ComPtr<ID2D1SolidColorBrush> brush = nullptr;
 
     //연산자오버라이딩
-    bool operator==(const FontBrushDesc& val)
+    bool operator==(const FontBrushDesc& val) const
     {
         return color.x == val.color.x &&
             color.y == val.color.y &&

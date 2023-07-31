@@ -35,7 +35,7 @@ void GameObject::CreateStaticMember()
 		desc.MiscFlags = 0;
 		desc.StructureByteStride = 0;
 
-		HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, NULL, colorBuffer.GetAddressOf());
+		const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, NULL, colorBuffer.GetAddressOf());
 		assert(SUCCEEDED(hr));
 	}
 	D3D.GetDC()->VSSetConstantBuffers(1, 1, colorBuffer.GetAddressOf());
@@ -47,7 +47,7 @@ void GameObject::CreateStaticMember()
 }
 
 
-GameObject::GameObject()
+GameObject::GameObject(): collider()
 {
 	P = nullptr;
 	position.x = 0;
@@ -144,7 +144,7 @@ void GameObject::Render()
 	}
 }
 
-ColPos GameObject::Intersect(Vector2 coord)
+ColPos GameObject::Intersect(Vector2 coord) const
 {
 	if (not colOnOff) 
 		return ColPos::none;
@@ -158,10 +158,10 @@ ColPos GameObject::Intersect(Vector2 coord)
 		}
 		else //회전
 		{
-			Vector2 rcpivot = Vector2::Transform(pivot, S);		// 피벗 다시 원점 위치
+			const Vector2 rcpivot = Vector2::Transform(pivot, S);		// 피벗 다시 원점 위치
 			Utility::RECT rc1(rcpivot, scale);
 
-			Matrix rcInverse = RT.Invert();
+			const Matrix rcInverse = RT.Invert();
 			coord = Vector2::Transform(coord, rcInverse);		// 마우스도 사각형의 체계로. SRT * (1/RT). scale만 남음
 
 			return IntersectRectCoord(rc1, coord);
@@ -183,24 +183,28 @@ ColPos GameObject::Intersect(shared_ptr<GameObject> ob)
 
 	if (collider == Collider::line)
 	{
-		Utility::LINE l(GetWorldPos(), Vector2(GetWorldPos().x + cos(rotation) * scale.x, GetWorldPos().y + sin(rotation) * scale.x));
+		Utility::LINE l(
+			GetWorldPos(), 
+			Vector2(GetWorldPos().x + cos(rotation) * scale.x, 
+				GetWorldPos().y + sin(rotation) * scale.x));
 		
 		// 선 선
 		if (ob->collider == Collider::line)
 		{
-			Utility::LINE l2(ob->GetWorldPos(), 
+			Utility::LINE l2(
+				ob->GetWorldPos(), 
 				Vector2(ob->GetWorldPos().x + cos(ob->rotation) * ob->scale.x,
 					ob->GetWorldPos().y + sin(ob->rotation) * ob->scale.x));
 			return Utility::IntersectLineLine(l, l2);
 		}
 		// 선 사각형
-		else if (ob->collider == Collider::rect)
+		if (ob->collider == Collider::rect)
 		{
 			Utility::RECT rc(ob->GetWorldPivot(), ob->scale);
 			return Utility::IntersectRectLine(rc, l);
 		}
 		// 선 원
-		else if (ob->collider == Collider::circle)
+		if (ob->collider == Collider::circle)
 		{
 			Utility::CIRCLE cc(ob->GetWorldPivot(), ob->scale);
 			return Utility::IntersectCircleLine(cc, l);
@@ -218,7 +222,7 @@ ColPos GameObject::Intersect(shared_ptr<GameObject> ob)
 			return Utility::IntersectRectLine(rc, l);
 		}
 		// 사각형 사각형
-		else if (ob->collider == Collider::rect)
+		if (ob->collider == Collider::rect)
 		{
 			if (GetRight() == RIGHT && ob->GetRight() == RIGHT)
 			{
@@ -226,11 +230,8 @@ ColPos GameObject::Intersect(shared_ptr<GameObject> ob)
 				Utility::RECT rc2(ob->GetWorldPivot(), ob->scale);
 				return Utility::IntersectRectRect(rc1, rc2);
 			}
-			else
-			{
-				return Utility::IntersectRectRect(make_shared<GameObject>(*this), ob);
-			}
 
+			return Utility::IntersectRectRect(make_shared<GameObject>(*this), ob);
 		}
 		// 사각형 원
 		else if (ob->collider == Collider::circle)
@@ -241,17 +242,15 @@ ColPos GameObject::Intersect(shared_ptr<GameObject> ob)
 				Utility::CIRCLE cc2(ob->GetWorldPivot(), ob->scale);
 				return Utility::IntersectRectCircle(rc1, cc2);
 			}
-			else
-			{
-				Vector2 rc1pivot = Vector2::Transform(pivot, S);
-				Utility::RECT rc1(rc1pivot, scale);
-				Matrix rcInverse = RT.Invert();
-				Vector2 cc2pivot = ob->GetWorldPivot();
-				cc2pivot = Vector2::Transform(cc2pivot, rcInverse);
-				Utility::CIRCLE cc2(cc2pivot, ob->scale);
 
-				return IntersectRectCircle(rc1, cc2);
-			}
+			Vector2 rc1pivot = Vector2::Transform(pivot, S);
+			Utility::RECT rc1(rc1pivot, scale);
+			Matrix rcInverse = RT.Invert();
+			Vector2 cc2pivot = ob->GetWorldPivot();
+			cc2pivot = Vector2::Transform(cc2pivot, rcInverse);
+			Utility::CIRCLE cc2(cc2pivot, ob->scale);
+
+			return IntersectRectCircle(rc1, cc2);
 		}
 	}
 	else if (collider == Collider::circle)
@@ -266,7 +265,7 @@ ColPos GameObject::Intersect(shared_ptr<GameObject> ob)
 			return Utility::IntersectCircleLine(cc, l);
 		}
 		// 원 사각형
-		else if (ob->collider == Collider::rect)
+		if (ob->collider == Collider::rect)
 		{
 			if (GetRight() == RIGHT)
 			{
@@ -274,20 +273,18 @@ ColPos GameObject::Intersect(shared_ptr<GameObject> ob)
 				Utility::CIRCLE cc2(GetWorldPivot(), scale);
 				return Utility::IntersectRectCircle(rc1, cc2);
 			}
-			else
-			{
-				Vector2 rc1pivot = Vector2::Transform(ob->pivot, ob->S);
-				Utility::RECT rc1(rc1pivot, ob->scale);
-				Matrix rcInverse = ob->RT.Invert();
-				Vector2 cc2pivot = GetWorldPivot();
-				cc2pivot = Vector2::Transform(cc2pivot, rcInverse);
-				Utility::CIRCLE cc2(cc2pivot, scale);
 
-				return IntersectRectCircle(rc1, cc2);
-			}
+			Vector2 rc1pivot = Vector2::Transform(ob->pivot, ob->S);
+			Utility::RECT rc1(rc1pivot, ob->scale);
+			Matrix rcInverse = ob->RT.Invert();
+			Vector2 cc2pivot = GetWorldPivot();
+			cc2pivot = Vector2::Transform(cc2pivot, rcInverse);
+			Utility::CIRCLE cc2(cc2pivot, scale);
+
+			return IntersectRectCircle(rc1, cc2);
 		}
 		// 원 원
-		else if (ob->collider == Collider::circle)
+		if (ob->collider == Collider::circle)
 		{
 			Utility::CIRCLE cc1(GetWorldPivot(), scale);
 			Utility::CIRCLE cc2(ob->GetWorldPivot(), ob->scale);
@@ -297,7 +294,7 @@ ColPos GameObject::Intersect(shared_ptr<GameObject> ob)
 	return ColPos::none;
 }
 
-ColPos GameObject::IntersectScreenMouse(Vector2 coord)
+ColPos GameObject::IntersectScreenMouse(Vector2 coord) const
 {
 	coord.y = app.GetHalfHeight() - coord.y;
 	coord.x = coord.x - app.GetHalfWidth();
@@ -310,7 +307,7 @@ void GameObject::SetWorldPos(Vector2 worldPos)
 		position = worldPos;
 	else
 	{
-		Vector2 location = Vector2::Transform(worldPos, P->Invert());
+		const Vector2 location = Vector2::Transform(worldPos, P->Invert());
 		position = location;
 	}
 }
@@ -321,7 +318,7 @@ void GameObject::SetWorldPosX(float worldPosX)
 		position.x = worldPosX;
 	else
 	{
-		Vector2 location = Vector2::Transform(Vector2(worldPosX, 0), P->Invert());
+		const Vector2 location = Vector2::Transform(Vector2(worldPosX, 0), P->Invert());
 		position.x = location.x;
 	}
 }
@@ -331,7 +328,7 @@ void GameObject::SetWorldPosY(float worldPosY)
 		position.y = worldPosY;
 	else
 	{
-		Vector2 location = Vector2::Transform(Vector2(0, worldPosY), P->Invert());
+		const Vector2 location = Vector2::Transform(Vector2(0, worldPosY), P->Invert());
 		position.y = location.y;
 	}
 }
@@ -341,7 +338,7 @@ void GameObject::MoveWorldPos(Vector2 velocity)
 		position += velocity;
 	else
 	{
-		Vector2 locVelocity = Vector2::TransformNormal(velocity, P->Invert());
+		const Vector2 locVelocity = Vector2::TransformNormal(velocity, P->Invert());
 		position += locVelocity;
 	}
 }

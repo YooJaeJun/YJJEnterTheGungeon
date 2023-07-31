@@ -1,5 +1,5 @@
 #pragma once
-class ObStar : public GameObject, public StaticVertexCount<ObStar>
+class ObStar final : public GameObject, public StaticVertexCount<ObStar>
 {
 private:
     static Microsoft::WRL::ComPtr<ID3D11Buffer> fillVertexBuffer;
@@ -12,4 +12,3 @@ public:
     ObStar();
     void Render()override;
 };
-

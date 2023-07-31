@@ -45,7 +45,7 @@ void ObRect::CreateStaticMember()
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
@@ -86,7 +86,7 @@ void ObRect::CreateStaticMember()
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 }
@@ -103,8 +103,8 @@ void ObRect::Render()
 
     basicShader->Set();
 
-    UINT stride = sizeof(VertexPC);
-    UINT offset = 0;
+    constexpr UINT stride = sizeof(VertexPC);
+    constexpr UINT offset = 0;
 
     if (isFilled)
     {
@@ -128,25 +128,22 @@ void ObRect::Render()
     }
 }
 
-const Vector2 ObRect::lb() const
+Vector2 ObRect::lb() const
 {
     return Vector2(GetWorldPos().x - scale.x / 2.0f, GetWorldPos().y - scale.y / 2.0f);
 }
 
-const Vector2 ObRect::rb() const
+Vector2 ObRect::rb() const
 {
     return Vector2(GetWorldPos().x + scale.x / 2.0f, GetWorldPos().y - scale.y / 2.0f);
 }
 
-const Vector2 ObRect::lt() const
+Vector2 ObRect::lt() const
 {
     return Vector2(GetWorldPos().x - scale.x / 2.0f, GetWorldPos().y + scale.y / 2.0f);
 }
 
-const Vector2 ObRect::rt() const
+Vector2 ObRect::rt() const
 {
     return Vector2(GetWorldPos().x + scale.x / 2.0f, GetWorldPos().y + scale.y / 2.0f);
 }
-
-
-

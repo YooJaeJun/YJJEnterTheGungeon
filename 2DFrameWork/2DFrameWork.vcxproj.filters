@@ -9,19 +9,19 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ObCircle.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ObLine.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ObRect.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ObStarPointed.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Random.h">
       <Filter>System</Filter>
@@ -33,10 +33,10 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Shader.h">
-      <Filter>GameObject\Member</Filter>
+      <Filter>Algorithm\GameObject\Member</Filter>
     </ClInclude>
     <ClInclude Include="VertexType.h">
-      <Filter>GameObject\Member</Filter>
+      <Filter>Algorithm\GameObject\Member</Filter>
     </ClInclude>
     <ClInclude Include="Gui.h">
       <Filter>System</Filter>
@@ -45,7 +45,7 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="ObImage.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Utility.h">
       <Filter>System</Filter>
@@ -60,10 +60,10 @@
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="ObStar.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="ObTriangle.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="Numeric.h">
       <Filter>System</Filter>
@@ -72,13 +72,13 @@
       <Filter>Algorithm</Filter>
     </ClInclude>
     <ClInclude Include="ObTileMap.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="DWrite.h">
       <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="ObIso.h">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClInclude>
     <ClInclude Include="MapInfo.h">
       <Filter>System</Filter>
@@ -109,14 +109,14 @@
     <Filter Include="System">
       <UniqueIdentifier>{21c08d9d-0d99-4e1a-b5cf-b6fe6274862f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObject">
-      <UniqueIdentifier>{6f4bd646-61cf-4ecf-9e3c-e1c08a8bf624}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GameObject\Member">
-      <UniqueIdentifier>{09dc338e-ffeb-4250-8eb8-8d54dd34faf9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Algorithm">
       <UniqueIdentifier>{3dbe9af7-f89b-4833-bc0b-71b680bf67ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithm\GameObject">
+      <UniqueIdentifier>{6f4bd646-61cf-4ecf-9e3c-e1c08a8bf624}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithm\GameObject\Member">
+      <UniqueIdentifier>{09dc338e-ffeb-4250-8eb8-8d54dd34faf9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -127,19 +127,19 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="ObCircle.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="ObLine.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="ObRect.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="ObStarPointed.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>System</Filter>
@@ -151,7 +151,7 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Shader.cpp">
-      <Filter>GameObject\Member</Filter>
+      <Filter>Algorithm\GameObject\Member</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>System</Filter>
@@ -163,7 +163,7 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="ObImage.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Utility.cpp">
       <Filter>System</Filter>
@@ -178,10 +178,10 @@
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="ObStar.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="ObTriangle.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="Numeric.cpp">
       <Filter>System</Filter>
@@ -190,13 +190,13 @@
       <Filter>Algorithm</Filter>
     </ClCompile>
     <ClCompile Include="ObTileMap.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="DWrite.cpp">
       <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="ObIso.cpp">
-      <Filter>GameObject</Filter>
+      <Filter>Algorithm\GameObject</Filter>
     </ClCompile>
     <ClCompile Include="MapInfo.cpp">
       <Filter>System</Filter>

@@ -7,7 +7,7 @@ struct D3DEnumOutputInfo
 	UINT									numerator;
 	UINT									denominator;
 	D3DEnumOutputInfo();
-	~D3DEnumOutputInfo();
+	~D3DEnumOutputInfo() = default;;
 };
 
 struct D3DEnumAdapterInfo
@@ -18,7 +18,7 @@ struct D3DEnumAdapterInfo
 	DXGI_ADAPTER_DESC1						adapterDesc;
 	std::shared_ptr<D3DEnumOutputInfo>		outputInfo;
 	D3DEnumAdapterInfo();
-	~D3DEnumAdapterInfo();
+	~D3DEnumAdapterInfo() = default;;
 };
 
 class Direct3D11
@@ -43,12 +43,16 @@ private:
 
 public:
 	void Create();
-	void SetRenderTarget(Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv = nullptr,
-		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv = nullptr);
+	void SetRenderTarget(
+		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv = nullptr,
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv = nullptr) const;
 	//
-	void Clear(Color color = Color(0.7f,0.7f,0.7f,1.0f), Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv = nullptr, Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv = nullptr);
+	void Clear(Color color = 
+		Color(0.7f,0.7f,0.7f,1.0f), 
+		Microsoft::WRL::ComPtr<ID3D11RenderTargetView> rtv = nullptr, 
+		Microsoft::WRL::ComPtr<ID3D11DepthStencilView> dsv = nullptr) const;
 	//
-	void Present();
+	void Present() const;
 
 	void ResizeScreen(float width, float height);
 	
@@ -58,7 +62,7 @@ public:
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext>		GetDC()			{ return deviceContext; }
 	Microsoft::WRL::ComPtr<IDXGISwapChain>			GetSwapChain()	{ return swapChain; }
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView>	GetRTV()		{ return renderTargetView; }
-	bool	GetCreated()	{ return isCreated; }
+	bool	GetCreated() const { return isCreated; }
 	//ID3D11DepthStencilView* GetDSV() { return depthStencilView; }
 
 private:
@@ -70,9 +74,8 @@ private:
 	Microsoft::WRL::ComPtr<ID3D11BlendState>		blendState;
 	//ID3D11DepthStencilView*	depthStencilView;
 
-	std::vector<std::shared_ptr<D3DEnumAdapterInfo>>	adapterInfos;
+	std::vector<std::shared_ptr<D3DEnumAdapterInfo>>	adapterInfos{};
 	UINT	numerator;
 	UINT	denominator;
 	bool	isCreated;
 };
-

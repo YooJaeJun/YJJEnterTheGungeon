@@ -2,7 +2,7 @@
 class Gui
 {
 public:
-	static LRESULT MsgProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam);
+	static LRESULT MsgProc(const HWND handle, const UINT message, const WPARAM wParam, const LPARAM lParam);
 
 private:
 	Gui();
@@ -20,9 +20,9 @@ private:
 	UINT fileID;
 public:
 	~Gui();
-	void ResizeScreen();
+	static void ResizeScreen();
 
 	void Update();
-	void Render();
-	bool FileImGui(string button, string name, string fiter, string minPath);
+	static void Render();
+	bool FileImGui(const string button, const string name, const string fiter, const string minPath);
 };

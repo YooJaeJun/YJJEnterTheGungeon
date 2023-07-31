@@ -3,12 +3,10 @@ using Microsoft::WRL::ComPtr;
 
 DWrite::DWrite()
 {
-    HRESULT hr;
-
-    hr = DWriteCreateFactory
-    (
-        DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), (IUnknown**)writeFactory.GetAddressOf()
-    );
+	HRESULT hr = DWriteCreateFactory
+	(
+		DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(writeFactory.GetAddressOf())
+	);
     assert(SUCCEEDED(hr));
 
 
@@ -29,7 +27,7 @@ DWrite::DWrite()
 
 
     ComPtr<IDXGISurface> dxgiSurface;
-    hr = D3D.GetSwapChain()->GetBuffer(0, __uuidof(IDXGISurface), (void**)dxgiSurface.GetAddressOf());
+    hr = D3D.GetSwapChain()->GetBuffer(0, __uuidof(IDXGISurface), reinterpret_cast<void**>(dxgiSurface.GetAddressOf()));
     assert(SUCCEEDED(hr));
 
 
@@ -39,26 +37,21 @@ DWrite::DWrite()
     bp.dpiX = 96;
     bp.dpiY = 96;
     bp.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW;
-    bp.colorContext = NULL;
+    bp.colorContext = nullptr;
 
     hr = deviceContext->CreateBitmapFromDxgiSurface(dxgiSurface.Get(), &bp, targetBitmap.GetAddressOf());
     assert(SUCCEEDED(hr));
     deviceContext->SetTarget(targetBitmap.Get());
 }
 
-DWrite::~DWrite()
-{
-}
-
 void DWrite::CreateBackBuffer(float width, float height)
 {
-    HRESULT hr;
-
-    hr = device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_ENABLE_MULTITHREADED_OPTIMIZATIONS, deviceContext.GetAddressOf());
+	HRESULT hr = device->CreateDeviceContext(D2D1_DEVICE_CONTEXT_OPTIONS_ENABLE_MULTITHREADED_OPTIMIZATIONS,
+	                                         deviceContext.GetAddressOf());
     assert(SUCCEEDED(hr));
 
     ComPtr<IDXGISurface> dxgiSurface;
-    hr = D3D.GetSwapChain()->GetBuffer(0, __uuidof(IDXGISurface), (void**)dxgiSurface.GetAddressOf());
+    hr = D3D.GetSwapChain()->GetBuffer(0, __uuidof(IDXGISurface), reinterpret_cast<void**>(dxgiSurface.GetAddressOf()));
     assert(SUCCEEDED(hr));
 
 
@@ -68,7 +61,7 @@ void DWrite::CreateBackBuffer(float width, float height)
     bp.dpiX = 96;
     bp.dpiY = 96;
     bp.bitmapOptions = D2D1_BITMAP_OPTIONS_TARGET | D2D1_BITMAP_OPTIONS_CANNOT_DRAW;
-    bp.colorContext = NULL;
+    bp.colorContext = nullptr;
 
     hr = deviceContext->CreateBitmapFromDxgiSurface(dxgiSurface.Get(), &bp, targetBitmap.GetAddressOf());
     assert(SUCCEEDED(hr));
@@ -84,12 +77,20 @@ void DWrite::DeleteBackBuffer()
     deviceContext.Reset();
 }
 
-void DWrite::RenderText(wstring text, RECT rect, float size, wstring font, Color color, DWRITE_FONT_WEIGHT weight, DWRITE_FONT_STYLE style, DWRITE_FONT_STRETCH stretch)
+void DWrite::RenderText(
+	const wstring text, 
+    const RECT rect,
+    const float size,
+    const wstring font,
+	const Color color,
+	const DWRITE_FONT_WEIGHT weight,
+	const DWRITE_FONT_STYLE style,
+	const DWRITE_FONT_STRETCH stretch)
 {
     FontBrushDesc brushDesc;
     brushDesc.color = color;
 
-    shared_ptr<FontBrushDesc> findBrush = NULL;
+    shared_ptr<FontBrushDesc> findBrush = nullptr;
 
     for (FontBrushDesc& desc : fontBrush)
     {
@@ -101,9 +102,9 @@ void DWrite::RenderText(wstring text, RECT rect, float size, wstring font, Color
     }
 
     //벡터안에 해당 브러시가 없다면
-    if (findBrush == NULL)
+    if (findBrush == nullptr)
     {
-        D2D1::ColorF colorF = D2D1::ColorF(color.x, color.y, color.z);
+	    const D2D1::ColorF colorF = D2D1::ColorF(color.x, color.y, color.z);
         deviceContext->CreateSolidColorBrush(colorF, brushDesc.brush.GetAddressOf());
 
         //해당 브러시를 벡터에 추가(기존에 존재하지 않기때문에)
@@ -119,7 +120,7 @@ void DWrite::RenderText(wstring text, RECT rect, float size, wstring font, Color
     textDesc.style = style;
     textDesc.weight = weight;
 
-    shared_ptr<FontTextDesc> findText = NULL;
+    shared_ptr<FontTextDesc> findText = nullptr;
     //벡터의 사이즈만큼 반복
 
     for (UINT i = 0; i < fontText.size(); i++)
@@ -133,11 +134,11 @@ void DWrite::RenderText(wstring text, RECT rect, float size, wstring font, Color
         }
     }
     //없다면 추가
-    if (findText == NULL)
+    if (findText == nullptr)
     {
         writeFactory->CreateTextFormat
         (
-            textDesc.font.c_str(), NULL, textDesc.weight, textDesc.style, textDesc.stretch, textDesc.fontSize,
+            textDesc.font.c_str(), nullptr, textDesc.weight, textDesc.style, textDesc.stretch, textDesc.fontSize,
             L"ko", textDesc.format.GetAddressOf()
         );
 
@@ -146,14 +147,17 @@ void DWrite::RenderText(wstring text, RECT rect, float size, wstring font, Color
     }
 
     D2D1_RECT_F rectF;
-    rectF.left = (float)rect.left;
-    rectF.right = (float)rect.right;
-    rectF.top = (float)rect.top;
-    rectF.bottom = (float)rect.bottom;
+    rectF.left = static_cast<float>(rect.left);
+    rectF.right = static_cast<float>(rect.right);
+    rectF.top = static_cast<float>(rect.top);
+    rectF.bottom = static_cast<float>(rect.bottom);
 
 
-    deviceContext->DrawTextW
-    (
-        text.c_str(), (UINT32)text.size(), findText->format.Get(), rectF, findBrush->brush.Get()
+    deviceContext->DrawTextW(
+        text.c_str(), 
+        static_cast<UINT32>(text.size()), 
+        findText->format.Get(), 
+        rectF, 
+        findBrush->brush.Get()
     );
 }

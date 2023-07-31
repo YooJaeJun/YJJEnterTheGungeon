@@ -1,6 +1,10 @@
 #include "framework.h"
 
-bool AStar::FindPath(std::shared_ptr<ObTileMap> tilemap, Vec2i sour, Vec2i dest, OUT vector<Tile>& way, bool checkDiagnoal)
+bool AStar::FindPath(
+    std::shared_ptr<ObTileMap> tilemap, 
+    Vec2i sour, Vec2i dest, 
+    OUT vector<Tile>& way, 
+    bool checkDiagnoal) const
 {
     //둘중에 하나가 벽이면 갈 수 있는길이 없다.  -> 갈 수 있게 수정
     //if (Tiles[dest.x][dest.y].state == TileState::wall)
@@ -15,7 +19,7 @@ bool AStar::FindPath(std::shared_ptr<ObTileMap> tilemap, Vec2i sour, Vec2i dest,
     if (sour == dest)
         return false;
 
-    Vec2i tileSize = tilemap->GetTileSize();
+    const Vec2i tileSize = tilemap->GetTileSize();
 
     //타일 비용 초기화
     for (int i = 0; i < tileSize.x; i++)
@@ -100,8 +104,8 @@ bool AStar::FindPath(std::shared_ptr<ObTileMap> tilemap, Vec2i sour, Vec2i dest,
                     node.first.idx.y + 1);
 
                 // 주위 벽이 있을 땐 대각선으로 가지 않기
-                TileState state1 = tilemap->GetTileState(Vec2i(on.x - 1, on.y));
-                TileState state2 = tilemap->GetTileState(Vec2i(on.x, on.y - 1));
+                const TileState state1 = tilemap->GetTileState(Vec2i(on.x - 1, on.y));
+                const TileState state2 = tilemap->GetTileState(Vec2i(on.x, on.y - 1));
                 if (state1 != TileState::wall &&
                     state2 != TileState::wall &&
                     state1 != TileState::pit &&
@@ -116,8 +120,8 @@ bool AStar::FindPath(std::shared_ptr<ObTileMap> tilemap, Vec2i sour, Vec2i dest,
                 Vec2i on = Vec2i(node.first.idx.x - 1,
                     node.first.idx.y - 1);
 
-                TileState state1 = tilemap->GetTileState(Vec2i(on.x - 1, on.y));
-                TileState state2 = tilemap->GetTileState(Vec2i(on.x, on.y + 1));
+                const TileState state1 = tilemap->GetTileState(Vec2i(on.x - 1, on.y));
+                const TileState state2 = tilemap->GetTileState(Vec2i(on.x, on.y + 1));
                 if (state1 != TileState::wall &&
                     state2 != TileState::wall &&
                     state1 != TileState::pit &&
@@ -132,8 +136,8 @@ bool AStar::FindPath(std::shared_ptr<ObTileMap> tilemap, Vec2i sour, Vec2i dest,
                 Vec2i on = Vec2i(node.first.idx.x + 1,
                     node.first.idx.y + 1);
 
-                TileState state1 = tilemap->GetTileState(Vec2i(on.x + 1, on.y));
-                TileState state2 = tilemap->GetTileState(Vec2i(on.x, on.y - 1));
+                const TileState state1 = tilemap->GetTileState(Vec2i(on.x + 1, on.y));
+                const TileState state2 = tilemap->GetTileState(Vec2i(on.x, on.y - 1));
                 if (state1 != TileState::wall &&
                     state2 != TileState::wall &&
                     state1 != TileState::pit &&
@@ -148,8 +152,8 @@ bool AStar::FindPath(std::shared_ptr<ObTileMap> tilemap, Vec2i sour, Vec2i dest,
                 Vec2i on = Vec2i(node.first.idx.x + 1,
                     node.first.idx.y - 1);
 
-                TileState state1 = tilemap->GetTileState(Vec2i(on.x + 1, on.y));
-                TileState state2 = tilemap->GetTileState(Vec2i(on.x, on.y + 1));
+                const TileState state1 = tilemap->GetTileState(Vec2i(on.x + 1, on.y));
+                const TileState state2 = tilemap->GetTileState(Vec2i(on.x, on.y + 1));
                 if (state1 != TileState::wall &&
                     state2 != TileState::wall &&
                     state1 != TileState::pit &&

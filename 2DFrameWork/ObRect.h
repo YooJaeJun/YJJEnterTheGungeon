@@ -1,5 +1,5 @@
 #pragma once
-class ObRect: public GameObject, public StaticVertexCount<ObRect>
+class ObRect final : public GameObject, public StaticVertexCount<ObRect>
 {
 private:
     static Microsoft::WRL::ComPtr<ID3D11Buffer> fillVertexBuffer;
@@ -11,9 +11,8 @@ public:
 public:
     ObRect();
     void Render() override;
-    const Vector2 lb() const;
-    const Vector2 rb() const;
-    const Vector2 lt() const;
-    const Vector2 rt() const;
+    Vector2 lb() const;
+    Vector2 rb() const;
+    Vector2 lt() const;
+    Vector2 rt() const;
 };
-

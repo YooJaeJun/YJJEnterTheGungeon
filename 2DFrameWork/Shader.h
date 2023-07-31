@@ -10,4 +10,3 @@ public:
     ~Shader();
     void Set();
 };
-

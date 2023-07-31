@@ -8,7 +8,7 @@ enum class AnimState
     reverseOnce
 };
 
-class ObImage : public GameObject, public StaticVertexCount<ObImage>
+class ObImage final : public GameObject, public StaticVertexCount<ObImage>
 {
     friend class ObTileMap;
 
@@ -42,13 +42,12 @@ private:
     void PlayAnim();
 
 public:
-    ObImage(wstring file);
-    ~ObImage();
+    ObImage(const wstring file);
+    ~ObImage() override = default;
 
     void Render()override;
-    void ChangeAnim(AnimState anim, float interval, bool xAxis = true); //set함수 기능
-    void ChangeSampler(D3D11_FILTER filter = D3D11_FILTER_MIN_MAG_MIP_POINT,
-        D3D11_TEXTURE_ADDRESS_MODE addressU = D3D11_TEXTURE_ADDRESS_WRAP,
-        D3D11_TEXTURE_ADDRESS_MODE addressV = D3D11_TEXTURE_ADDRESS_WRAP);
+    void ChangeAnim(const AnimState anim, const float interval, const bool xAxis = true); //set함수 기능
+    void ChangeSampler(const D3D11_FILTER filter = D3D11_FILTER_MIN_MAG_MIP_POINT,
+        const D3D11_TEXTURE_ADDRESS_MODE addressU = D3D11_TEXTURE_ADDRESS_WRAP,
+        const D3D11_TEXTURE_ADDRESS_MODE addressV = D3D11_TEXTURE_ADDRESS_WRAP);
 };
-

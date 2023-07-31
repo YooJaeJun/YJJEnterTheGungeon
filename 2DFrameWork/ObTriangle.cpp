@@ -38,7 +38,7 @@ void ObTriangle::CreateStaticMember()
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, fillVertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
@@ -87,8 +87,8 @@ void ObTriangle::Render()
 
     basicShader->Set();
 
-    UINT stride = sizeof(VertexPC);
-    UINT offset = 0;
+    constexpr UINT stride = sizeof(VertexPC);
+    constexpr UINT offset = 0;
 
     if (isFilled)
     {
@@ -138,31 +138,34 @@ bool ObTriangle::ContainsVertex(const Vec2f& v)
 
 bool ObTriangle::CircumCircleContains(const Vec2f& n) const
 {
-    Vector2 va = Vector2(a.x, a.y);
-    Vector2 vb = Vector2(b.x, b.y);
-    Vector2 vc = Vector2(c.x, c.y);
-    long double dA = va.LengthSquared();
-    long double dB = vb.LengthSquared();
-    long double dC = vc.LengthSquared();
+	const Vector2 va = Vector2(a.x, a.y);
+    const Vector2 vb = Vector2(b.x, b.y);
+    const Vector2 vc = Vector2(c.x, c.y);
+    const long double dA = va.LengthSquared();
+    const long double dB = vb.LengthSquared();
+    const long double dC = vc.LengthSquared();
 
-    long double ax = a.x;
-    long double ay = a.y;
-    long double bx = b.x;
-    long double by = b.y;
-    long double cx = c.x;
-    long double cy = c.y;
+    const long double ax = a.x;
+    const long double ay = a.y;
+    const long double bx = b.x;
+    const long double by = b.y;
+    const long double cx = c.x;
+    const long double cy = c.y;
 
-    long double circum_x = (dA * (cy - by) + dB * (ay - cy) + dC * (by - ay)) / (ax * (cy - by) + bx * (ay - cy) + cx * (by - ay));
-    long double circum_y = (dA * (cx - bx) + dB * (ax - cx) + dC * (bx - ax)) / (ay * (cx - bx) + by * (ax - cx) + cy * (bx - ax));
+    const long double circum_x = 
+        (dA * (cy - by) + dB * (ay - cy) + dC * (by - ay)) / (ax * (cy - by) + bx * (ay - cy) + cx * (by - ay));
+    const long double circum_y = 
+        (dA * (cx - bx) + dB * (ax - cx) + dC * (bx - ax)) / (ay * (cx - bx) + by * (ax - cx) + cy * (bx - ax));
 
-    Vector2 circum(static_cast<float>(circum_x / 2), static_cast<float>(circum_y / 2));
-    float circum_radius = Vector2::Distance(va, circum);
-    Vector2 v = Vector2(n.x, n.y);
-    float dist = Vector2::Distance(v, circum);
+	const Vector2 circum(static_cast<float>(circum_x / 2), static_cast<float>(circum_y / 2));
+	const float circum_radius = Vector2::Distance(va, circum);
+	const Vector2 v = Vector2(n.x, n.y);
+	const float dist = Vector2::Distance(v, circum);
+
     return dist <= circum_radius;
 }
 
-bool ObTriangle::almostEqualTriangle(const ObTriangle& other)
+bool ObTriangle::AlmostEqualTriangle(const ObTriangle& other)
 {
     return	(a.NearlyEqualVector2Member(other.a) || a.NearlyEqualVector2Member(other.b) || a.NearlyEqualVector2Member(other.c)) &&
         (b.NearlyEqualVector2Member(other.a) || b.NearlyEqualVector2Member(other.b) || b.NearlyEqualVector2Member(other.c)) &&

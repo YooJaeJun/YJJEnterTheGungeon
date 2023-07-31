@@ -25,7 +25,7 @@ void MSTPrim::FindPath(Delaunay& triangulation, const std::vector<ObLine>& lines
 
         auto Push = [&](const Vec2f& node)
         {
-            size_t size = triangulation.nodesLinked[node].size();
+	        const size_t size = triangulation.nodesLinked[node].size();
             Vec2f nextNode;
             for (size_t i = 0; i < size; i++)
             {

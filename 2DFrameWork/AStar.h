@@ -3,7 +3,7 @@
 class AStar
 {
 private:
-	AStar() {}
+	AStar() = default;
 
 public:
 	static AStar& GetInstance()
@@ -15,9 +15,8 @@ public:
 	}
 
 public:
-	~AStar() {}
+	~AStar() = default;
 
 public:
-	bool FindPath(std::shared_ptr<ObTileMap> tilemap, Vec2i sour, Vec2i dest, OUT vector<Tile>& way, bool checkDiagnoal = false);
+	bool FindPath(std::shared_ptr<ObTileMap> tilemap, Vec2i sour, Vec2i dest, OUT vector<Tile>& way, bool checkDiagnoal = false) const;
 };
-

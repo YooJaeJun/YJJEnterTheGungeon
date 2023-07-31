@@ -3,7 +3,7 @@
 class Histogram
 {
 private:
-	Histogram() {}
+	Histogram() = default;
 
 public:
 	static Histogram& GetInstance()
@@ -15,11 +15,11 @@ public:
 	}
 
 public:
-	~Histogram() {}
+	~Histogram() = default;
 
 public:
-	void FindMaximalRectangleForStack(const int xStart, const int xEnd, const int yStart, const int yEnd,
+	void FindMaximalRectangleForStack(
+		const int xStart, const int xEnd, const int yStart, const int yEnd,
 		const int xSize, const int ySize, 
 		OUT int& xMax, OUT int& yMax, OUT Vec2i& propSour, OUT Vec2i& propDest);
 };
-

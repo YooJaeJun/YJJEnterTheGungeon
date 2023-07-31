@@ -3,7 +3,7 @@
 // Forward declare message handler from imgui_impl_win32.cpp
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
-LRESULT Gui::MsgProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT Gui::MsgProc(const HWND handle, const UINT message, const WPARAM wParam, const LPARAM lParam)
 {
 	return ImGui_ImplWin32_WndProcHandler(handle, message, wParam, lParam);
 }
@@ -47,8 +47,6 @@ Gui::Gui()
 	ImGui::GetIO().ConfigWindowsResizeFromEdges = true;
 	ImGui::StyleColorsDark();
 	//ImGuiStyle& style = ImGui::GetStyle();
-
-
 }
 
 Gui::~Gui()
@@ -86,14 +84,14 @@ void Gui::Render()
 	}
 }
 
-bool Gui::FileImGui(string button, string name, string fiter, string minPath)
+bool Gui::FileImGui(const string button, const string name, const string fiter, const string minPath)
 {
-	string strId = to_string(fileID);
+	const string strId = to_string(fileID);
 	fileID++;
 
 	// open Dialog Simple
 	if (ImGui::Button(button.c_str()))
-		ImGuiFileDialog::Instance()->OpenDialog(strId, name.c_str(), fiter.c_str(), minPath, ".");
+		ImGuiFileDialog::Instance()->OpenDialog(strId, name, fiter.c_str(), minPath, ".");
 
 	// display
 	if (ImGuiFileDialog::Instance()->Display(strId))

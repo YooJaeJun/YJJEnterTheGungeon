@@ -40,7 +40,7 @@ void ObImage::CreateStaticMember()
         //초기화 데이터의 포인터.
 
         //버퍼 만들기
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, &data, vertexBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
@@ -55,7 +55,7 @@ void ObImage::CreateStaticMember()
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         desc.MiscFlags = 0;
         desc.StructureByteStride = 0;
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, NULL, uvBuffer.GetAddressOf());
+        const HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, nullptr, uvBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
@@ -143,50 +143,46 @@ void ObImage::PlayAnim()
 
     if (maxFrame.x != 1)
     {
-        uv.x = frame.x / (float)maxFrame.x;
-        uv.z = (frame.x + 1.0f) / (float)maxFrame.x;
+        uv.x = frame.x / static_cast<float>(maxFrame.x);
+        uv.z = (frame.x + 1.0f) / static_cast<float>(maxFrame.x);
     }
     if (maxFrame.y != 1)
     {
-        uv.y = frame.y / (float)maxFrame.y;
-        uv.w = (frame.y + 1.0f) / (float)maxFrame.y;
+        uv.y = frame.y / static_cast<float>(maxFrame.y);
+        uv.w = (frame.y + 1.0f) / static_cast<float>(maxFrame.y);
     }
 }
 
-ObImage::ObImage(wstring file)
+ObImage::ObImage(const wstring file): animState()
 {
-    this->file = file;
+	this->file = file;
 
-    //기본 샘플러 값
-    samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
-    samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
-    samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	//기본 샘플러 값
+	samplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_POINT;
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
 
-    samplerDesc.MipLODBias = 0.0f;
-    samplerDesc.MaxAnisotropy = 1;
-    samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
-    samplerDesc.MinLOD = -FLT_MAX;
-    samplerDesc.MaxLOD = FLT_MAX;
+	samplerDesc.MipLODBias = 0.0f;
+	samplerDesc.MaxAnisotropy = 1;
+	samplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerDesc.MinLOD = -FLT_MAX;
+	samplerDesc.MaxLOD = FLT_MAX;
 
-    //하나 이상의 샘플러 만들어 두기
-    D3D.GetDevice()->CreateSamplerState(&samplerDesc, sampler.GetAddressOf());
+	//하나 이상의 샘플러 만들어 두기
+	D3D.GetDevice()->CreateSamplerState(&samplerDesc, sampler.GetAddressOf());
 
-    //텍스쳐 로드
-    SRV = TEXTURE.LoadTexture(file);
+	//텍스쳐 로드
+	SRV = TEXTURE.LoadTexture(file);
 
-    //           (최소좌표)   (최대좌표)
-    uv = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
-    animTime = 0.0f;
-    animInterval = 0.0f;
-    animXAxis = true;
-    maxFrame = Vec2i(1, 1);
-    frame = Vec2i(0, 0);
-    reverseLR = false;
-}
-
-ObImage::~ObImage()
-{
+	//           (최소좌표)   (최대좌표)
+	uv = Vector4(0.0f, 0.0f, 1.0f, 1.0f);
+	animTime = 0.0f;
+	animInterval = 0.0f;
+	animXAxis = true;
+	maxFrame = Vec2i(1, 1);
+	frame = Vec2i(0, 0);
+	reverseLR = false;
 }
 
 void ObImage::Render()
@@ -201,7 +197,7 @@ void ObImage::Render()
     D3D.GetDC()->Map(uvBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);
     if (reverseLR)
     {
-        Vector4 reUv = Vector4(uv.z, uv.y, uv.x, uv.w);
+	    const Vector4 reUv = Vector4(uv.z, uv.y, uv.x, uv.w);
         memcpy_s(mappedResource.pData, sizeof(Vector4), &reUv, sizeof(Vector4));
     }
     else
@@ -209,8 +205,8 @@ void ObImage::Render()
 
     D3D.GetDC()->Unmap(uvBuffer.Get(), 0);
 
-    UINT stride = sizeof(VertexPT);
-    UINT offset = 0;
+    constexpr UINT stride = sizeof(VertexPT);
+    constexpr UINT offset = 0;
 
     D3D.GetDC()->PSSetShaderResources(0, 1, SRV.GetAddressOf());
     D3D.GetDC()->PSSetSamplers(0, 1, sampler.GetAddressOf());
@@ -219,7 +215,7 @@ void ObImage::Render()
     D3D.GetDC()->Draw(StaticVertexCount::Trianglestrip(), 0);
 }
 
-void ObImage::ChangeAnim(AnimState anim, float interval, bool xAxis)
+void ObImage::ChangeAnim(const AnimState anim, const float interval, const bool xAxis)
 {
     animState = anim;
     animInterval = interval;
@@ -242,7 +238,7 @@ void ObImage::ChangeAnim(AnimState anim, float interval, bool xAxis)
     
 }
 
-void ObImage::ChangeSampler(D3D11_FILTER filter, D3D11_TEXTURE_ADDRESS_MODE addressU, D3D11_TEXTURE_ADDRESS_MODE addressV)
+void ObImage::ChangeSampler(const D3D11_FILTER filter, const D3D11_TEXTURE_ADDRESS_MODE addressU, const D3D11_TEXTURE_ADDRESS_MODE addressV)
 {
     samplerDesc.Filter = filter;
     samplerDesc.AddressU = addressU;
