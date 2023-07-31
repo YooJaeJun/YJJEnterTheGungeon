@@ -1,28 +1,28 @@
 #include "framework.h"
 
-Input::Input()
+Input::Input(): isZoom(false)
 {
-    //시작주소로부터 어디까지 전부 0으로 초기화
-    ZeroMemory(keyState, sizeof(keyState));
-    ZeroMemory(keyOldState, sizeof(keyOldState));
-    ZeroMemory(keyMap, sizeof(keyMap));
+	//시작주소로부터 어디까지 전부 0으로 초기화
+	ZeroMemory(keyState, sizeof(keyState));
+	ZeroMemory(keyOldState, sizeof(keyOldState));
+	ZeroMemory(keyMap, sizeof(keyMap));
 }
 
 Input::~Input()
 {
 }
 
-bool Input::KeyDown(int KeyCode)
+bool Input::KeyDown(int KeyCode) const
 {
     return keyMap[KeyCode] == KEY_INPUT_STATUS_DOWN;
 }
 
-bool Input::KeyPress(int KeyCode)
+bool Input::KeyPress(int KeyCode) const
 {
     return keyMap[KeyCode] <= KEY_INPUT_STATUS_PRESS;
 }
 
-bool Input::KeyUp(int KeyCode)
+bool Input::KeyUp(int KeyCode) const
 {
     return keyMap[KeyCode] == KEY_INPUT_STATUS_UP;
 }
@@ -54,13 +54,13 @@ void Input::Update()
     {
         for (UINT i = 0; i < 256; i++)
         {
-            unsigned char key = keyState[i] & 0x80;
+	        const unsigned char key = keyState[i] & 0x80;
             //삼항연산자   (bool)? 1{} 0{}
             //키를 누른상태면 1, 아니면 0으로 대입
             keyState[i] = key ? 1 : 0;
 
-            int oldState = keyOldState[i];
-            int state = keyState[i];
+	        const int oldState = keyOldState[i];
+	        const int state = keyState[i];
 
             if (oldState == 0 && state == 1)
                 keyMap[i] = KEY_INPUT_STATUS_DOWN; //이전 0, 현재 1 - KeyDown

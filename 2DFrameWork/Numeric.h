@@ -1,3 +1,4 @@
+#pragma once
 #include <cmath>
 #include <climits>
 #include <type_traits>
@@ -6,8 +7,7 @@
 /// <summary>
 /// 전역 함수
 /// </summary>
-bool NearlyEqualFloat(const float x, const float y, int ulp = 2);
-
+bool NearlyEqualFloat(const float x, const float y, const int ulp = 2);
 bool NearlyEqualVector2(const Vector2& v1, const Vector2& v2);
 
 
@@ -26,36 +26,36 @@ struct Vec2i
 		this->y = y;
 	}
 
-	const Vec2i operator+(const Vec2i& dest) const
+	Vec2i operator+(const Vec2i& dest) const
 	{
 		return Vec2i(x + dest.x, y + dest.y);
 	}
-	const Vec2i operator-(const Vec2i& dest) const
+
+	Vec2i operator-(const Vec2i& dest) const
 	{
 		return Vec2i(x - dest.x, y - dest.y);
 	}
-	const Vec2i operator*(const Vec2i& dest) const
+	Vec2i operator*(const Vec2i& dest) const
 	{
 		return Vec2i(x * dest.x, y * dest.y);
 	}
-	const Vec2i operator/(const Vec2i& dest) const
+	Vec2i operator/(const Vec2i& dest) const
 	{
 		return Vec2i(x / dest.x, y / dest.y);
 	}
-
-	const Vec2i operator+(const int value) const
+	Vec2i operator+(const int value) const
 	{
 		return Vec2i(x + value, y + value);
 	}
-	const Vec2i operator-(const int value) const
+	Vec2i operator-(const int value) const
 	{
 		return Vec2i(x - value, y - value);
 	}
-	const Vec2i operator*(const int value) const
+	Vec2i operator*(const int value) const
 	{
 		return Vec2i(x * value, y * value);
 	}
-	const Vec2i operator/(const int value) const
+	Vec2i operator/(const int value) const
 	{
 		return Vec2i(x / value, y / value);
 	}
@@ -113,28 +113,29 @@ struct Vec2f
 		return Vec2f(x / other.x, y / other.y);
 	}
 
-	inline void operator=(const Vec2f& other)
+	void operator=(const Vec2f& other)
 	{
 		index = other.index;
 		x = other.x;
 		y = other.y;
 	}
 
-	inline bool operator<(const Vec2f& other) const
+	bool operator<(const Vec2f& other) const
 	{
 		return x < other.x || (!(other.x < x) && y < other.y);
 	}
-	inline bool operator>(const Vec2f& other) const
+
+	bool operator>(const Vec2f& other) const
 	{
 		return x > other.x || (!(other.x > x) && y > other.y);
 	}
 
-	inline bool operator==(const Vec2f& other) const
+	bool operator==(const Vec2f& other) const
 	{
 		return x == other.x && y == other.y;
 	}
 
-	bool NearlyEqualVector2Member(const Vec2f& ohter);
+	bool NearlyEqualVector2Member(const Vec2f& ohter) const;
 
-	float DirToRadian(Vec2f Dir);
+	static float DirToRadian(Vec2f Dir);
 };

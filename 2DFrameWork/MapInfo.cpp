@@ -5,10 +5,6 @@ MapInfo::MapInfo()
     Init();
 }
 
-MapInfo::~MapInfo()
-{
-}
-
 void MapInfo::Init()
 {
     // tilemap
@@ -30,7 +26,7 @@ void MapInfo::Update()
     SetTilemapGUI();
 }
 
-void MapInfo::Render()
+void MapInfo::Render() const
 {
     tilemap->Render();
 }
@@ -45,22 +41,22 @@ void MapInfo::SetTilemapGUI()
         ImGuiFileDialog::Instance()->Close();
 
     // TileScale
-    ImGui::SliderFloat2("Scale", (float*)&tilemap->scale, 0.0f, 100.0f);
+    ImGui::SliderFloat2("Scale", reinterpret_cast<float*>(&tilemap->scale), 0.0f, 100.0f);
 
     //TileSize
-    if (ImGui::SliderInt2("TileSize", (int*)&tileSize, 1, 100))
+    if (ImGui::SliderInt2("TileSize", reinterpret_cast<int*>(&tileSize), 1, 100))
         tilemap->ResizeTile(tileSize);
 
     //TilePos
     Vector2 pos = tilemap->GetWorldPos();
-    if (ImGui::SliderFloat2("TilePos", (float*)&pos, -5000.0f, 5000.0f))
+    if (ImGui::SliderFloat2("TilePos", reinterpret_cast<float*>(&pos), -5000.0f, 5000.0f))
         tilemap->SetWorldPos(pos);
 
     //TileState
-    ImGui::SliderInt("TileState", &tileState, int(TileState::none), int(TileState::max));
+    ImGui::SliderInt("TileState", &tileState, static_cast<int>(TileState::none), static_cast<int>(TileState::max));
 
     //TileColor
-    ImGui::ColorEdit4("TileColor", (float*)&tileColor, ImGuiColorEditFlags_PickerHueWheel);
+    ImGui::ColorEdit4("TileColor", reinterpret_cast<float*>(&tileColor), ImGuiColorEditFlags_PickerHueWheel);
 
     //Texture
     for (int i = 0; i < tilemap->tileImageCount; i++)
@@ -85,7 +81,7 @@ void MapInfo::SetTilemapGUI()
     ImGui::Text("Img Idx : %d", imgIdx);
 
     //maxFrame
-    ImGui::InputInt2("Max Frame", (int*)&tilemap->tileImages[imgIdx]->maxFrame);
+    ImGui::InputInt2("Max Frame", reinterpret_cast<int*>(&tilemap->tileImages[imgIdx]->maxFrame));
 
     //Coord
     ImGui::Text("Camera Pos : %f , %f", CAM.position.x, CAM.position.y);

@@ -24,18 +24,14 @@ Light::Light()
         desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         desc.MiscFlags = 0;
         desc.StructureByteStride = 0;
-        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, NULL, lightBuffer.GetAddressOf());
+        HRESULT hr = D3D.GetDevice()->CreateBuffer(&desc, nullptr, lightBuffer.GetAddressOf());
         assert(SUCCEEDED(hr));
     }
 
     D3D.GetDC()->PSSetConstantBuffers(0, 1, lightBuffer.GetAddressOf());
 }
 
-Light::~Light()
-{
-}
-
-void Light::Set()
+void Light::Set() const
 {
     D3D11_MAPPED_SUBRESOURCE mappedResource;
     D3D.GetDC()->Map(lightBuffer.Get(), 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);

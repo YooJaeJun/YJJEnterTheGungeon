@@ -25,11 +25,10 @@ public:
     }
 
 public:
-    ~Light();
-    void        Set();
+    ~Light() = default;;
+    void        Set() const;
     void        SetLightPos(Vector2 WPos);
 
 public:
     PointLight light;
 };
-

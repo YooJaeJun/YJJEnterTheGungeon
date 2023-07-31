@@ -11,7 +11,7 @@ Sound::Sound()
 Sound::~Sound()
 {
     //사운드를 다 삭제하는 부분
-    for (auto iter = SoundList.begin(); iter != SoundList.end(); iter++)
+    for (auto iter = SoundList.begin(); iter != SoundList.end(); ++iter)
     {
         iter->second->channel->stop();
         iter->second->sound->release();
@@ -22,15 +22,14 @@ Sound::~Sound()
     SoundList.clear();
 }
 
-bool Sound::AddSound(string File, string Key, bool loop)
+bool Sound::AddSound(const string& File, const string& Key, const bool loop)
 {
-    string path = "../Contents/Sound/" + File;
+	const string path = "../Contents/Sound/" + File;
 
     //key 중복 허용x
-    auto iter = SoundList.find(Key);
 
-    //중복된게 있다.
-    if (iter != SoundList.end())
+	//중복된게 있다.
+    if (const auto iter = SoundList.find(Key); iter != SoundList.end())
         return false;
 
     //중복된게 없다.
@@ -54,13 +53,14 @@ bool Sound::AddSound(string File, string Key, bool loop)
     return true;
 }
 
-bool Sound::DeleteSound(string Key)
+bool Sound::DeleteSound(const string& Key)
 {
-    auto iter = SoundList.find(Key);
+	const auto iter = SoundList.find(Key);
 
     //중복된게 없다.
     if (iter == SoundList.end())
         return false;
+
     //first가 키, second 밸류
     iter->second->channel->stop();
     iter->second->sound->release();
@@ -71,12 +71,10 @@ bool Sound::DeleteSound(string Key)
     return true;
 }
 
-void Sound::Play(string Key)
+void Sound::Play(const string& Key)
 {
-    auto iter = SoundList.find(Key);
-
-    //중복된게 있을때
-    if (iter != SoundList.end())
+	//중복된게 있을때
+    if (const auto iter = SoundList.find(Key); iter != SoundList.end())
     {
         bool isplay;
         iter->second->channel->isPlaying(&isplay);
@@ -90,49 +88,41 @@ void Sound::Play(string Key)
     }
 }
 
-void Sound::Stop(string Key)
+void Sound::Stop(const string& Key)
 {
-    auto iter = SoundList.find(Key);
-
-    //중복된게 있을때
-    if (iter != SoundList.end())
+	//중복된게 있을때
+    if (const auto iter = SoundList.find(Key); iter != SoundList.end())
         iter->second->channel->stop();
 }
 
-void Sound::Pause(string Key)
+void Sound::Pause(const string& Key)
 {
-    auto iter = SoundList.find(Key);
-
-    //중복된게 있을때
-    if (iter != SoundList.end())
+	//중복된게 있을때
+    if (const auto iter = SoundList.find(Key); iter != SoundList.end())
         iter->second->channel->setPaused(true);
 }
 
-void Sound::Resume(string Key)
+void Sound::Resume(const string& Key)
 {
-    auto iter = SoundList.find(Key);
-
-    //중복된게 있을때
-    if (iter != SoundList.end())
+	//중복된게 있을때
+    if (const auto iter = SoundList.find(Key); iter != SoundList.end())
         iter->second->channel->setPaused(false);
 }
 
-void Sound::SetVolume(string Key, float scale)
+void Sound::SetVolume(const string& Key, const float scale)
 {
-    auto iter = SoundList.find(Key);
-
-    //중복된게 있을때
-    if (iter != SoundList.end())
+	//중복된게 있을때
+    if (const auto iter = SoundList.find(Key); iter != SoundList.end())
         iter->second->channel->setVolume(scale * app.soundScale);
 }
 
 void Sound::SetMasterVolume()
 {
-    for (auto iter = SoundList.begin(); iter != SoundList.end(); iter++)
+    for (auto iter = SoundList.begin(); iter != SoundList.end(); ++iter)
         iter->second->channel->setVolume(app.soundScale);
 }
 
-void Sound::Update()
+void Sound::Update() const
 {
     system->update();
 }

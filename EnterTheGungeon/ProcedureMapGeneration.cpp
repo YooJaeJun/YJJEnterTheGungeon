@@ -315,8 +315,9 @@ namespace Gungeon
 
         while (count--)
         {
-            int rand = static_cast<int>(RANDOM.Int(0, linesTriangulated.size() - 1));
+	        const int rand = RANDOM.Int(0, linesTriangulated.size() - 1);
             bool flag = false;
+
             for (auto& elem : linesMST)
             {
                 if ((elem.V() == linesTriangulated[rand].V() && elem.W() == linesTriangulated[rand].W()) ||

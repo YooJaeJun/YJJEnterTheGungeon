@@ -17,20 +17,20 @@ public:
     ~SceneManager();
 
     //¾À Ãß°¡
-    bool    AddScene(string key, std::shared_ptr<Scene> value);
+    bool    AddScene(const string& key, const std::shared_ptr<Scene> value);
     //¾À »èÁ¦
-    bool    DeleteScene(string key);
+    bool    DeleteScene(const string& key);
     //¾À º¯°æ
-    std::shared_ptr<Scene> ChangeScene(string key, float changingTime = 0.0f);
+    std::shared_ptr<Scene> ChangeScene(const string& key, const float changingTime = 0.0f);
     //¾À °¡Á®¿À±â
-    std::shared_ptr<Scene> GetScene(string key);
+    std::shared_ptr<Scene> GetScene(const string& key);
     //ÇöÀç ¾À °¡Á®¿À±â
     std::shared_ptr<Scene> GetCurrentScene();
 
     void    Update();
-    void    LateUpdate();
-    void    Render();
-    void    ResizeScreen();
+    void    LateUpdate() const;
+    void    Render() const;
+    void    ResizeScreen() const;
 
 private:
     bool        isChanging = false;

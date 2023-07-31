@@ -3,7 +3,7 @@ class Window
 {
 	//static
 private:
-	static LRESULT CALLBACK WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam);
+	static LRESULT CALLBACK WndProc(const HWND handle, const UINT message, const WPARAM wParam, const LPARAM lParam);
 
 private:
 	Window();
@@ -23,9 +23,9 @@ private:
 
 public:
 	void	Create();
-	void	Destroy();
+	static void	Destroy();
 	WPARAM	Run(std::shared_ptr<Scene> main);
-	void	Load();
-	void	Save();
+	static void	Load();
+	static void	Save();
 };
 

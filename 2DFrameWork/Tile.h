@@ -35,7 +35,7 @@ using PTile = pair<Tile, int>;
 
 struct ComparePTile
 {
-    bool operator()(PTile& a, PTile& b) const
+    bool operator()(const PTile& a, const PTile& b) const
     {
         return a.second > b.second;
     }

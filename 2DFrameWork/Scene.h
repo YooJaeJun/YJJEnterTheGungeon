@@ -3,7 +3,7 @@
 class Scene
 {
 public:
-	virtual ~Scene() {};
+	virtual ~Scene() = default;;
 	//√ ±‚»≠
 	virtual void Init() = 0;
 	//Loop

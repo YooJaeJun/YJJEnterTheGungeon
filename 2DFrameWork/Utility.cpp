@@ -28,14 +28,15 @@ Utility::LINE::LINE(const Vector2 begin, const Vector2 end)
 
 int Utility::Ccw(const Vector2& v1, const Vector2& v2, const Vector2& v3)
 {
-    float res = v1.x * v2.y + v2.x * v3.y + v3.x * v1.y
+	const float res = v1.x * v2.y + v2.x * v3.y + v3.x * v1.y
         - (v1.y * v2.x + v2.y * v3.x + v3.y * v1.x);
+
     if (res > 0) 
         return 1;
-    else if (res < 0) 
+    if (res < 0) 
         return -1;
-    else 
-        return 0;
+
+    return 0;
 }
 
 ColPos Utility::IntersectLineLine(const LINE& line1, const LINE& line2)
@@ -55,8 +56,8 @@ ColPos Utility::IntersectLineLine(const LINE& line1, const LINE& line2)
     };
 
     //두 선분이 한 직선 위에 있거나, 끝점이 겹치는 경우
-    float ab = static_cast<float>(Ccw(l1.begin, l1.end, l2.begin) * Ccw(l1.begin, l1.end, l2.end));
-    float cd = static_cast<float>(Ccw(l2.begin, l2.end, l1.begin) * Ccw(l2.begin, l2.end, l1.end));
+    const float ab = static_cast<float>(Ccw(l1.begin, l1.end, l2.begin) * Ccw(l1.begin, l1.end, l2.end));
+    const float cd = static_cast<float>(Ccw(l2.begin, l2.end, l1.begin) * Ccw(l2.begin, l2.end, l1.end));
 
     if (ab == 0.0f && cd == 0.0f)
     {
@@ -100,10 +101,10 @@ ColPos Utility::IntersectRectCoord(const RECT& rc, const Vector2 coord)
 ColPos Utility::IntersectRectLine(const RECT& rc, const LINE& l)
 {
     // lt-lb  lb-rb  rb-rt  rt-lt
-    LINE line1(rc.lt, rc.lb);
-    LINE line2(rc.lb, rc.rb);
-    LINE line3(rc.rb, rc.rt);
-    LINE line4(rc.rt, rc.lt);
+    const LINE line1(rc.lt, rc.lb);
+    const LINE line2(rc.lb, rc.rb);
+    const LINE line3(rc.rb, rc.rt);
+    const LINE line4(rc.rt, rc.lt);
 
     if (IntersectRectCoord(rc, l.begin) &&
         IntersectRectCoord(rc, l.end))
@@ -132,21 +133,21 @@ ColPos Utility::IntersectRectRect(const RECT& rc1, const RECT& rc2)
 ColPos Utility::IntersectRectRect(shared_ptr<GameObject> ob1, shared_ptr<GameObject> ob2)
 {
     //중심점
-    Vector2 rc1Pivot = ob1->GetWorldPivot();
-    Vector2 rc2Pivot = ob2->GetWorldPivot();
+    const Vector2 rc1Pivot = ob1->GetWorldPivot();
+    const Vector2 rc2Pivot = ob2->GetWorldPivot();
 
     //두 중심점간의 차이 벡터
-    Vector2 dis = rc1Pivot - rc2Pivot;
+    const Vector2 dis = rc1Pivot - rc2Pivot;
 
     //사각형마다 2개의 절반크기의 벡터
-    Vector2 Rc1Up =
+    const Vector2 Rc1Up =
         ob1->GetUp() * ob1->scale.y * 0.5f;
-    Vector2 Rc1Right =
+    const Vector2 Rc1Right =
         ob1->GetRight() * ob1->scale.x * 0.5f;
-    
-    Vector2 Rc2Up =
+
+    const Vector2 Rc2Up =
         ob2->GetUp() * ob2->scale.y * 0.5f;
-    Vector2 Rc2Right =
+    const Vector2 Rc2Right =
         ob2->GetRight() * ob2->scale.x * 0.5f;
 
     //ob1의 right축 비교
@@ -207,16 +208,16 @@ ColPos Utility::IntersectRectRect(shared_ptr<GameObject> ob1, shared_ptr<GameObj
 
 ColPos Utility::IntersectRectCircle(const RECT& rc, const CIRCLE& cc)
 {
-    Vector2 rectPivot = (rc.min + rc.max) * 0.5f;
-    Vector2 RectScale = rc.max - rc.min;
+	const Vector2 rectPivot = (rc.min + rc.max) * 0.5f;
+	const Vector2 RectScale = rc.max - rc.min;
 
-    RECT Wrect(rectPivot, RectScale + Vector2(cc.radius * 2.0f, 0.0f));
+	const RECT Wrect(rectPivot, RectScale + Vector2(cc.radius * 2.0f, 0.0f));
 
-    if ((bool)IntersectRectCoord(Wrect, cc.pivot))
+    if (static_cast<bool>(IntersectRectCoord(Wrect, cc.pivot)))
         return ColPos::leftRight;
 
-    RECT Hrect(rectPivot, RectScale + Vector2(0.0f, cc.radius * 2.0f));
-    if ((bool)IntersectRectCoord(Hrect, cc.pivot))
+	const RECT Hrect(rectPivot, RectScale + Vector2(0.0f, cc.radius * 2.0f));
+    if (static_cast<bool>(IntersectRectCoord(Hrect, cc.pivot)))
         return ColPos::upDown;
 
     Vector2 edge[4];
@@ -232,6 +233,7 @@ ColPos Utility::IntersectRectCircle(const RECT& rc, const CIRCLE& cc)
     return ColPos::none;
 }
 
+// 안 씀
 /*
 bool Utility::IntersectRectCircle(GameObject * ob1, GameObject * ob2, COLDIR & result)
 {
@@ -276,7 +278,7 @@ bool Utility::IntersectRectCircle(GameObject * ob1, GameObject * ob2, COLDIR & r
 
 ColPos Utility::IntersectCircleCoord(const CIRCLE& cc, const Vector2 coord)
 {
-    Vector2 Distance = cc.pivot - coord;
+	const Vector2 Distance = cc.pivot - coord;
     if (Distance.Length() < cc.radius)
         return ColPos::inter;
 
@@ -286,10 +288,10 @@ ColPos Utility::IntersectCircleCoord(const CIRCLE& cc, const Vector2 coord)
 ColPos Utility::IntersectCircleLine(const CIRCLE& cc, const LINE& l)
 {
     //이하 코드는 구글링 후 조건만 좀 변경함.
-    const Vector2& origin_to_begin = l.begin - cc.pivot;
-    const Vector2& origin_to_end = l.end - cc.pivot;
-    float c_begin = origin_to_begin.Dot(origin_to_begin) - cc.radius * cc.radius;
-    float c_end = origin_to_end.Dot(origin_to_end) - cc.radius * cc.radius;
+    const Vector2 origin_to_begin = l.begin - cc.pivot;
+    const Vector2 origin_to_end = l.end - cc.pivot;
+    const float c_begin = origin_to_begin.Dot(origin_to_begin) - cc.radius * cc.radius;
+    const float c_end = origin_to_end.Dot(origin_to_end) - cc.radius * cc.radius;
 
     //선분의 시작점부터 구의 중심까지의 거리가 구의 반지름보다 크지 않다면,
     //선분의 시작점이 구의 안에 있으므로 교차함.
@@ -299,13 +301,13 @@ ColPos Utility::IntersectCircleLine(const CIRCLE& cc, const LINE& l)
     else if (c_begin <= 0.0f || c_end <= 0.0f)
         return ColPos::inter;
 
-    Vector2 dir = l.end - l.begin;
-    float length = sqrt(dir.Dot(dir));	//수정함
+    const Vector2 dir = l.end - l.begin;
+    const float length = sqrt(dir.Dot(dir));	//수정함
     if (length == 0.0f)
         return ColPos::none;
 
     const Vector2 normalized_dir = dir / length;
-    float b_prime = origin_to_begin.Dot(normalized_dir);
+    const float b_prime = origin_to_begin.Dot(normalized_dir);
 
     //선분의 시작점이 구의 밖에 있고, 구의 중심에서 선분의 시작점을 향하는 벡터와 선분의 방향
     //벡터가 이루는 각이 90도 미만이라면 교차하지 않음
@@ -315,13 +317,13 @@ ColPos Utility::IntersectCircleLine(const CIRCLE& cc, const LINE& l)
     //원래는 b' * b' - a * c를 사용해야 함. 그런데 선분의 방향 벡터가 단위 벡터면,
     //a는 normalized_dir.dot(normalized_dir) = 1
     //이므로, a를 생략 가능.
-    float square_root_of_discriminant = sqrt(b_prime * b_prime - c_begin);	//discriminant == 판별식
+    const float square_root_of_discriminant = sqrt(b_prime * b_prime - c_begin);	//discriminant == 판별식
 
-    float t1 = -b_prime + square_root_of_discriminant;
+    const float t1 = -b_prime + square_root_of_discriminant;
     if (t1 >= 0.0f && t1 <= length)
         return ColPos::inter;
 
-    float t2 = -b_prime + square_root_of_discriminant;
+    const float t2 = -b_prime + square_root_of_discriminant;
     if (t2 >= 0.0f && t2 <= length)
         return ColPos::inter;
 
@@ -330,7 +332,7 @@ ColPos Utility::IntersectCircleLine(const CIRCLE& cc, const LINE& l)
 
 ColPos Utility::IntersectCircleCircle(const CIRCLE& cc1, const CIRCLE& cc2)
 {
-    Vector2 distance = cc1.pivot - cc2.pivot;
+	const Vector2 distance = cc1.pivot - cc2.pivot;
     if (distance.Length() < cc1.radius + cc2.radius)
         return ColPos::inter;
 

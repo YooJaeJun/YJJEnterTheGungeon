@@ -14,13 +14,13 @@ public:
     }
 
 private:
-    std::map<wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> textureList;
+    std::map<wstring, Microsoft::WRL::ComPtr<ID3D11ShaderResourceView>> textureList{};
 
 public:
     ~Texture();
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> LoadTexture(wstring file);
-    bool DeleteTexture(wstring file);
+    bool DeleteTexture(const wstring& file);
 
-    std::shared_ptr<ScratchImage> GetTexture(wstring file);
+    std::shared_ptr<ScratchImage> GetTexture(const wstring& file) const;
 };
 

@@ -25,20 +25,20 @@ public:
 public:
     ~Sound();
     //전역에서 사운드 추가 
-    bool AddSound(string File, string Key, bool loop = false);
+    bool AddSound(const string& File, const string& Key, const bool loop = false);
     //전역에서 사운드 삭제
-    bool DeleteSound(string Key);
+    bool DeleteSound(const string& Key);
 
     //그리고 key를 매개변수로 두고 모두 제어
-    void Play(string Key);
-    void Stop(string Key);
+    void Play(const string& Key);
+    void Stop(const string& Key);
     //일시정지
-    void Pause(string Key);
+    void Pause(const string& Key);
     //일시정지 해제
-    void Resume(string Key);
+    void Resume(const string& Key);
 
-    void SetVolume(string Key, float scale);
+    void SetVolume(const string& Key, const float scale);
     void SetMasterVolume();
-    void Update();
+    void Update() const;
 };
 

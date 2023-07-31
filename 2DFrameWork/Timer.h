@@ -15,17 +15,17 @@ public:
     }
 
 public:
-    bool    GetTick(float& time, float interval);
-    void    Chronometry(UINT lock = 60);
+    bool    GetTick(float& time, const float interval);
+    void    Chronometry(const UINT lock = 60);
     void    CheckStartTimer();
-    float   CheckEndTimer();
-    void    DebugPrintTimer(const string& str);
-    float   GetDelta() { return deltaTime; } //매크로 X
-    float   GetDeltaTime() { return deltaScaleTime; }
-    UINT    GetFramePerSecond() { return framePerSecond; }
-    float   GetWorldTime() { return worldTime; }
+    float   CheckEndTimer() const;
+    static void    DebugPrintTimer(const string& str);
+    float   GetDelta() const { return deltaTime; } //매크로 X
+    float   GetDeltaTime() const { return deltaScaleTime; }
+    UINT    GetFramePerSecond() const { return framePerSecond; }
+    float   GetWorldTime() const { return worldTime; }
 
-    void Update();
+    void Update() const;
 
 private:
     chrono::steady_clock::time_point    currentTime;

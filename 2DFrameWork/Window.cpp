@@ -23,10 +23,10 @@ WPARAM Window::Run(std::shared_ptr<Scene> main)
 	ObStarPointed::CreateStaticMember();
 	ObImage::CreateStaticMember();
 	main->Init();
-	MSG msg = { 0 };
+	MSG msg = { nullptr };
 	while (true)
 	{
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
 		{
 			if (msg.message == WM_QUIT)
 				break;
@@ -70,12 +70,12 @@ void Window::Create()
 	WNDCLASSEXW wndClass;
 	wndClass.cbClsExtra = 0;
 	wndClass.cbWndExtra = 0;
-	wndClass.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
+	wndClass.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
 	wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wndClass.hIcon = LoadIcon(NULL, IDI_WINLOGO);
 	wndClass.hIconSm = wndClass.hIcon;
 	wndClass.hInstance = app.instance;
-	wndClass.lpfnWndProc = (WNDPROC)WndProc;
+	wndClass.lpfnWndProc = static_cast<WNDPROC>(WndProc);
 	wndClass.lpszClassName = app.appName.c_str();
 	wndClass.lpszMenuName = NULL;
 	wndClass.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
@@ -88,8 +88,8 @@ void Window::Create()
 	{
 		DEVMODE devMode = { 0 };
 		devMode.dmSize = sizeof(DEVMODE);
-		devMode.dmPelsWidth = (DWORD)app.GetWidth();
-		devMode.dmPelsHeight = (DWORD)app.GetHeight();
+		devMode.dmPelsWidth = static_cast<DWORD>(app.GetWidth());
+		devMode.dmPelsHeight = static_cast<DWORD>(app.GetHeight());
 		devMode.dmBitsPerPel = 32;
 		devMode.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
@@ -105,10 +105,10 @@ void Window::Create()
 		, CW_USEDEFAULT
 		, CW_USEDEFAULT
 		, CW_USEDEFAULT
-		, NULL
-		, (HMENU)NULL
+		, nullptr
+		, (HMENU)nullptr
 		, app.instance
-		, NULL
+		, nullptr
 	);
 	assert(app.handle != NULL);
 
@@ -135,14 +135,16 @@ void Window::Load()
 		fin.close();
 	}
 
-	RECT rect = { 0, 0, (LONG)app.GetWidth(), (LONG)app.GetHeight() };
+	RECT rect{ 0, 0, static_cast<LONG>(app.GetWidth()), static_cast<LONG>(app.GetHeight()) };
 	AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 	MoveWindow
 	(
-		app.handle
-		, (LONG)app.x, (LONG)app.y
-		, rect.right - rect.left, rect.bottom - rect.top
-		, TRUE
+		app.handle,
+		static_cast<LONG>(app.x), 
+		static_cast<LONG>(app.y), 
+		rect.right - rect.left, 
+		rect.bottom - rect.top,
+		TRUE
 	);
 }
 
@@ -150,10 +152,10 @@ void Window::Save()
 {
 	RECT rc;
 	GetWindowRect(app.handle, &rc);
-	app.x = (float)rc.left;
-	app.y = (float)rc.top;
+	app.x = static_cast<float>(rc.left);
+	app.y = static_cast<float>(rc.top);
 	ofstream fout;
-	string file = "window.ini";
+	const string file = "window.ini";
 	fout.open(file.c_str(), ios::out);
 	if (fout.is_open())
 	{
@@ -168,7 +170,7 @@ void Window::Save()
 void Window::Destroy()
 {
 	if (app.fullScreen == true)
-		ChangeDisplaySettings(NULL, 0);
+		ChangeDisplaySettings(nullptr, 0);
 
 	DestroyWindow(app.handle);
 
@@ -176,7 +178,7 @@ void Window::Destroy()
 }
 
 
-LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT Window::WndProc(const HWND handle, const UINT message, const WPARAM wParam, const LPARAM lParam)
 {
 	if (Gui::MsgProc(handle, message, wParam, lParam))
 		return true;
@@ -185,8 +187,8 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 	case WM_MOUSEMOVE:
 	{
-		INPUT.mouseScreenPos.x = (float)LOWORD(lParam);
-		INPUT.mouseScreenPos.y = (float)HIWORD(lParam);
+		INPUT.mouseScreenPos.x = static_cast<float>(LOWORD(lParam));
+		INPUT.mouseScreenPos.y = static_cast<float>(HIWORD(lParam));
 		break;
 	}
 	case WM_MOUSEWHEEL:
@@ -198,8 +200,8 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		if (D3D.GetCreated())
 		{
-			float width = (float)LOWORD(lParam);
-			float height = (float)HIWORD(lParam);
+			const float width = LOWORD(lParam);
+			const float height = HIWORD(lParam);
 			D3D.ResizeScreen(width, height);
 			CAM.ResizeScreen();
 			GUI.ResizeScreen();
@@ -215,8 +217,9 @@ LRESULT Window::WndProc(HWND handle, UINT message, WPARAM wParam, LPARAM lParam)
 
 		return 0;
 	}//case
+	default: 
+		break;
 	}//swith
 
 	return DefWindowProc(handle, message, wParam, lParam);
 }
-

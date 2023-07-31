@@ -55,13 +55,11 @@ namespace Utility
     T Saturate(T src, T min = 0, T max = 1)
     {
         if (src < min)
-        {
             return min;
-        }
-        else if (src > max)
-        {
+
+        if (src > max)
             return max;
-        }
+
         return src;
     }
 

@@ -14,11 +14,11 @@ public:
 	}
 
 public:
-	~MapInfo();
+	~MapInfo() = default;;
 	
 	void Init();
 	void Update();
-	void Render();
+	void Render() const;
 	void SetTilemapGUI();
 
 public:
@@ -32,4 +32,3 @@ public:
 	Vec2i		pickingIdx;
 	bool		useGui;
 };
-

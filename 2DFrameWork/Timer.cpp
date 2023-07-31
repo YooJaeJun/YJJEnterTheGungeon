@@ -13,7 +13,7 @@ Timer::Timer()
     framePerSecondTimeElapsed = 0.0f;
 }
 
-bool Timer::GetTick(float& time, float interval)
+bool Timer::GetTick(float& time, const float interval)
 {
     time += DELTA;
     if (time > interval)
@@ -24,13 +24,13 @@ bool Timer::GetTick(float& time, float interval)
     return false;
 }
 
-void Timer::Chronometry(UINT lock)
+void Timer::Chronometry(const UINT lock)
 {
     currentTime = chrono::steady_clock::now();
     //지난시간 - 현재시간값을 나노 초단위로 받기
     chrono::duration<double> Delta = currentTime - lastTime;
     //        초단위로 변경하여 값받기
-    deltaTime = (float)Delta.count();
+    deltaTime = static_cast<float>(Delta.count());
 
     //델타가 1/60보다 작다면
     while (deltaTime < (1.0f / lock))
@@ -39,7 +39,7 @@ void Timer::Chronometry(UINT lock)
         currentTime = chrono::steady_clock::now();
         //델타를 다시계산
         Delta = currentTime - lastTime;
-        deltaTime = (float)Delta.count();
+        deltaTime = static_cast<float>(Delta.count());
     }
 
     //마지막 시간을 기록
@@ -66,10 +66,10 @@ void Timer::CheckStartTimer()
     startTimer = currentTime;
 }
 
-float Timer::CheckEndTimer()
+float Timer::CheckEndTimer() const
 {
-    std::chrono::duration<double> diff = chrono::steady_clock::now() - startTimer;
-    return (float)diff.count();
+	const std::chrono::duration<double> diff = chrono::steady_clock::now() - startTimer;
+    return static_cast<float>(diff.count());
 }
 
 void Timer::DebugPrintTimer(const string& str)
@@ -77,7 +77,7 @@ void Timer::DebugPrintTimer(const string& str)
     printf("%15s %15f \n", str.c_str(), TIMER.CheckEndTimer());
 }
 
-void Timer::Update()
+void Timer::Update() const
 {
     ImGui::Text("FPS : %d", GetFramePerSecond());
     ImGui::Text("World Time : %f", GetWorldTime());

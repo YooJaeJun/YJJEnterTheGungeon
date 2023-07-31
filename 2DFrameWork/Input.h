@@ -19,13 +19,13 @@ public:
 public:
     ~Input();
 
-    bool KeyDown(int KeyCode); //눌렀을때 최초1회
-    bool KeyPress(int KeyCode);//누르고있을때
-    bool KeyUp(int KeyCode); //눌렀다가 떼었을때 최초1회
+    bool KeyDown(int KeyCode) const; //눌렀을때 최초1회
+    bool KeyPress(int KeyCode) const;//누르고있을때
+    bool KeyUp(int KeyCode) const; //눌렀다가 떼었을때 최초1회
     void Update();
 
-    Vector2 GetScreenMousePos() { return mouseScreenPos; }
-    Vector2 GetWorldMousePos() { return mouseWorldPos; }
+    Vector2 GetScreenMousePos() const { return mouseScreenPos; }
+    Vector2 GetWorldMousePos() const { return mouseWorldPos; }
 
 private:
     unsigned char keyState[256];

@@ -19,7 +19,6 @@ private:
 public:
 	~Random();
 	// 메모리 주소 최소 단위 4바이트. CPU가 4바이트씩 읽는다.
-	int Int(int min = 0, int max = 1);
-	float Float(float min = 0.0f, float max = 1.0f);
+	int     Int(const int min = 0, const int max = 1) const;
+	float   Float(const float min = 0.0f, const float max = 1.0f) const;
 };
-

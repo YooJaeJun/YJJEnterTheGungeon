@@ -9,11 +9,10 @@ SceneManager::~SceneManager()
     scenes.clear();
 }
 
-bool SceneManager::AddScene(string key, std::shared_ptr<Scene> value)
+bool SceneManager::AddScene(const string& key, const std::shared_ptr<Scene> value)
 {
-    auto iter = scenes.find(key);
-
-    if (iter != scenes.end())
+    // If Init Statement
+	if (const auto iter = scenes.find(key); iter != scenes.end())
         return false;
 
     scenes[key] = value;
@@ -21,9 +20,9 @@ bool SceneManager::AddScene(string key, std::shared_ptr<Scene> value)
     return true;
 }
 
-bool SceneManager::DeleteScene(string key)
+bool SceneManager::DeleteScene(const string& key)
 {
-    auto iter = scenes.find(key);
+	const auto iter = scenes.find(key);
 
     if (iter == scenes.end())
         return false;
@@ -33,7 +32,7 @@ bool SceneManager::DeleteScene(string key)
     return true;
 }
 
-shared_ptr<Scene> SceneManager::ChangeScene(string key, float changingTime)
+shared_ptr<Scene> SceneManager::ChangeScene(const string& key, const float changingTime)
 {
     shared_ptr<Scene> temp = GetScene(key);
 
@@ -54,7 +53,7 @@ shared_ptr<Scene> SceneManager::ChangeScene(string key, float changingTime)
     return temp;
 }
 
-shared_ptr<Scene> SceneManager::GetScene(string key)
+shared_ptr<Scene> SceneManager::GetScene(const string& key)
 {
     auto iter = scenes.find(key);
 
@@ -92,21 +91,21 @@ void SceneManager::Update()
     currentScene->Update();
 }
 
-void SceneManager::LateUpdate()
+void SceneManager::LateUpdate() const
 {
     if (isChanging)
         return;
     currentScene->LateUpdate();
 }
 
-void SceneManager::Render()
+void SceneManager::Render() const
 {
     if (isChanging)
         return;
     currentScene->Render();
 }
 
-void SceneManager::ResizeScreen()
+void SceneManager::ResizeScreen() const
 {
     if (isChanging || !currentScene)
         return;

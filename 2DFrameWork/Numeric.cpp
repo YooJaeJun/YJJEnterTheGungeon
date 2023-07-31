@@ -8,7 +8,7 @@
 // float epsilon compare
 // http://en.cppreference.com/w/cpp/types/numeric_limits/epsilon
 
-bool NearlyEqualFloat(const float x, const float y, int ulp)
+bool NearlyEqualFloat(const float x, const float y, const int ulp)
 {
 	return fabsf(x - y) <= std::numeric_limits<float>::epsilon() * fabsf(x + y) * static_cast<float>(ulp)
 		|| fabsf(x - y) < 1.175494351e-38F; // std::numeric_limits<float>::min();
@@ -23,7 +23,7 @@ bool NearlyEqualVector2(const Vector2& v1, const Vector2& v2)
 /// <summary>
 /// ¸â¹ö ÇÔ¼ö
 /// </summary>
-bool Vec2f::NearlyEqualVector2Member(const Vec2f& ohter)
+bool Vec2f::NearlyEqualVector2Member(const Vec2f& ohter) const
 {
     return NearlyEqualFloat(x, ohter.x) && NearlyEqualFloat(y, ohter.y);
 }

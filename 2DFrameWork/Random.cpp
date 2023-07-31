@@ -10,14 +10,14 @@ Random::~Random()
 {
 }
 
-int Random::Int(int min, int max)
+int Random::Int(const int min, const int max) const
 {
 	uniform_int_distribution<int> result(min, max);
 	
 	return result(*randomEngine);
 }
 
-float Random::Float(float min, float max)
+float Random::Float(const float min, const float max) const
 {
 	uniform_real_distribution<float> result(min, max);
 	
