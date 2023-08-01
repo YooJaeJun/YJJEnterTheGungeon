@@ -2,7 +2,7 @@
 
 const std::vector<ObTriangle>& Delaunay::Triangulate(std::vector<Vec2f>& nodes)
 {
-	// Determinate the super triangle
+	// ½´ÆÛ »ï°¢Çü °áÁ¤
 	float minX = nodes[0].x;
 	float minY = nodes[0].y;
 	float maxX = minX;

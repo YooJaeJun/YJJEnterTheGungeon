@@ -14,6 +14,7 @@ namespace Gungeon
         LIGHT.light.radius = 4000.0f;
         state = MapGenState::none;
         finalState = state;
+        totalTime = 0.0f;
     }
 
     void ProcedureMapGeneration::Clear()
@@ -49,86 +50,87 @@ namespace Gungeon
         case MapGenState::spray:
             TIMER.CheckStartTimer();
             Spray();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::spread:
             TIMER.CheckStartTimer();
             Spread();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::select:
             TIMER.CheckStartTimer();
             Select();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::triangulate:
             TIMER.CheckStartTimer();
             Triangulate();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::span:
             TIMER.CheckStartTimer();
             Spanning();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::loop:
             TIMER.CheckStartTimer();
             Loop();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::clean:
             TIMER.CheckStartTimer();
             Clean();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::roomTile:
             TIMER.CheckStartTimer();
             RoomTile();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::passageTile:
             TIMER.CheckStartTimer();
             PassageTile();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::passagePitTile:
             TIMER.CheckStartTimer();
             PassagePitTile();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::prop:
             TIMER.CheckStartTimer();
             Prop();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::spawner:
             TIMER.CheckStartTimer();
             Spawner();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::propPit:
             TIMER.CheckStartTimer();
             PropPit();
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
             break;
 
         case MapGenState::propWall:
             TIMER.CheckStartTimer();
             PropWall();
             MAPINFO.useGui = true;
-            TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            totalTime += TIMER.DebugPrintTimer(debugStateText[static_cast<int>(state)]);
+            printf("%9c Total %15f", ' ', totalTime);
             break;
 
         case MapGenState::finish:
@@ -308,7 +310,7 @@ namespace Gungeon
 
         while (count--)
         {
-	        const int rand = RANDOM.Int(0, linesTriangulated.size() - 1);
+	        const int rand = RANDOM.Int(0, static_cast<int>(linesTriangulated.size() - 1));
             bool flag = false;
 
             for (auto& elem : linesMST)
@@ -342,7 +344,7 @@ namespace Gungeon
         candidateRooms.clear();
     }
 
-    void ProcedureMapGeneration::RoomTile()
+    void ProcedureMapGeneration::RoomTile() const
     {
 	    int roomIdx = 0;
         for (const auto& elem : selectedRooms)
@@ -512,6 +514,8 @@ namespace Gungeon
 
             // 위에서 길찾아 리턴되었어야 함
             assert(false);
+
+            return Vec2i(0, 0);
         };
 
         // 시작
@@ -543,7 +547,7 @@ namespace Gungeon
         linesMST.clear();
     }
 
-    void ProcedureMapGeneration::PassagePitTile()
+    void ProcedureMapGeneration::PassagePitTile() const
     {
         for (auto& elem : passages)
         {

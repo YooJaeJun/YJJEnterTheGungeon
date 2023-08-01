@@ -72,9 +72,11 @@ float Timer::CheckEndTimer() const
     return static_cast<float>(diff.count());
 }
 
-void Timer::DebugPrintTimer(const string& str)
+float Timer::DebugPrintTimer(const string& str)
 {
-    printf("%15s %15f \n", str.c_str(), TIMER.CheckEndTimer());
+	const float ret = TIMER.CheckEndTimer();
+    printf("%15s %15f \n", str.c_str(), ret);
+    return ret;
 }
 
 void Timer::Update() const

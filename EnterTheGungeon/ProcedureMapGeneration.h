@@ -65,9 +65,9 @@ namespace Gungeon
 		void Spanning();
 		void Loop();
 		void Clean();
-		void RoomTile();
+		void RoomTile() const;
 		void PassageTile();
-		void PassagePitTile();
+		void PassagePitTile() const;
 		void Prop() const;
 		void Spawner();
 		void PropPit();
@@ -110,6 +110,8 @@ namespace Gungeon
 		std::vector<std::shared_ptr<Room>>	selectedRooms;
 
 	private:
+		// Timer
+		float totalTime = 0.0f;
 		// 동적할당하지 않은 변수들은 보여주기 용도
 		bool								autoProcess = false;
 		float								timer = 0.0f;

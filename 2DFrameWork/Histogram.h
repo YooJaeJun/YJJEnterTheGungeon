@@ -18,7 +18,7 @@ public:
 	~Histogram() = default;
 
 public:
-	void FindMaximalRectangleForStack(
+	static void FindMaximalRectangleForStack(
 		const int xStart, const int xEnd, const int yStart, const int yEnd,
 		const int xSize, const int ySize, 
 		OUT int& xMax, OUT int& yMax, OUT Vec2i& propSour, OUT Vec2i& propDest);

@@ -19,7 +19,7 @@ public:
     void    Chronometry(const UINT lock = 60);
     void    CheckStartTimer();
     float   CheckEndTimer() const;
-    static void    DebugPrintTimer(const string& str);
+    static float   DebugPrintTimer(const string& str);
     float   GetDelta() const { return deltaTime; } //∏≈≈©∑Œ X
     float   GetDeltaTime() const { return deltaScaleTime; }
     UINT    GetFramePerSecond() const { return framePerSecond; }
