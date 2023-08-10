@@ -110,7 +110,7 @@ Shader::~Shader()
 void Shader::Set()
 {
     //파이프라인에 바인딩
-    D3D.GetDC()->VSSetShader(vertexShader.Get(), 0, 0);
-    D3D.GetDC()->PSSetShader(pixelShader.Get(), 0, 0);
+    D3D.GetDC()->VSSetShader(vertexShader.Get(), nullptr, 0);
+    D3D.GetDC()->PSSetShader(pixelShader.Get(), nullptr, 0);
     D3D.GetDC()->IASetInputLayout(vertexLayout.Get());
 }

@@ -1,6 +1,6 @@
 #include "framework.h"
 
-const std::vector<ObTriangle>& Delaunay::Triangulate(std::vector<Vec2f>& nodes)
+const std::vector<ObTriangle>& Delaunay::Triangulate(const std::vector<Vec2f>& nodes)
 {
 	// ½´ÆÛ »ï°¢Çü °áÁ¤
 	float minX = nodes[0].x;

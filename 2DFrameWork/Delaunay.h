@@ -5,7 +5,7 @@ public:
 	Delaunay() = default;
 	Delaunay(const Delaunay&) = delete;
 
-	const std::vector<ObTriangle>& Triangulate(std::vector<Vec2f>& vertices);
+	const std::vector<ObTriangle>& Triangulate(const std::vector<Vec2f>& vertices);
 	bool							ValidChecker(const Vec2f& n1, const Vec2f& n2);
 
 public:
