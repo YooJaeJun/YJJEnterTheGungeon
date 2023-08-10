@@ -11,6 +11,6 @@ public:
 public:
 	vector<ObTriangle>			triangles;
 	vector<ObLine>				edges;
-	map<Vec2f, int>			nodesForIndex;
+	map<Vec2f, int>				nodesForIndex;
 	map<Vec2f, vector<Vec2f>>	nodesLinked;
 };

@@ -94,10 +94,8 @@ public:
 public:
 	//위치 받아오기
 	[[nodiscard]] Vector2 GetLocalPos() const	{ return position;}
-	[[nodiscard]] Vector2 GetWorldPos() const	{ 
-		return {RT._41, RT._42}; 
-	}
-	Vector2 GetWorldPivot() const { return Vector2(W._41, W._42); }
+	[[nodiscard]] Vector2 GetWorldPos() const	{ return { RT._41, RT._42 }; 	}
+	[[nodiscard]] Vector2 GetWorldPivot() const { return { W._41, W._42 }; }
 	//위치를 고정할때 =
 	void	SetLocalPos(Vector2 location)	{ position = location; }
 	void	SetLocalPosX(float locationX)	{ position.x = locationX; }

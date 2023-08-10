@@ -45,7 +45,7 @@ void Histogram::FindMaximalRectangleForStack(
     }
 
     ///
-    /// 브루트 포스한 방법
+    /// 브루트 포스 - 정사각형
     ///
     //int areaMax = 0;
     //int w = 1, h = 1;
