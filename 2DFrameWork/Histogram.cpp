@@ -5,7 +5,11 @@ void Histogram::FindMaximalRectangleForStack(
     const int xSize, const int ySize, 
     OUT int& xMax, OUT int& yMax, OUT Vec2i& propSour, OUT Vec2i& propDest)
 {
+    int count = 0;
+
+    //
     // 히스토그램에서 가장 큰 직사각형 Stack 방법
+    //
     vector<int> height(xSize + 1);
     int areaMax = 0;
 
@@ -27,9 +31,11 @@ void Histogram::FindMaximalRectangleForStack(
             // st.top() == x index
             while (!st.empty() && height[x] < height[st.top()])
             {
-	          const int h = height[st.top()];
-              st.pop();
-	          const int w = (st.empty()) ? x : x - 1 - st.top();
+			const int h = height[st.top()];
+			st.pop();
+			const int w = (st.empty()) ? x : x - 1 - st.top();
+
+                count++;
 
                 if (areaMax <= w * h)
                 {
@@ -43,26 +49,30 @@ void Histogram::FindMaximalRectangleForStack(
             st.push(x);
         }
     }
+    //cout << "히스토그램 반복문 횟수: " << count << '\n';
 
-    ///
-    /// 브루트 포스 - 정사각형
-    ///
-    //int areaMax = 0;
-    //int w = 1, h = 1;
 
+
+    //
+    // 브루트 포스
+    //
+	//int areaMax = 0;
+	//int w = 1, h = 1;
+    
     //for (int curX = 0; curX < xSize; curX++)
     //{
     //    for (int curY = 0; curY < ySize; curY++)
     //    {
     //        bool loopBreak = false;
     //        int length = 2;
-
     //        while (false == loopBreak)
     //        {
-    //            for (int x = 0; x < length && false == loopBreak; x++)
+    //            for (int x = 0; x < length; x++)
     //            {
-    //                for (int y = 0; y < length && false == loopBreak; y++)
+    //                for (int y = 0; y < length; y++)
     //                {
+    //                    count++;
+
     //                    const Vec2i on = Vec2i(xStart + curX + x, yStart + curY + y);
 
     //                    if (MAPINFO.tilemap->GetTileState(on) != TileState::floor ||
@@ -85,4 +95,6 @@ void Histogram::FindMaximalRectangleForStack(
     //        }
     //    }
     //}
+
+    //cout << "브루트포스 반복문 횟수: " << count << '\n';
 }
